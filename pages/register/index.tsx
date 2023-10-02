@@ -31,20 +31,20 @@ export default function RegisterPage()
 
     return (
         <div className='flex flex-col justify-center items-center content-center h-screen w-screen'>
-            <div name='logo' className='w-fit'>
+            <div className='w-fit'>
                 <img src={LOGO} alt='logo' style={{
                     width: '150px',
                     height: '150px'
                 }} />
             </div>
-            <div name='form' className='mt-12 w-10/12 max-w-md'>
+            <div className='mt-12 w-10/12 max-w-md'>
                 <TextField label='Nome completo' placeholder='Fulano de Sicrano' onChange={onChangeFullName} fullWidth />
                 <TextField label='Email' placeholder='example@www.com' className='mt-4' onChange={onChangeEmail} fullWidth />
                 <TextField label='Usuário' placeholder='usuario' className='mt-4' onChange={onChangeUserName} fullWidth />
                 <PasswordInput label='Senha' placeholder='********' className='mt-4' onChange={onChangePassword} />
                 <PasswordInput label='Confirmar Senha' placeholder='********' className='mt-4' onChange={onChangePasswordConfirm} />
             </div>
-            <div name='action-buttons' className='mt-6 w-10/12 max-w-md flex flex-wrap md:grid md:grid-cols-2 justify-between'>
+            <div className='mt-6 w-10/12 max-w-md flex flex-wrap md:grid md:grid-cols-2 justify-between'>
                 <div className='pb-1 md:pr-1 md:pb-0 w-full'>
                     <ButtonPrimary variant='contained' size='large' className='w-full'>CRIAR CONTA</ButtonPrimary>
                 </div>
