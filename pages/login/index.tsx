@@ -18,8 +18,8 @@ export default function LoginPage()
     const [password, setPassword] = React.useState(false);
     const [userName, setUserName] = React.useState(false);
 
-    const onChangePassword = (event) => setPassword(event.currentTarget.value)
-    const onChangeUserName = (event) => setUserName(event.currentTarget.value)
+    const onChangePassword = (event:any) => setPassword(event.currentTarget.value)
+    const onChangeUserName = (event:any) => setUserName(event.currentTarget.value)
 
     const redirectToRegisterPage = () => push('/register')
 

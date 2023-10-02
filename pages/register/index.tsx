@@ -21,11 +21,11 @@ export default function RegisterPage()
     const [password, setPassword] = React.useState(false);
     const [passwordConfirm, setPasswordConfirm] = React.useState(false);
 
-    const onChangeFullName = (event) => setFullName(event.currentTarget.value)
-    const onChangeEmail = (event) => setEmail(event.currentTarget.value)
-    const onChangeUserName = (event) => setUserName(event.currentTarget.value)
-    const onChangePassword = (event) => setPassword(event.currentTarget.value)
-    const onChangePasswordConfirm = (event) => setPasswordConfirm(event.currentTarget.value)
+    const onChangeFullName = (event:any) => setFullName(event.currentTarget.value)
+    const onChangeEmail = (event:any) => setEmail(event.currentTarget.value)
+    const onChangeUserName = (event:any) => setUserName(event.currentTarget.value)
+    const onChangePassword = (event:any) => setPassword(event.currentTarget.value)
+    const onChangePasswordConfirm = (event:any) => setPasswordConfirm(event.currentTarget.value)
 
     const redirectToLoginPage = () => push('/login')
 
