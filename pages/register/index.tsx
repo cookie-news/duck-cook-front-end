@@ -39,10 +39,18 @@ export default function RegisterPage()
             </div>
             <div className='mt-12 w-10/12 max-w-md'>
                 <TextField label='Nome completo' placeholder='Fulano de Sicrano' onChange={onChangeFullName} fullWidth />
-                <TextField label='Email' placeholder='example@www.com' className='mt-4' onChange={onChangeEmail} fullWidth />
-                <TextField label='Usuário' placeholder='usuario' className='mt-4' onChange={onChangeUserName} fullWidth />
-                <PasswordInput label='Senha' placeholder='********' className='mt-4' onChange={onChangePassword} />
-                <PasswordInput label='Confirmar Senha' placeholder='********' className='mt-4' onChange={onChangePasswordConfirm} />
+                <div className='mt-4'>
+                    <TextField label='Email' placeholder='example@www.com' onChange={onChangeEmail} fullWidth />
+                </div>
+                <div className='mt-4'>
+                    <TextField label='Usuário' placeholder='usuario' onChange={onChangeUserName} fullWidth />
+                </div>
+                <div className='mt-4'>
+                    <PasswordInput label='Senha' placeholder='********' onChange={onChangePassword} />
+                </div>
+                <div className='mt-4'>
+                    <PasswordInput label='Confirmar Senha' placeholder='********' onChange={onChangePasswordConfirm} />
+                </div>
             </div>
             <div className='mt-6 w-10/12 max-w-md flex flex-wrap md:grid md:grid-cols-2 justify-between'>
                 <div className='pb-1 md:pr-1 md:pb-0 w-full'>

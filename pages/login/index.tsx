@@ -33,7 +33,9 @@ export default function LoginPage()
             </div>
             <div className='mt-12 w-10/12 max-w-md'>
                 <TextField label='Usuário' placeholder='usuario' onChange={onChangeUserName} fullWidth />
-                <PasswordInput label='Senha' placeholder='********' className='mt-4' onChange={onChangePassword} />
+                <div className='mt-4'>
+                    <PasswordInput label='Senha' placeholder='********' onChange={onChangePassword} />
+                </div>
             </div>
             <div className='mt-6 w-10/12 max-w-md flex flex-wrap md:grid md:grid-cols-2 justify-between'>
                 <div className='pb-1 md:pr-1 md:pb-0 w-full'>
