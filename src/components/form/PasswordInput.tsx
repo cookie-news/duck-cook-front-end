@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-export default function PasswordInput(props)
+export default function PasswordInput(props:any)
 {
     const [showPassword, setShowPassword] = React.useState(false);
 
