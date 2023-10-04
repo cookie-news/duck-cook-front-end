@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { NextPage } from 'next';
 
@@ -15,11 +15,13 @@ const RegisterPage:NextPage = () =>
 {
     const router = useRouter();
 
-    const [fullName, setFullName] = React.useState(false);
-    const [email, setEmail] = React.useState(false);
-    const [userName, setUserName] = React.useState(false);
-    const [password, setPassword] = React.useState(false);
-    const [passwordConfirm, setPasswordConfirm] = React.useState(false);
+    const [fullName, setFullName] = useState(false);
+    const [email, setEmail] = useState(false);
+    const [userName, setUserName] = useState(false);
+    const [password, setPassword] = useState(false);
+    const [passwordConfirm, setPasswordConfirm] = useState(false);
+
+    const [loading, setLoading] = useState(false);
 
     const onChangeFullName = (event:any) => setFullName(event.currentTarget.value)
     const onChangeEmail = (event:any) => setEmail(event.currentTarget.value)
@@ -29,6 +31,10 @@ const RegisterPage:NextPage = () =>
 
     const redirectToLoginPage = () => router.push('/login')
     const redirectToHomePage = () => router.push('/')
+
+    const onClickRegister = async () => {
+        setLoading(true)
+    }
 
     return (
         <div className='flex flex-col justify-center items-center content-center h-screen w-screen'>
@@ -55,7 +61,7 @@ const RegisterPage:NextPage = () =>
             </div>
             <div className='mt-6 w-10/12 max-w-md flex flex-wrap md:grid md:grid-cols-2 justify-between'>
                 <div className='pb-1 md:pr-1 md:pb-0 w-full'>
-                    <Button variant='contained' size='large' className='w-full'>CRIAR CONTA</Button>
+                    <Button variant='contained' size='large' className='w-full' onClick={onClickRegister}>CRIAR CONTA</Button>
                 </div>
                 <div className='pt-1 md:pl-1 md:pt-0 w-full'>
                     <Button variant='outlined' size='large' className='w-full' onClick={redirectToLoginPage}>JÁ TENHO CONTA</Button>

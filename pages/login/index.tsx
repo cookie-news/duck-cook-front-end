@@ -32,8 +32,8 @@ const LoginPage:NextPage = () =>
     const redirectToHomePage = () => router.push('/')
 
     const onClickLogin = async () => {
-        setLoading(true);
-        let response = await callLoginAuth();
+        setLoading(true)
+        let response = await callLoginAuth()
     }
 
     return (
