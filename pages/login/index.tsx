@@ -50,7 +50,7 @@ const LoginPage:NextPage = () =>
             setToast({
                 open: true,
                 type: 'error',
-                message: 'Login não existe.'
+                message: response.error
             })
             return;
         }
