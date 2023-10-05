@@ -33,7 +33,10 @@ const LoginPage:NextPage = () =>
 
     const onClickLogin = async () => {
         setLoading(true)
-        let response = await callLoginAuth()
+        let response = await callLoginAuth({
+            user: userName,
+            pass: password
+        })
     }
 
     return (
