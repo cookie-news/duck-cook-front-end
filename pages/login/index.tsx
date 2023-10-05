@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { NextPage } from 'next';
 
 //Material UI
-import { TextField, Button, CircularProgress } from '@mui/material'
+import { TextField, Button, CircularProgress, Snackbar, Alert } from '@mui/material'
 
 //Custom
 import PasswordInput from '@/components/form/PasswordInput';
@@ -20,10 +20,16 @@ const LoginPage:NextPage = () =>
 {
     const router = useRouter()
 
-    const [password, setPassword] = useState(false)
-    const [userName, setUserName] = useState(false)
+    const [password, setPassword] = useState('')
+    const [userName, setUserName] = useState('')
 
     const [loading, setLoading] = useState(false);
+
+    const [toast, setToast] = useState({
+        open: false,
+        type: 'info',
+        message: ''
+    });
 
     const onChangePassword = (event:any) => setPassword(event.currentTarget.value)
     const onChangeUserName = (event:any) => setUserName(event.currentTarget.value)
@@ -36,6 +42,23 @@ const LoginPage:NextPage = () =>
         let response = await callLoginAuth({
             user: userName,
             pass: password
+        })
+
+        setLoading(false)
+        if(response.error)
+        {
+            setToast({
+                open: true,
+                type: 'error',
+                message: 'Login não existe.'
+            })
+            return;
+        }
+
+        setToast({
+            open: true,
+            type: 'success',
+            message: 'Login efetuado com sucesso!!'
         })
     }
 
@@ -63,6 +86,13 @@ const LoginPage:NextPage = () =>
                 </div>
                 <Button variant='text' size='small' className='w-fit p-0 mt-1'>ESQUECEU SUA SENHA?</Button>
             </div>
+
+            <Snackbar open={toast.open} autoHideDuration={6000}>
+                <Alert severity={toast.type} sx={{ width: '100%' }}>
+                    
+                    {toast.message}
+                </Alert>
+            </Snackbar>
         </div>
     )
 }

@@ -8,8 +8,7 @@ export const callLoginAuth = async (loginInfo:any) => {
             },
             body: JSON.stringify(loginInfo)
         });
-		const data = await res.json();
-		console.log(data);
+		return await res.json();
 	} catch (err) {
 		console.log(err);
 	}
