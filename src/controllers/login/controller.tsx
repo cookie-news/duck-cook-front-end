@@ -6,8 +6,7 @@ export const callLoginAuth = async (loginInfo:any) => {
             headers: {
                 'Content-type': 'application/json'
             },
-            body: JSON.stringify(loginInfo),
-            mode: 'same-origin'
+            body: JSON.stringify(loginInfo)
         });
 		const data = await res.json();
 		console.log(data);
