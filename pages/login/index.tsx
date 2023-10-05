@@ -14,7 +14,7 @@ import styles from './login.module.css';
 const LOGO = '/assets/imgs/logo.png'
 
 //Controller
-import { callLoginAuth } from './controller'
+import { callLoginAuth } from '@/controllers/login/controller'
 
 const LoginPage:NextPage = () =>
 {
