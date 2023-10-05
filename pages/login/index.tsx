@@ -88,8 +88,7 @@ const LoginPage:NextPage = () =>
             </div>
 
             <Snackbar open={toast.open} autoHideDuration={6000}>
-                <Alert severity={toast.type} sx={{ width: '100%' }}>
-                    
+                <Alert severity={`${toast.type}`} sx={{ width: '100%' }}>
                     {toast.message}
                 </Alert>
             </Snackbar>
