@@ -11,29 +11,57 @@ import PasswordInput from '@/components/form/PasswordInput';
 //Imgs
 const LOGO = '/assets/imgs/logo.png'
 
+//Controller
+import { callRegisterAuth } from '@/controllers/register/controller'
+
 const RegisterPage:NextPage = () => 
 {
     const router = useRouter();
 
-    const [fullName, setFullName] = useState(false);
-    const [email, setEmail] = useState(false);
-    const [userName, setUserName] = useState(false);
-    const [password, setPassword] = useState(false);
-    const [passwordConfirm, setPasswordConfirm] = useState(false);
+    const [registerInfo, setRegisterInfo] = useState({
+        fullName: {
+            required: true,
+            error: false,
+            helperText: ''
+        },
+        email: {
+            required: true,
+            error: false,
+            helperText: ''
+        },
+        userName: {
+            required: true,
+            error: false,
+            helperText: ''
+        },
+        password: {
+            required: true,
+            error: false,
+            helperText: ''
+        },
+        confirmPassword: {
+            required: true,
+            error: false,
+            helperText: ''
+        }
+        
+    });
 
     const [loading, setLoading] = useState(false);
 
-    const onChangeFullName = (event:any) => setFullName(event.currentTarget.value)
-    const onChangeEmail = (event:any) => setEmail(event.currentTarget.value)
-    const onChangeUserName = (event:any) => setUserName(event.currentTarget.value)
-    const onChangePassword = (event:any) => setPassword(event.currentTarget.value)
-    const onChangePasswordConfirm = (event:any) => setPasswordConfirm(event.currentTarget.value)
+    const onChangeInput = (event:any) => {
+        let changeInfos:any = registerInfo
+        changeInfos[event.currentTarget.name]['value'] = event.currentTarget.value
+        setRegisterInfo(registerInfo)
+    }
 
     const redirectToLoginPage = () => router.push('/login')
     const redirectToHomePage = () => router.push('/')
 
     const onClickRegister = async () => {
         setLoading(true)
+        callRegisterAuth(registerInfo)
+        setRegisterInfo(registerInfo)
     }
 
     return (
@@ -45,18 +73,61 @@ const RegisterPage:NextPage = () =>
                 }} />
             </div>
             <div className='mt-6 w-10/12 max-w-md'>
-                <TextField label='Nome completo' placeholder='Fulano de Sicrano' onChange={onChangeFullName} fullWidth />
+                <TextField 
+                    label='Nome completo' 
+                    placeholder='Fulano de Sicrano' 
+                    helperText={registerInfo.fullName.helperText}
+                    error={registerInfo.fullName.error} 
+                    required={registerInfo.fullName.required} 
+                    name="fullName" 
+                    onChange={onChangeInput} 
+                    fullWidth 
+                />
                 <div className='mt-4'>
-                    <TextField label='Email' placeholder='example@www.com' onChange={onChangeEmail} fullWidth />
+                    <TextField 
+                        label='Email' 
+                        placeholder='example@www.com' 
+                        error={registerInfo.email.error}
+                        helperText={registerInfo.fullName.helperText}
+                        required={registerInfo.email.required} 
+                        name="email" 
+                        onChange={onChangeInput} 
+                        fullWidth 
+                    />
                 </div>
                 <div className='mt-4'>
-                    <TextField label='Usuário' placeholder='usuario' onChange={onChangeUserName} fullWidth />
+                    <TextField 
+                        label='Usuário' 
+                        placeholder='usuario' 
+                        error={registerInfo.userName.error} 
+                        helperText={registerInfo.fullName.helperText}
+                        required={registerInfo.userName.required} 
+                        name="userName" 
+                        onChange={onChangeInput} 
+                        fullWidth 
+                    />
                 </div>
                 <div className='mt-4'>
-                    <PasswordInput label='Senha' placeholder='********' onChange={onChangePassword} />
+                    <PasswordInput 
+                        label='Senha' 
+                        placeholder='********' 
+                        error={registerInfo.password.error} 
+                        helperText={registerInfo.fullName.helperText}
+                        required={registerInfo.password.required} 
+                        name="password" 
+                        onChange={onChangeInput} 
+                    />
                 </div>
                 <div className='mt-4'>
-                    <PasswordInput label='Confirmar Senha' placeholder='********' onChange={onChangePasswordConfirm} />
+                    <PasswordInput 
+                        label='Confirmar Senha' 
+                        placeholder='********' 
+                        error={registerInfo.password.error} 
+                        helperText={registerInfo.fullName.helperText}
+                        required={registerInfo.confirmPassword.required} 
+                        name="confirmPassword" 
+                        onChange={onChangeInput} 
+                    />
                 </div>
             </div>
             <div className='mt-6 w-10/12 max-w-md flex flex-wrap md:grid md:grid-cols-2 justify-between'>

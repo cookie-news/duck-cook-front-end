@@ -20,12 +20,16 @@ export default function PasswordInput(props:any)
     return (
         <TextField
             label={props.label}
+            error={props.error}
+            required={props.required}
             variant="outlined"
             type={showPassword ? "text" : "password"}
             fullWidth
             className={props.className}
             onChange={props.onChange}
             placeholder={props.placeholder}
+            helperText={props.helperText}
+            name={props.name}
             InputProps={{
                 endAdornment: (
                 <InputAdornment position="end">

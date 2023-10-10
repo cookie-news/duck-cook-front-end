@@ -87,7 +87,7 @@ const LoginPage:NextPage = () =>
                 <Button variant='text' size='small' className='w-fit p-0 mt-1'>ESQUECEU SUA SENHA?</Button>
             </div>
 
-            <Snackbar open={toast.open} autoHideDuration={6000}>
+            <Snackbar open={toast.open} autoHideDuration={1000}>
                 <Alert severity={toast.type == 'success' ? 'success' : toast.type == 'error' ? 'error' : 'info'} sx={{ width: '100%' }}>
                     {toast.message}
                 </Alert>
