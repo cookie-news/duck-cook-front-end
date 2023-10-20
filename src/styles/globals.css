@@ -1,0 +1,14 @@
+@tailwind components;
+@tailwind utilities;
+@tailwind base;
+
+:root {
+  --primary-color: #095150;
+  --primary-color-hover: #053f3e;
+  --secundary-color: #edfffc;
+}
+
+body {
+  background-color: var(--secundary-color) !important;
+  margin: 0;
+}
