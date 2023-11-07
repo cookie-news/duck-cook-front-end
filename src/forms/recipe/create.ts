@@ -20,6 +20,21 @@ export const RecipeForm: FormType[] = [
         label: "Descrição",
         type: "text",
         className: "mt-4",
+        multiline: true,
+        rows: 3,
+        validates: {
+            required: ErrorMessages.REQUIRED
+        }
+    },
+    {
+        name: "methodPreparation",
+        placeholder: "",
+        fullWidth: true,
+        label: "Modo de Preparo",
+        type: "text",
+        className: "mt-4",
+        multiline: true,
+        rows: 3,
         validates: {
             required: ErrorMessages.REQUIRED
         }

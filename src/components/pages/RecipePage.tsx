@@ -115,6 +115,8 @@ const RecipePage = ({cardLabelRecipeData, cardLabelIngredientData, onSaveRecipe 
                                                 error={errors && !!errors[form.name as string]}
                                                 helperText={errors && errors[form.name as string]?.message as string}
                                                 fullWidth
+                                                multiline={form.multiline}
+                                                rows={form.rows}
                                                 defaultValue={recipe[form.name]}
                                                 {...register(form.name as string, form.validates)}
                                                 onChange={() => {}}

@@ -42,11 +42,11 @@ export const IngredientForm: FormType[] = [
             },
             {
                 label: 'Colher',
-                value: 'spoon'
+                value: 'Colher(es)'
             },
             {
                 label: 'Xicara',
-                value: 'cup'
+                value: 'Xicara(s)'
             },
             {
                 label: 'Gramas',
