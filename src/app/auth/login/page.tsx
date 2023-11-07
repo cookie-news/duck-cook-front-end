@@ -65,11 +65,11 @@ const LoginPage: NextPage = () => {
     });
 
     setLoading(false);
-    if (response.error) {
+    if (response?.data.error) {
       setToast({
         open: true,
         type: "error",
-        message: response.error,
+        message: response?.data.error,
       });
       return;
     }
@@ -154,8 +154,8 @@ const LoginPage: NextPage = () => {
             toast.type == "success"
               ? "success"
               : toast.type == "error"
-              ? "error"
-              : "info"
+                ? "error"
+                : "info"
           }
           sx={{ width: "100%" }}
         >

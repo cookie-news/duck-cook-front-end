@@ -15,6 +15,7 @@
     "@mui/base": "^5.0.0-beta.17",
     "@mui/icons-material": "^5.14.11",
     "@mui/material": "^5.14.11",
+    "axios": "^1.6.0",
     "mui-file-dropzone": "^4.0.2",
     "next": "^13.5.6",
     "react": "^18.2.0",
