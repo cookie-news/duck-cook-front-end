@@ -1,0 +1,9 @@
+.label-avatar-file-input
+{
+    border-radius: 100%
+}
+
+.label-avatar-file-input:hover
+{
+    cursor: pointer;
+}

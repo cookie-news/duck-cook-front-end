@@ -1,21 +1,36 @@
 import { Metadata } from "next";
-import "@/styles/globals.css";
+
+//Themes
+import ThemeProvider from '@components/ThemeProvider'
+
+//CSS
+import "@styles/globals.css";
+
+//Custom
+import Menu from '@components/Menu';
 
 export const metadata: Metadata = {
-  title: "Duck Cook",
-  icons: {
-    icon: "/assets/imgs/logo.png",
-  },
+    title: "Duck Cook",
+    icons: {
+        icon: "/assets/imgs/logo.png",
+    },
 };
 
 export default function RootLayout({
-  children,
+    children,
 }: {
-  children: React.ReactNode;
+    children: React.ReactNode;
 }) {
-  return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
-  );
+    return (
+        <html lang="en">
+            <body className="flex flex-col h-screen">
+                <ThemeProvider>
+                    <Menu />
+                    <div className="flex-1">
+                        {children}
+                    </div>
+                </ThemeProvider>
+            </body>
+        </html>
+    );
 }

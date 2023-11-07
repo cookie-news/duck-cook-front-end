@@ -1,6 +1,6 @@
 @tailwind components;
 @tailwind utilities;
-@tailwind base;
+/*@tailwind base;*/
 
 :root {
   --primary-color: #095150;
@@ -9,6 +9,6 @@
 }
 
 body {
-  background-color: var(--secundary-color) !important;
+  background-color: white !important;
   margin: 0;
 }

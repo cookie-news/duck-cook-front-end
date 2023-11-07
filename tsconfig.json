@@ -19,6 +19,12 @@
       }
     ],
     "paths": {
+      "@components/*": ["./src/components/*"],
+      "@types/*": ["./src/types/*"],
+      "@forms/*": ["./src/forms/*"],
+      "@styles/*": ["./src/styles/*"],
+      "@assets/*": ["./public/assets/*"],
+      "@utils/*": ["./src/utils/*"],
       "@root/*": ["./*"],
       "@/*": ["./src/*"]
     }
