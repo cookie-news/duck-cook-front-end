@@ -1,4 +1,6 @@
-const styles = {
+import StylesType from '@/types/StylesType'
+
+const styles:StylesType = {
     'card': {
         'backgroundColor': '#fdffff',
         'border': '1px solid #f5f5f5',

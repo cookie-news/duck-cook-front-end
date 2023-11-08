@@ -1,5 +1,8 @@
 
+import { NextPage } from "next";
+
 import RecipePage from "@components/pages/RecipePage";
+import IngredientType from "@root/src/types/IngredientType";
 
 const EditRecipePage: NextPage = () => {
     return (
@@ -10,9 +13,9 @@ const EditRecipePage: NextPage = () => {
             preparetionTimeMinutes: '30',
             ingredients: [{
                 name: 'Ingrediente nome',
-                quantity: 20,
+                quantity: '20',
                 measure: 'cup'
-            }]
+            } as IngredientType]
         }} />
     );
 };

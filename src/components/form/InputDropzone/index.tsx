@@ -11,10 +11,18 @@ import { DropzoneArea } from "mui-file-dropzone";
 //CSS
 import './styles.css';
 
-const InputDropzone = ({label = '',onChange = (loadedFiles:any) => {}, acceptedFiles = [], dropzoneText = 'Selecione o arquivo'}) => {
-    const [loadedFiles, setLoadedFiles] = useState([]);
+interface InputDropzoneType
+{
+    label?:string,
+    onChange?: (loadedFiles:File[]) => void,
+    acceptedFiles?: Array<string>,
+    dropzoneText?:string
+}
 
-    const handleChangeDropzone = (loadedFiles:any) => {
+const InputDropzone = ({label = '',onChange = (loadedFiles:File[]) => {}, acceptedFiles = [], dropzoneText = 'Selecione o arquivo'}:InputDropzoneType) => {
+    const [loadedFiles, setLoadedFiles] = useState<File[]>([]);
+
+    const handleChangeDropzone = (loadedFiles:File[]) => {
         setLoadedFiles(loadedFiles);
         
         onChange(loadedFiles);
@@ -24,6 +32,7 @@ const InputDropzone = ({label = '',onChange = (loadedFiles:any) => {}, acceptedF
         <div>
             <InputLabel color='primary'>{label}</InputLabel>
             <DropzoneArea 
+                fileObjects={loadedFiles}
                 onChange={handleChangeDropzone} 
                 dropzoneClass="dropzone-area-style" 
                 dropzoneText={dropzoneText} 

@@ -1,4 +1,4 @@
-import { FormType } from "@types/FormType";
+import { FormType } from "@/types/FormType";
 import ErrorMessages from "@utils/ErrorMessages";
 
 export const IngredientForm: FormType[] = [

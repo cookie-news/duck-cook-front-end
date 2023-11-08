@@ -22,9 +22,18 @@ import { RecipeForm } from "@forms/recipe/create";
 import { useForm } from "react-hook-form";
 
 //Types
-import { ToastType } from "@types/ToastType";
+import { ToastType } from "@/types/ToastType";
+import RecipeType from "@/types/RecipeType";
 
-const RecipePage = ({cardLabelRecipeData, cardLabelIngredientData, onSaveRecipe = (recipe:any) => {}, recipeProp}) => {
+interface RecipePageParams
+{
+    cardLabelRecipeData?: string,
+    cardLabelIngredientData?: string,
+    recipeProp?: RecipeType,
+    onSaveRecipe?: (recipe:RecipeType) => void
+}
+
+const RecipePage = ({cardLabelRecipeData, cardLabelIngredientData, onSaveRecipe = (recipe:RecipeType) => {}, recipeProp}:RecipePageParams) => {
     // routers
     const router = useRouter();
 
@@ -40,7 +49,7 @@ const RecipePage = ({cardLabelRecipeData, cardLabelIngredientData, onSaveRecipe 
     });
 
     const [stateRecipe, setStateRecipe] = useState('setRecipe');
-    let [recipe, setRecipe] = useState(recipeProp ? recipeProp : {
+    let [recipe, setRecipe] = useState<RecipeType>(recipeProp ? recipeProp : {
         ingredients: []
     });
 
@@ -68,7 +77,7 @@ const RecipePage = ({cardLabelRecipeData, cardLabelIngredientData, onSaveRecipe 
 
     return (
         <>
-            <Card title={ stateRecipe === 'setRecipe' ? cardLabelRecipeData : cardLabelIngredientData }>
+            <Card title={ stateRecipe === 'setRecipe' ? cardLabelRecipeData || '' : cardLabelIngredientData || ''  }>
                 {
                     stateRecipe === 'setRecipe' 
                     ? 
@@ -88,7 +97,7 @@ const RecipePage = ({cardLabelRecipeData, cardLabelIngredientData, onSaveRecipe 
                                                         error={errors && !!errors[form.name+'Hours' as string]}
                                                         helperText={errors && errors[form.name+'Hours' as string]?.message as string}
                                                         fullWidth
-                                                        defaultValue={recipe[form.name+'Hours']}
+                                                        defaultValue={recipe[form.name+'Hours' as keyof RecipeType]}
                                                         {...register(form.name+'Hours' as string, form.validates)}
                                                         onChange={() => {}}
                                                     />
@@ -99,7 +108,7 @@ const RecipePage = ({cardLabelRecipeData, cardLabelIngredientData, onSaveRecipe 
                                                         helperText={errors && errors[form.name+'Minutes' as string]?.message as string}
                                                         fullWidth
                                                         className="mt-4 md:mt-0"
-                                                        defaultValue={recipe[form.name+'Minutes']}
+                                                        defaultValue={recipe[form.name+'Minutes' as keyof RecipeType]}
                                                         {...register(form.name+'Minutes' as string, form.validates)}
                                                         onChange={() => {}}
                                                     />
@@ -117,7 +126,7 @@ const RecipePage = ({cardLabelRecipeData, cardLabelIngredientData, onSaveRecipe 
                                                 fullWidth
                                                 multiline={form.multiline}
                                                 rows={form.rows}
-                                                defaultValue={recipe[form.name]}
+                                                defaultValue={recipe[form.name as keyof RecipeType]}
                                                 {...register(form.name as string, form.validates)}
                                                 onChange={() => {}}
                                             />
