@@ -22,11 +22,14 @@ import Card from '@components/Card';
 import { useForm } from "react-hook-form";
 
 //Types
-import { ToastType } from "@types/ToastType";
+import { ToastType } from "@/types/ToastType";
 import { UserForm } from "@forms/user/UserForm";
 
 //Styels
 import './styles.css'
+
+//Types
+import UserType from "@/types/UserType";
 
 const EditUserPage = () => {
     // routers
@@ -41,13 +44,13 @@ const EditUserPage = () => {
         open: false,
         type: "info",
         message: "",
-    });
+    } as ToastType);
 
-    const [user, setUser] = useState({
+    const [user, setUser] = useState<UserType>({
         fullName: 'Luidy Moura',
         userName: 'luidymg',
         email: 'luidy.mourawm@gmail.com'
-    });
+    } as UserType);
 
     const handlChangeAvatarImg = (event:any) => {
         console.log(event.target.files);
@@ -56,8 +59,8 @@ const EditUserPage = () => {
 
         reader.onload = function (e) {
             let newUser = {...user};
-            newUser.avatar = e.target.result;
-            console.log(newUser);
+            newUser.avatar = e?.target?.result as string;
+            
             setUser(newUser);
         }
         reader.readAsDataURL(event.target.files[0]);
@@ -78,7 +81,7 @@ const EditUserPage = () => {
                                 onChange={handlChangeAvatarImg}
                             />
                              <IconButton>
-                                <label for="contained-button-file" className="label-avatar-file-input">
+                                <label htmlFor="contained-button-file" className="label-avatar-file-input">
                                         <Avatar 
                                             sx={{ width: 200, height: 200 }}
                                             src={user.avatar}
@@ -97,7 +100,7 @@ const EditUserPage = () => {
                                     error={errors && !!errors[form.name as string]}
                                     helperText={errors && errors[form.name as string]?.message as string}
                                     fullWidth
-                                    defaultValue={user[form.name]}
+                                    defaultValue={user[form.name as keyof UserType]}
                                     {...register(form.name as string, form.validates)}
                                     onChange={() => {}}
                                 />

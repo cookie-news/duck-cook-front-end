@@ -1,5 +1,5 @@
 
-import { FormType } from "@types/FormType";
+import { FormType } from "@/types/FormType";
 
 export const RegisterForm: FormType[] = [
     {

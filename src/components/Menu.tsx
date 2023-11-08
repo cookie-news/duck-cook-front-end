@@ -31,7 +31,7 @@ const Menu = (props: any) => {
     }
 
     const verifyIsLoginOrRegisterPage = () => {
-        let prevUrl = undefined;
+        let prevUrl = '';
         setInterval(() => {
             try
             {

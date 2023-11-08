@@ -1,5 +1,7 @@
-import { FormType } from "@types/FormType";
 import ErrorMessages from "@utils/ErrorMessages";
+
+//Types
+import { FormType } from "@/types/FormType";
 
 export const UserForm: FormType[] = [
     {

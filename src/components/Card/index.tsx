@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 import { isMobile } from "react-device-detect";
 
 //Material UI
