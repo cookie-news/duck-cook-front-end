@@ -4,11 +4,11 @@ import Cookies from 'js-cookie';
 const axios = configAxios()
 
 
-export async function auth(user: string, password: string) {
+export async function auth(user: string, pass: string) {
 
     const resp = await axios.post(`${process.env.NEXT_PUBLIC_AUTH_URL}/v1/auth/login`, {
         user,
-        password
+        pass
     })
 
     Cookies.set("authorization", resp.data.token)
