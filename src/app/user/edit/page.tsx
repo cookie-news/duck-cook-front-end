@@ -44,7 +44,7 @@ const EditUserPage = () => {
         open: false,
         type: "info",
         message: "",
-    });
+    } as ToastType);
 
     const [user, setUser] = useState<UserType>({
         fullName: 'Luidy Moura',

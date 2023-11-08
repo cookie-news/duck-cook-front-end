@@ -103,6 +103,8 @@ const ViewRecipePage: NextPage = () => {
 
     const onLikeRecipe = () => {
         let newRecipe = {...recipe};
+        if(!newRecipe.likeNumber) { newRecipe.likeNumber = 0; }
+        
         newRecipe.likeNumber += 1;
         setRecipe(newRecipe);
         setIsLiked(true);
@@ -110,6 +112,8 @@ const ViewRecipePage: NextPage = () => {
 
     const onNotLikeRecipe = () => {
         let newRecipe = {...recipe};
+        if(!newRecipe.likeNumber) { newRecipe.likeNumber = 0; }
+        
         newRecipe.likeNumber -= 1;
         setRecipe(newRecipe);
         setIsLiked(false);
@@ -118,7 +122,8 @@ const ViewRecipePage: NextPage = () => {
     const onCreateComment = (values:any) => {
         let newRecipe = {...recipe};
 
-        newRecipe.comments.unshift({
+        
+        newRecipe.comments?.unshift({
             text: values.comment,
             author: user,
             createdDatetime: (new Date()).toLocaleDateString()+' '+(new Date()).toLocaleTimeString().substring(0, 5)
@@ -157,7 +162,7 @@ const ViewRecipePage: NextPage = () => {
                             </Typography>
                             <ul>
                                 {
-                                    recipe.ingredients.map((ingredient:any) => 
+                                    recipe.ingredients?.map((ingredient:any) => 
                                         <li key={crypto.randomUUID()}>
                                             <Typography color="text.primary" variant="body2">
                                                 {ingredient.quantity} {ingredient.measure} de {ingredient.name}.
@@ -176,7 +181,7 @@ const ViewRecipePage: NextPage = () => {
                             indicators={false}
                         >
                             {
-                                recipe.images.map((image) => 
+                                recipe.images?.map((image) => 
                                     <Paper key={crypto.randomUUID()} elevation={0} square className="flex justify-center bg-transparent">
                                         <img style={{width: '100%'}} src={image.src} />
                                     </Paper>
@@ -241,7 +246,7 @@ const ViewRecipePage: NextPage = () => {
                     </div>
                     <div className="mt-4">
                         {
-                            recipe.comments.map((comment) => 
+                            recipe.comments?.map((comment) => 
                                 <div className={'flex w-full mt-4 '+(comment.author.id == user.id ? 'flex-row-reverse' : '')} key={crypto.randomUUID()}>
                                     <div className="mr-2" style={{ width: '45px', height: '45px' }}></div>
                                     <Paper elevation={2} className="flex-1 mr-2 p-4 border border-solid rounded border-neutral-100 text-left">

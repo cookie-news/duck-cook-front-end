@@ -4,7 +4,7 @@ import { Snackbar, Alert } from "@mui/material";
 //Types
 import { ToastType } from "@/types/ToastType"
 
-const Loading = (toast:ToastType) => {
+const Loading = ({toast, ...props}:{toast:ToastType}) => {
     return (
         <Snackbar open={toast.open} autoHideDuration={1000}>
             <Alert
