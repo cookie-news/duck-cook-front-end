@@ -15,9 +15,13 @@
     "@mui/base": "^5.0.0-beta.17",
     "@mui/icons-material": "^5.14.11",
     "@mui/material": "^5.14.11",
-    "next": "latest",
-    "react": "latest",
-    "react-dom": "latest"
+    "mui-file-dropzone": "^4.0.2",
+    "next": "^13.5.6",
+    "react": "^18.2.0",
+    "react-device-detect": "^2.2.3",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.47.0",
+    "react-material-ui-carousel": "^3.4.2"
   },
   "devDependencies": {
     "@types/node": "latest",
@@ -25,7 +29,7 @@
     "@types/react-dom": "latest",
     "autoprefixer": "latest",
     "eslint": "latest",
-    "eslint-config-next": "latest",
+    "eslint-config-next": "^13.5.6",
     "postcss": "latest",
     "tailwindcss": "latest",
     "typescript": "latest"

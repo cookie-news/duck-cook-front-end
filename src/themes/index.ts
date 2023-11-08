@@ -1,11 +1,11 @@
-import * as React from 'react'
-import { red } from '@mui/material/colors'
-import { createTheme } from '@mui/material/styles'
+import { createTheme } from "@mui/material/styles";
 
-import palette from './palette'
+import palette from "./palette";
+import components from "./components";
 
 const theme = createTheme({
-    palette
-})
+  palette,
+  components,
+});
 
-export default theme
+export default theme;

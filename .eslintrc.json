@@ -1,3 +1,16 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "sort-imports": [
+      "warn",
+      {
+        "ignoreCase": true,
+        "ignoreMemberSort": true,
+        "ignoreDeclarationSort": true,
+        "eslint-disable-next-line": true,
+        "memberSyntaxSortOrder": ["none"],
+        "allowSeparatedGroups": true
+      }
+    ]
+  }
 }

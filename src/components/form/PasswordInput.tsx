@@ -1,48 +1,51 @@
-import React from 'react'
+'use client'
 
-import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
-import IconButton from '@mui/material/IconButton';
+import React from "react";
 
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
 
-export default function PasswordInput(props:any)
-{
-    const [showPassword, setShowPassword] = React.useState(false);
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
-    const handleClickShowPassword = () => setShowPassword((show) => !show);
+export default function PasswordInput({
+  registerInput = (name: string) => {},
+  registerParams = {},
+  ...props
+}: any) {
+  const [showPassword, setShowPassword] = React.useState(false);
 
-    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-    };
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-    return (
-        <TextField
-            label={props.label}
-            error={props.error}
-            required={props.required}
-            variant="outlined"
-            type={showPassword ? "text" : "password"}
-            fullWidth
-            className={props.className}
-            onChange={props.onChange}
-            placeholder={props.placeholder}
-            helperText={props.helperText}
-            name={props.name}
-            InputProps={{
-                endAdornment: (
-                <InputAdornment position="end">
-                    <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    >
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                </InputAdornment>
-                )
-            }}
-        />
-    )
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+  };
+  
+  return (
+    
+    <TextField
+      className={props?.className}
+      {...registerInput(props.name, registerParams)}
+      variant="outlined"
+      type={showPassword ? "text" : "password"}
+      fullWidth
+      {...props}
+      InputProps={{
+        endAdornment: (
+          <InputAdornment position="end">
+            <IconButton
+              aria-label="toggle password visibility"
+              onClick={handleClickShowPassword}
+              onMouseDown={handleMouseDownPassword}
+            >
+              {showPassword ? <Visibility /> : <VisibilityOff />}
+            </IconButton>
+          </InputAdornment>
+        ),
+      }}
+    />
+  );
 }
