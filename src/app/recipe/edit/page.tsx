@@ -1,4 +1,6 @@
 
+import { NextPage } from "next";
+
 import RecipePage from "@components/pages/RecipePage";
 
 const EditRecipePage: NextPage = () => {

@@ -1,16 +1,16 @@
 'use client'
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { NextPage } from "next";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 //Material UI
 import {
-  TextField,
+  Alert,
   Button,
   CircularProgress,
   Snackbar,
-  Alert,
+  TextField,
 } from "@mui/material";
 
 //Custom
@@ -154,8 +154,8 @@ const LoginPage: NextPage = () => {
             toast.type == "success"
               ? "success"
               : toast.type == "error"
-              ? "error"
-              : "info"
+                ? "error"
+                : "info"
           }
           sx={{ width: "100%" }}
         >

@@ -1,6 +1,5 @@
 export const callLoginAuth = async (loginInfo:any) => {
     try {
-        console.log(loginInfo);
 		const res = await fetch(`https://duck-cook-auth-ms.onrender.com/v1/auth/login`, {
             method: 'POST',
             headers: {

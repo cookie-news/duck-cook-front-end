@@ -12,9 +12,13 @@ import { AccessAlarm as AccessAlarmIcon, ThumbUpOffAlt as ThumbUpOffAltIcon, Thu
 import { useForm } from "react-hook-form";
 import ErrorMessages from "@utils/ErrorMessages";
 
+//Types
+import UserType from "@/types/UserType";
+import RecipeType from "@/types/RecipeType";
+
 const ViewRecipePage: NextPage = () => {
 
-    const [recipe, setRecipe] = useState({
+    const [recipe, setRecipe] = useState<RecipeType>({
         title: 'Teste',
         description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsu.`,
         methodPreparation: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsu.`,
@@ -57,40 +61,40 @@ const ViewRecipePage: NextPage = () => {
         }],
         author: {
             fullName: 'Luidy Moura'
-        },
-        preparetionTimeFormated: '01:30',
+        } as UserType,
+        preparetionTime: '01:30',
         likeNumber: 10,
         comments: [{
             author: {
                 fullName: 'Lucas Nascimento',
                 avatar: 'https://imgs.search.brave.com/xIDwytv2xutDq2oHeLEkZwVL_q8jDk2cqgdeZhNDXWI/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9wdWIt/c3RhdGljLmZvdG9y/LmNvbS9hc3NldHMv/cHJvamVjdHMvcGFn/ZXMvNGIyZmNkN2Vi/NjhhNDdjNjk4ZmQ3/YWMzNTI4YzU2YTEv/Zm90b3ItZmJjNjc4/MGUyNTA2NDY5ZGE2/N2FiYjUxNWMxN2Uw/ZTYuanBn'
-            },
+            } as UserType,
             text: `Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.`,
-            dateFormated: '06/11/2023 20:01'
+            createdDatetime: '06/11/2023 20:01'
         },
         {
             author: {
                 id: 'test',
                 fullName: 'Luidy Moura',
                 avatar: 'https://imgs.search.brave.com/VtUkZ_UfRNwFfcSEtdUTd-7tIBHE7FiIJdKsX0Vjirg/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1wc2QvM2Qt/aWxsdXN0cmF0aW9u/LWh1bWFuLWF2YXRh/ci1wcm9maWxlXzIz/LTIxNTA2NzExNDIu/anBnP3NpemU9NjI2/JmV4dD1qcGc'
-            },
+            } as UserType,
             text: 'Muito bom!!',
-            dateFormated: '05/11/2023 22:58'
+            createdDatetime: '05/11/2023 22:58'
         },{
             author: {
                 fullName: 'Paulo Iury',
                 avatar: 'https://imgs.search.brave.com/qDwk5XMurETJUyZmI31i5PLVCimIotCqjpSbGaM_HVE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9jZG4u/bWVpa2VyLmlvL2Fz/c2V0cy81MDM3LzIw/MTkvMTIvaWNvbl8y/MDE5MTIxOTA3MTYx/NTVkZmIyM2JmYWE2/ZWIucG5n'
-            },
+            } as UserType,
             text: `There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.`,
-            dateFormated: '05/11/2023 15:25'
+            createdDatetime: '05/11/2023 15:25'
         }]
-    });
+    } as RecipeType);
     
-    const [user, setUSer] = useState({
+    const [user, setUser] = useState<UserType>({
         id: 'test',
         fullName: 'Luidy Moura',
         avatar: 'https://imgs.search.brave.com/VtUkZ_UfRNwFfcSEtdUTd-7tIBHE7FiIJdKsX0Vjirg/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1wc2QvM2Qt/aWxsdXN0cmF0aW9u/LWh1bWFuLWF2YXRh/ci1wcm9maWxlXzIz/LTIxNTA2NzExNDIu/anBnP3NpemU9NjI2/JmV4dD1qcGc'
-    });
+    } as UserType);
 
     const [isLiked, setIsLiked] = useState(false);
     
@@ -117,7 +121,7 @@ const ViewRecipePage: NextPage = () => {
         newRecipe.comments.unshift({
             text: values.comment,
             author: user,
-            dateFormated: (new Date()).toLocaleDateString()+' '+(new Date()).toLocaleTimeString().substring(0, 5)
+            createdDatetime: (new Date()).toLocaleDateString()+' '+(new Date()).toLocaleTimeString().substring(0, 5)
         })
 
         reset({
@@ -144,8 +148,8 @@ const ViewRecipePage: NextPage = () => {
                         <Typography color="text.primary" variant="body2">
                             {recipe.description}
                         </Typography>
-                        <Alert variant="outlined" severity="info" className="mt-4" color="primary" icon={<AccessAlarmIcon />}>
-                            <b>Tempo de preparo:</b> {recipe.preparetionTimeFormated}
+                        <Alert variant="outlined" severity="info" className="mt-4" color="info" icon={<AccessAlarmIcon />}>
+                            <b>Tempo de preparo:</b> {recipe.preparetionTime}
                         </Alert>
                         <div className="mt-4">
                             <Typography color="text.primary" variant="body1">
@@ -173,7 +177,7 @@ const ViewRecipePage: NextPage = () => {
                         >
                             {
                                 recipe.images.map((image) => 
-                                    <Paper key={crypto.randomUUID()} variant="elevation-0" square className="flex justify-center bg-transparent">
+                                    <Paper key={crypto.randomUUID()} elevation={0} square className="flex justify-center bg-transparent">
                                         <img style={{width: '100%'}} src={image.src} />
                                     </Paper>
                                 )
@@ -181,7 +185,7 @@ const ViewRecipePage: NextPage = () => {
                         </Carousel>
                         <div className="mt-2 text-left md:text-right">
                             <Typography color={isLiked ? 'primary' : 'text.primary'} variant="body1">
-                                <IconButton aria-label="like" color={isLiked ? 'primary' : 'text.primary'} onClick={isLiked ? onNotLikeRecipe : onLikeRecipe}>
+                                <IconButton aria-label="like" color={isLiked ? 'primary' : 'default'} onClick={isLiked ? onNotLikeRecipe : onLikeRecipe}>
                                     {isLiked ? <ThumbUpAltIcon /> : <ThumbUpOffAltIcon />}
                                 </IconButton>
 
@@ -249,7 +253,7 @@ const ViewRecipePage: NextPage = () => {
                                         </Typography>
                                         <div className="text-right mt-2">
                                             <Typography style={{color: '#9d9d9d'}} variant="caption">
-                                                {comment.dateFormated}
+                                                {comment.createdDatetime}
                                             </Typography>
                                         </div>
                                     </Paper>

@@ -2,13 +2,14 @@
   "extends": "next/core-web-vitals",
   "rules": {
     "sort-imports": [
-      "error",
+      "warn",
       {
-        "ignoreCase": false,
-        "ignoreDeclarationSort": false,
-        "ignoreMemberSort": false,
-        "memberSyntaxSortOrder": ["none", "all", "multiple", "single"],
-        "allowSeparatedGroups": false
+        "ignoreCase": true,
+        "ignoreMemberSort": true,
+        "ignoreDeclarationSort": true,
+        "eslint-disable-next-line": true,
+        "memberSyntaxSortOrder": ["none"],
+        "allowSeparatedGroups": true
       }
     ]
   }

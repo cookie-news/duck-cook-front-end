@@ -2,7 +2,7 @@
 import { Snackbar, Alert } from "@mui/material";
 
 //Types
-import { ToastType } from "@types/ToastType"
+import { ToastType } from "@/types/ToastType"
 
 const Loading = (toast:ToastType) => {
     return (
