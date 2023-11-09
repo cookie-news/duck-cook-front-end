@@ -25,6 +25,9 @@ import { useForm } from "react-hook-form";
 import { ToastType } from "@/types/ToastType";
 import RecipeType from "@/types/RecipeType";
 
+//Service
+import { createRecipe } from "@/data/recipe.service";
+
 interface RecipePageParams
 {
     cardLabelRecipeData?: string,
@@ -71,8 +74,23 @@ const RecipePage = ({cardLabelRecipeData, cardLabelIngredientData, onSaveRecipe 
         setRecipe(newRecipe);
     }
 
-    const handlerSaveRecipe = () => {
-        onSaveRecipe(recipe);
+    const handlerSaveRecipe = async (data: any) => {
+
+        try {
+            // createRecipe();
+            console.log(data);
+            createRecipe({ idUser: "",
+                           description: data.description,
+                           images: data.images,
+                           ingredients: [],
+                           preparationMethod: data.methodPreparation,
+                           preparationTime: ( (data.preparetionTimeHours * 60) * 60 + data.preparetionTimeMinutes * 60 ),
+                           title: data.title });
+        } catch (error) {
+            
+        }
+
+       // onSaveRecipe(recipe);
     }
 
     return (
@@ -134,7 +152,8 @@ const RecipePage = ({cardLabelRecipeData, cardLabelIngredientData, onSaveRecipe 
                                     )}
                                 </div>
                                 <div className="w-full">
-                                    <InputDropzone label="Adicione as imagens da receita:" acceptedFiles={['image/png']} />
+                                    <input multiple type="file" {...register("images")} ></input> 
+                                    {/* <InputDropzone name="images" registerInput={register} label="Adicione as imagens da receita:" acceptedFiles={['image/png']} /> */}
                                 </div>
                             </div>
                         </form>
@@ -147,7 +166,7 @@ const RecipePage = ({cardLabelRecipeData, cardLabelIngredientData, onSaveRecipe 
                             variant="contained"
                             size="large"
                             className="w-full"
-                            onClick={stateRecipe === 'setRecipe' ? handleSubmit(onNextStateRecipe) : handlerSaveRecipe}
+                            onClick={stateRecipe === 'setRecipe' ? handleSubmit(onNextStateRecipe) : handleSubmit(handlerSaveRecipe)}
                         >
                             { stateRecipe === 'setRecipe' ? 'AVANÇAR' : 'SALVAR' }
                         </Button>

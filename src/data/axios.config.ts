@@ -1,4 +1,3 @@
-"user server";
 import axios from "axios";
 
 import { Cookies } from "@utils/Cookie";
