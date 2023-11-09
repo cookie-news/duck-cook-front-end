@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { NextPage } from "next";
 import { useRouter } from "next/navigation";
@@ -15,14 +15,12 @@ import {
 
 //Custom
 import PasswordInput from "@components/form/PasswordInput";
+import { Auth } from "@root/src/data/auth.service";
 
 import styles from "./login.module.css";
 
 //Imgs
 const LOGO = "/assets/imgs/logo.png";
-
-//Controller
-import { callLoginAuth } from "./controller";
 
 import { authRoutes } from "@root/routes";
 
@@ -48,37 +46,30 @@ const LoginPage: NextPage = () => {
   const redirectToRegisterPage = () => router.push(authRoutes.register.path);
   const redirectToHomePage = () => router.push("/");
 
-  const onSubmitLogin = async (values: any) => {
-    try {
-      const result = await callAuthEnpoint(values);
-      console.log(result);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const callAuthEnpoint = async ({ user, pass }: any) => {
+  const onSubmitLogin = async ({ user, pass }: any) => {
     setLoading(true);
-    let response = await callLoginAuth({
-      user,
-      pass,
-    });
+    try {
+      await Auth.auth({
+        user,
+        pass,
+      });
 
-    setLoading(false);
-    if (response?.data.error) {
+      setToast({
+        open: true,
+        type: "success",
+        message: "Login efetuado com sucesso!!",
+      });
+
+      router.push("/");
+    } catch (e: any) {
       setToast({
         open: true,
         type: "error",
-        message: response?.data.error,
+        message: e.message,
       });
-      return;
+    } finally {
+      setLoading(false);
     }
-
-    setToast({
-      open: true,
-      type: "success",
-      message: "Login efetuado com sucesso!!",
-    });
   };
 
   return (
@@ -154,8 +145,8 @@ const LoginPage: NextPage = () => {
             toast.type == "success"
               ? "success"
               : toast.type == "error"
-                ? "error"
-                : "info"
+              ? "error"
+              : "info"
           }
           sx={{ width: "100%" }}
         >
