@@ -24,18 +24,14 @@ import { useForm } from "react-hook-form";
 //Types
 import { ToastType } from "@/types/ToastType";
 import RecipeType from "@/types/RecipeType";
+import { NextPage } from "next";
 
-interface RecipePageParams
-{
-    cardLabelRecipeData?: string,
-    cardLabelIngredientData?: string,
-    recipeProp?: RecipeType,
-    onSaveRecipe?: (recipe:RecipeType) => void
-}
-
-const RecipePage = ({cardLabelRecipeData, cardLabelIngredientData, onSaveRecipe = (recipe:RecipeType) => {}, recipeProp}:RecipePageParams) => {
+const RecipePage = ({ params, searchParams}: { params: { method: string }, searchParams: { id: string} }) => {
     // routers
     const router = useRouter();
+
+    const cardLabelRecipeData = params?.method == 'create' ? 'Criar Receita' : 'Editar Receita';
+    const cardLabelIngredientData = params?.method == 'create' ? 'Adicionar Ingredientes' : 'Editar/Adicionar Ingredientes';
 
     // react hook form
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -49,7 +45,7 @@ const RecipePage = ({cardLabelRecipeData, cardLabelIngredientData, onSaveRecipe 
     });
 
     const [stateRecipe, setStateRecipe] = useState('setRecipe');
-    let [recipe, setRecipe] = useState<RecipeType>(recipeProp ? recipeProp : {
+    let [recipe, setRecipe] = useState<RecipeType>({
         ingredients: []
     });
 
@@ -72,7 +68,7 @@ const RecipePage = ({cardLabelRecipeData, cardLabelIngredientData, onSaveRecipe 
     }
 
     const handlerSaveRecipe = () => {
-        onSaveRecipe(recipe);
+        //apply rule
     }
 
     return (
