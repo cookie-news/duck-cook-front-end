@@ -15,7 +15,6 @@ import {
 
 //Custom
 import PasswordInput from "@components/form/PasswordInput";
-import { Auth } from "@root/src/data/auth.service";
 
 import styles from "./login.module.css";
 
@@ -29,17 +28,18 @@ import { LoginForm } from "@forms/auth/login";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "@root/src/context/AuthContext";
 import PageWrapper from "@components/PageWrapper";
+import { Login } from "@utils/Login";
+import { LoadingContext } from "@context/LoadingContext";
 
 const LoginPage: NextPage = () => {
-  const { setAuth } = useContext(AuthContext);
+  const { setToken, setUserData } = useContext(AuthContext);
+  const { toggle: toggleLoading } = useContext(LoadingContext);
 
   // routers
   const router = useRouter();
 
   // react hook form
   const { register, handleSubmit } = useForm();
-
-  const [loading, setLoading] = useState(false);
 
   const [toast, setToast] = useState({
     open: false,
@@ -51,20 +51,15 @@ const LoginPage: NextPage = () => {
   const redirectToHomePage = () => router.push("/");
 
   const onSubmitLogin = async ({ user, pass }: any) => {
-    setLoading(true);
+    toggleLoading();
     try {
-      const data = await Auth.auth({
+      const { token, userData } = await Login.doLogin({
         user,
         pass,
       });
 
-      setToast({
-        open: true,
-        type: "success",
-        message: "Login efetuado com sucesso!!",
-      });
-
-      setAuth(data.token);
+      setToken(token);
+      setUserData(userData);
     } catch (e: any) {
       setToast({
         open: true,
@@ -72,7 +67,7 @@ const LoginPage: NextPage = () => {
         message: e.message,
       });
     } finally {
-      setLoading(false);
+      toggleLoading();
     }
   };
 
@@ -90,15 +85,7 @@ const LoginPage: NextPage = () => {
             }}
           />
         </div>
-        {loading ? (
-          <div
-            className={`flex justify-center items-center h-screen w-screen z-10 absolute ${styles["screen-grey-transparent"]}`}
-          >
-            <CircularProgress />
-          </div>
-        ) : (
-          <></>
-        )}
+
         <form className="mt-6 w-10/12 max-w-md">
           {LoginForm.map((form) =>
             form.type === "password" ? (
