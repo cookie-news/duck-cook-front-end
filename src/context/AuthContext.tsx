@@ -18,7 +18,9 @@ export function AuthContextProvider({
   children: React.ReactNode;
 }) {
   const [auth, setAuth] = useState<string>(
-    typeof window !== "undefined" ? String(Cookies.get(COOKIE_AUTH_TOKEN)) : ""
+    typeof window !== "undefined"
+      ? JSON.parse(Cookies.get(COOKIE_AUTH_TOKEN) ?? "undefined")
+      : ""
   );
 
   useEffect(() => {
