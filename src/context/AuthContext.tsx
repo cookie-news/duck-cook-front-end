@@ -2,11 +2,16 @@
 
 import { createContext, useEffect, useMemo, useState } from "react";
 import { Cookies } from "@utils/Cookie";
-import { COOKIE_AUTH_TOKEN } from "../data/auth.service";
+import { User } from "../data/user.service";
+
+export const COOKIE_AUTH_TOKEN = "@duck-cook/COOKIE_AUTH_TOKEN";
+export const LOCALSTORAGE_USER_DATA = "@duck-cook/USER_DATA";
 
 interface AuthContextProps {
-  auth: string;
-  setAuth: (auth: string) => void;
+  token: string;
+  userData: User;
+  setUserData: (userData: User) => void;
+  setToken: (token: string) => void;
   isLogged: boolean;
 }
 
@@ -17,22 +22,38 @@ export function AuthContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [auth, setAuth] = useState<string>(
+  const [token, setToken] = useState<string>(
+    String(Cookies.get(COOKIE_AUTH_TOKEN) ?? "")
+  );
+
+  const [userData, setUserData] = useState<User>(
     typeof window !== "undefined"
-      ? JSON.parse(Cookies.get(COOKIE_AUTH_TOKEN) ?? "undefined")
+      ? JSON.parse(localStorage.getItem(LOCALSTORAGE_USER_DATA) ?? "{}")
       : ""
   );
 
   useEffect(() => {
-    Cookies.set(COOKIE_AUTH_TOKEN, auth);
-  }, [auth]);
+    if (token) Cookies.set(COOKIE_AUTH_TOKEN, token);
+  }, [token]);
+
+  useEffect(() => {
+    if (token !== "" || token) {
+      localStorage.setItem(LOCALSTORAGE_USER_DATA, JSON.stringify(userData));
+    }
+  }, [userData]);
 
   const handleIsLogged = () => {
     return Cookies.has(COOKIE_AUTH_TOKEN);
   };
 
   const value: AuthContextProps = useMemo(
-    () => ({ auth, setAuth, isLogged: handleIsLogged() }),
+    () => ({
+      token,
+      setToken,
+      isLogged: handleIsLogged(),
+      userData,
+      setUserData,
+    }),
     []
   );
 

@@ -20,6 +20,7 @@
     ],
     "paths": {
       "@components/*": ["./src/components/*"],
+      "@context/*": ["./src/context/*"],
       "@forms/*": ["./src/forms/*"],
       "@styles/*": ["./src/styles/*"],
       "@assets/*": ["./public/assets/*"],
