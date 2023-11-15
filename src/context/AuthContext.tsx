@@ -19,7 +19,7 @@ export function AuthContextProvider({
 }) {
   const [auth, setAuth] = useState<string>(
     typeof window !== "undefined"
-      ? JSON.parse(Cookies.get(COOKIE_AUTH_TOKEN) ?? "undefined")
+      ? String (Cookies.get(COOKIE_AUTH_TOKEN) ?? "")
       : ""
   );
 
