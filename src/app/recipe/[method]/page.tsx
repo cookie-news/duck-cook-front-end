@@ -73,7 +73,6 @@ const RecipePage = ({ params, searchParams}: { params: { method: string }, searc
     const handlerSaveRecipe = async () => {
 
         try {
-            console.log(recipe);
             createRecipe({ idUser: "",
                            description: recipe.description,
                            images: recipe.images,
@@ -82,10 +81,8 @@ const RecipePage = ({ params, searchParams}: { params: { method: string }, searc
                            preparationTime: ( (parseInt(recipe.preparetionTimeHours ?? '') * 60) * 60 + parseInt(recipe.preparetionTimeMinutes ?? '') * 60 ),
                            title: recipe.title } as any);
         } catch (error) {
-            
+            console.error(error);
         }
-
-       // onSaveRecipe(recipe);
     }
 
     return (
