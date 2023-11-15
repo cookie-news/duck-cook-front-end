@@ -147,10 +147,10 @@ const ViewRecipePage: NextPage = () => {
 
     return (
         <Container className="mt-10 mb-10">
-            <div className="p-0 md:p-10 bg-white shadow-2xl rounded-3xl overflow-auto">
+            <div className="p-0 md:p-10 bg-white rounded-md overflow-auto">
                 <div className="md:grid md:grid-cols-2 md:grid-rows-none gap-2 md:gap-8">
                     <Carousel 
-                        className="w-full h-96 md:h-full md:rounded-3xl md:shadow-2xl"
+                        className="w-full h-96 md:h-full md:rounded-md"
                         fullHeightHover={false}
                         autoPlay={true}
                         indicators={false}
@@ -162,8 +162,11 @@ const ViewRecipePage: NextPage = () => {
                         }
                     </Carousel>
                     <div className="p-5 pb-0 md:p-0">
-                        <Typography color="text.primary" className="font-bold mb-2" variant="h4">
+                        <Typography color="text.primary" className="font-bold" variant="h4">
                             {recipe.title}
+                        </Typography>
+                        <Typography className="float-right font-bold" color="text-primary" variant="caption">
+                            Autor: {recipe.author?.fullName}
                         </Typography>
                         <div className="flex items-center">
                             <IconButton aria-label="like" color={isLiked ? 'primary' : 'default'}  className="mr-2 p-0" onClick={isLiked ? onNotLikeRecipe : onLikeRecipe}>
@@ -182,7 +185,7 @@ const ViewRecipePage: NextPage = () => {
                             <Typography color="text.primary" variant="body1">
                                 <b>Ingredientes usados na receita</b>
                             </Typography>
-                            <div className="mt-2 border-solid border border-green-50dark shadow-lg shadow-green-50dark rounded-2xl bg-green-50 grid grid-cols-1">
+                            <div className="mt-2 border-solid border border-neutral-200 rounded-md bg-neutral-50 grid grid-cols-1">
                                 {
                                     recipe.ingredients?.map((ingredient:any) => 
                                         <div key={crypto.randomUUID()} className="p-4 border-b border-t-0 border-r-0 border-l-0 border-solid border-green-50dark">
@@ -253,24 +256,24 @@ const ViewRecipePage: NextPage = () => {
                             recipe.comments?.map((comment) => 
                                 <div className={'flex w-full mt-4 '+(comment.author.id == user.id ? 'flex-row-reverse' : '')} key={crypto.randomUUID()}>
                                     <div className="mr-2 w-5 h-5 md:w-11 md:h-11"></div>
-                                    <Paper elevation={2} className="flex-1 mr-2 p-4 border border-solid rounded border-neutral-100 text-left">
+                                    <div className="flex-1 mr-2 p-4 border border-solid rounded-md border-neutral-200 bg-neutral-50 text-left">
+                                        <Avatar 
+                                            sx={{ width: 30, height: 30 }}
+                                            src={comment.author.avatar}
+                                            className="flex-none md:hidden float-right"
+                                        />
                                         <Typography variant="body2">
-                                            <Avatar 
-                                                sx={{ width: 30, height: 30 }}
-                                                src={comment.author.avatar}
-                                                className="flex-none md:hidden float-right"
-                                            />
                                             <b>{comment.author.fullName}:</b>
                                         </Typography>
                                         <Typography variant="body2" className="mt-1">
                                             {comment.text}
                                         </Typography>
                                         <div className="text-right mt-2">
-                                            <Typography className="CaptionText" variant="caption">
+                                            <Typography color="CaptionText" variant="caption">
                                                 {comment.createdDatetime}
                                             </Typography>
                                         </div>
-                                    </Paper>
+                                    </div>
                                     <Avatar 
                                         sx={{ width: 45, height: 45 }}
                                         src={comment.author.avatar}
