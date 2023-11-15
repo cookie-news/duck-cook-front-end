@@ -47,8 +47,7 @@ export async function createRecipe(body: createRecipe) {
 
     console.log(body);
 
-    // formData.append("idUser", body.idUser);
-    formData.append("idUser", "1");
+    formData.append("idUser", body.idUser);
     formData.append("title", body.title);
     formData.append("description", body.description);
     formData.append("preparationTime", body.preparationTime.toString());

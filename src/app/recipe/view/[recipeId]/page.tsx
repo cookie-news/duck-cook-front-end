@@ -30,20 +30,23 @@ import ErrorMessages from "@utils/ErrorMessages";
 import UserType from "@/types/UserType";
 import RecipeType from "@/types/RecipeType";
 import PageWrapper from "@components/PageWrapper";
-import { AuthContext } from "@root/src/context/AuthContext";
 
 //Data services
 import { getRecipe } from "@root/src/data/recipe.service";
+import { UserService } from "@root/src/data/user.service";
+
+//Contexts
+import { AuthContext } from "@context/AuthContext";
+import { LoadingContext } from "@context/LoadingContext";
 
 const ViewRecipePage = ({params}:{params:{recipeId:string}}) => {
   const [recipe, setRecipe] = useState<RecipeType>({});
-  
-  const [user, setUser] = useState<UserType>({
-    id: "test",
-    fullName: "Luidy Moura",
-    avatar:
-      "https://imgs.search.brave.com/VtUkZ_UfRNwFfcSEtdUTd-7tIBHE7FiIJdKsX0Vjirg/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1wc2QvM2Qt/aWxsdXN0cmF0aW9u/LWh1bWFuLWF2YXRh/ci1wcm9maWxlXzIz/LTIxNTA2NzExNDIu/anBnP3NpemU9NjI2/JmV4dD1qcGc",
-  } as UserType);
+
+  //Loading
+  const { toggle: handleLoadingDialog } = useContext(LoadingContext);
+
+  //User
+  const { userData } = useContext(AuthContext);
 
   const [isLiked, setIsLiked] = useState(false);
 
@@ -82,7 +85,11 @@ const ViewRecipePage = ({params}:{params:{recipeId:string}}) => {
 
     newRecipe.comments?.unshift({
       text: values.comment,
-      author: user,
+      author: { id: userData.id,
+                fullName: userData.name,
+                avatar  : userData.image,
+                email   : userData.email,
+                userName: userData.user },
       createdDatetime:
         new Date().toLocaleDateString() +
         " " +
@@ -94,25 +101,37 @@ const ViewRecipePage = ({params}:{params:{recipeId:string}}) => {
     });
   };
 
-  const getRecipeData = async () =>{
+  const getRecipeData = () =>{
 
-    getRecipe(params.recipeId).then((data)=>{
+    getRecipe(params.recipeId).then( async (data)=>{
 
-      setRecipe({ title: data.title,
-                  description: data.description,
-                  ingredients: data.ingredients,  
-                  preparationTime   : data.preparationTimeConverted,  
-                  preparationMethod : data.preparationMethod,
-                  images            : data.images
+      const userData = await UserService.getUserData("_id", data.idUser);
 
+      if(userData){
 
-      });
+        setRecipe({ author: { fullName: userData.name,
+                              avatar  : userData.image,
+                              email   : userData.email,
+                              userName: userData.user },
+                    title: data.title,
+                    description: data.description,
+                    ingredients: data.ingredients,  
+                    preparationTime   : data.preparationTimeConverted,  
+                    preparationMethod : data.preparationMethod,
+                    images            : data.images });
 
-    })
+                   
+
+        }
+
+    }).finally(()=>{
+      handleLoadingDialog();
+    });
 
   };
   
   useEffect(()=>{
+    handleLoadingDialog();
     getRecipeData();
   },[]);
 
@@ -209,11 +228,11 @@ const ViewRecipePage = ({params}:{params:{recipeId:string}}) => {
               <Typography color="text.primary" variant="body1">
                 <b>Comentários:</b>
               </Typography>
-              {user && (
+              {userData && (
                 <div className="mt-2 flex">
                   <Avatar
                     sx={{ width: 50, height: 50 }}
-                    src={user.avatar}
+                    src={userData.image}
                     className="mr-2"
                   />
                   <TextField
@@ -249,7 +268,7 @@ const ViewRecipePage = ({params}:{params:{recipeId:string}}) => {
                 <div
                   className={
                     "flex w-full mt-4 " +
-                    (comment.author.id == user.id ? "flex-row-reverse" : "")
+                    (comment.author.id == userData.id ? "flex-row-reverse" : "")
                   }
                   key={crypto.randomUUID()}
                 >
