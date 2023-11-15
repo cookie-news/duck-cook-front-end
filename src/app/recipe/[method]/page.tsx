@@ -26,6 +26,9 @@ import { ToastType } from "@/types/ToastType";
 import RecipeType from "@/types/RecipeType";
 import { NextPage } from "next";
 
+//Data services
+import { createRecipe } from "@root/src/data/recipe.service";
+
 const RecipePage = ({ params, searchParams}: { params: { method: string }, searchParams: { id: string} }) => {
     // routers
     const router = useRouter();
@@ -67,18 +70,17 @@ const RecipePage = ({ params, searchParams}: { params: { method: string }, searc
         setRecipe(newRecipe);
     }
 
-    const handlerSaveRecipe = async (data: any) => {
+    const handlerSaveRecipe = async () => {
 
         try {
-            // createRecipe();
-            console.log(data);
+            console.log(recipe);
             createRecipe({ idUser: "",
-                           description: data.description,
-                           images: data.images,
+                           description: recipe.description,
+                           images: recipe.images,
                            ingredients: [],
-                           preparationMethod: data.methodPreparation,
-                           preparationTime: ( (data.preparetionTimeHours * 60) * 60 + data.preparetionTimeMinutes * 60 ),
-                           title: data.title });
+                           preparationMethod: recipe.methodPreparation,
+                           preparationTime: ( (parseInt(recipe.preparetionTimeHours ?? '') * 60) * 60 + parseInt(recipe.preparetionTimeMinutes ?? '') * 60 ),
+                           title: recipe.title } as any);
         } catch (error) {
             
         }
