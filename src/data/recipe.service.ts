@@ -96,7 +96,6 @@ export async function getRecipe(recipeId: string) {
 
     response.data.preparationTimeConverted = secondsToHourMinute(response.data.preparationTime);
     
-    console.log(response.data);
     return response.data;
   
   } catch (e: any) {

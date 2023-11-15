@@ -4,14 +4,15 @@ import IngredientType from '@/types/IngredientType';
 import UserType from '@/types/UserType';
 
 export default interface RecipeType {
+    id?: string,
+    idUser?: string,
     title?: string,
     description?: string,
-    methodPreparation?: string,
     images?: FileList,
     imagesSRC?: Array<string>,
     ingredients?: Array<IngredientType>,
     author?: UserType,
-    preparationTime?: string,
+    preparationTimeConverted?: string,
     preparetionTimeHours?: string,
     preparetionTimeMinutes?: string,
     preparationMethod?: string,
