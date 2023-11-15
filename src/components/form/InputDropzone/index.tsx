@@ -16,10 +16,14 @@ interface InputDropzoneType
     label?:string,
     onChange?: (loadedFiles:File[]) => void,
     acceptedFiles?: Array<string>,
-    dropzoneText?:string
+    dropzoneText?:string,
+
+    registerInput: (name: string) => {},
+    name: string
+
 }
 
-const InputDropzone = ({label = '',onChange = (loadedFiles:File[]) => {}, acceptedFiles = [], dropzoneText = 'Selecione o arquivo'}:InputDropzoneType) => {
+const InputDropzone = ({label = '',onChange = (loadedFiles:File[]) => {}, acceptedFiles = [], dropzoneText = 'Selecione o arquivo', registerInput, name}:InputDropzoneType) => {
     const [loadedFiles, setLoadedFiles] = useState<File[]>([]);
 
     const handleChangeDropzone = (loadedFiles:File[]) => {
@@ -32,8 +36,8 @@ const InputDropzone = ({label = '',onChange = (loadedFiles:File[]) => {}, accept
         <div>
             <InputLabel color='primary'>{label}</InputLabel>
             <DropzoneArea 
+                inputProps={{...registerInput(name)}}
                 fileObjects={loadedFiles}
-                onChange={handleChangeDropzone} 
                 dropzoneClass="dropzone-area-style" 
                 dropzoneText={dropzoneText} 
                 acceptedFiles={acceptedFiles} 

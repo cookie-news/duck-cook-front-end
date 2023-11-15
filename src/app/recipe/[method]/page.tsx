@@ -24,18 +24,17 @@ import { useForm } from "react-hook-form";
 //Types
 import { ToastType } from "@/types/ToastType";
 import RecipeType from "@/types/RecipeType";
+import { NextPage } from "next";
 
-interface RecipePageParams
-{
-    cardLabelRecipeData?: string,
-    cardLabelIngredientData?: string,
-    recipeProp?: RecipeType,
-    onSaveRecipe?: (recipe:RecipeType) => void
-}
+//Data services
+import { createRecipe } from "@root/src/data/recipe.service";
 
-const RecipePage = ({cardLabelRecipeData, cardLabelIngredientData, onSaveRecipe = (recipe:RecipeType) => {}, recipeProp}:RecipePageParams) => {
+const RecipePage = ({ params, searchParams}: { params: { method: string }, searchParams: { id: string} }) => {
     // routers
     const router = useRouter();
+
+    const cardLabelRecipeData = params?.method == 'create' ? 'Criar Receita' : 'Editar Receita';
+    const cardLabelIngredientData = params?.method == 'create' ? 'Adicionar Ingredientes' : 'Editar/Adicionar Ingredientes';
 
     // react hook form
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -49,7 +48,7 @@ const RecipePage = ({cardLabelRecipeData, cardLabelIngredientData, onSaveRecipe 
     });
 
     const [stateRecipe, setStateRecipe] = useState('setRecipe');
-    let [recipe, setRecipe] = useState<RecipeType>(recipeProp ? recipeProp : {
+    let [recipe, setRecipe] = useState<RecipeType>({
         ingredients: []
     });
 
@@ -71,8 +70,19 @@ const RecipePage = ({cardLabelRecipeData, cardLabelIngredientData, onSaveRecipe 
         setRecipe(newRecipe);
     }
 
-    const handlerSaveRecipe = () => {
-        onSaveRecipe(recipe);
+    const handlerSaveRecipe = async () => {
+
+        try {
+            createRecipe({ idUser: "",
+                           description: recipe.description,
+                           images: recipe.images,
+                           ingredients: [],
+                           preparationMethod: recipe.methodPreparation,
+                           preparationTime: ( (parseInt(recipe.preparetionTimeHours ?? '') * 60) * 60 + parseInt(recipe.preparetionTimeMinutes ?? '') * 60 ),
+                           title: recipe.title } as any);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     return (
@@ -134,7 +144,8 @@ const RecipePage = ({cardLabelRecipeData, cardLabelIngredientData, onSaveRecipe 
                                     )}
                                 </div>
                                 <div className="w-full">
-                                    <InputDropzone label="Adicione as imagens da receita:" acceptedFiles={['image/png']} />
+                                    <input multiple type="file" {...register("images")} ></input> 
+                                    {/* <InputDropzone name="images" registerInput={register} label="Adicione as imagens da receita:" acceptedFiles={['image/png']} /> */}
                                 </div>
                             </div>
                         </form>
@@ -147,7 +158,7 @@ const RecipePage = ({cardLabelRecipeData, cardLabelIngredientData, onSaveRecipe 
                             variant="contained"
                             size="large"
                             className="w-full"
-                            onClick={stateRecipe === 'setRecipe' ? handleSubmit(onNextStateRecipe) : handlerSaveRecipe}
+                            onClick={stateRecipe === 'setRecipe' ? handleSubmit(onNextStateRecipe) : handleSubmit(handlerSaveRecipe)}
                         >
                             { stateRecipe === 'setRecipe' ? 'AVANÇAR' : 'SALVAR' }
                         </Button>
