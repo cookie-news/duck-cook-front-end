@@ -7,4 +7,10 @@ const authRoutes = {
   },
 };
 
-export { authRoutes };
+const rootRoutes = {
+  home: {
+    path: "/",
+  },
+};
+
+export { authRoutes, rootRoutes };

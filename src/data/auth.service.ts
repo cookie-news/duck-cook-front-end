@@ -20,7 +20,6 @@ async function auth(body: AuthRequest) {
       baseUrl + "/auth/login",
       body
     );
-    Cookies.set(COOKIE_AUTH_TOKEN, data.token);
     return data;
   } catch (e: any) {
     throw new Error(e.response?.message ?? "Erro na autenticação");

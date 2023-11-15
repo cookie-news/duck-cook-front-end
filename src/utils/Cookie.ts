@@ -12,4 +12,7 @@ export const Cookies = {
   ) {
     return Cookie.set(key, value, options);
   },
+  has: function (key: string): boolean {
+    return !!Cookie.get(key);
+  },
 };
