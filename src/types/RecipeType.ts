@@ -12,7 +12,7 @@ export default interface RecipeType {
     preparationTime?: string,
     preparetionTimeHours?: string,
     preparetionTimeMinutes?: string,
-    preparationMethod: string,
+    preparationMethod?: string,
     likeNumber?: number,
     commentsNumber?: number,
     comments?: Array<CommentType>,
