@@ -1,7 +1,7 @@
 "use client";
 
 import { NextPage } from "next";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 //Material UI
 import Carousel from "react-material-ui-carousel";
@@ -32,95 +32,12 @@ import RecipeType from "@/types/RecipeType";
 import PageWrapper from "@components/PageWrapper";
 import { AuthContext } from "@root/src/context/AuthContext";
 
-const ViewRecipePage: NextPage = () => {
-  const [recipe, setRecipe] = useState<RecipeType>({
-    title: "Teste",
-    description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsu.`,
-    methodPreparation: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsu.`,
-    images: [
-      {
-        src: "https://imgs.search.brave.com/09u0egwEI5oo55tfE80XFTtFQlEX7GhbFl18TXkyGfo/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9jbGFz/c2ljLmV4YW1lLmNv/bS93cC1jb250ZW50/L3VwbG9hZHMvMjAy/Mi8wNS9SZW1hbnNv/LWRvLVBlaXhlLmpw/Zz9xdWFsaXR5PTcw/JnN0cmlwPWluZm8m/dz0xMDI0",
-      },
-    ],
-    ingredients: [
-      {
-        name: "Açucar",
-        quantity: "1",
-        measure: "Colher(es)",
-      },
-      {
-        name: "Leite",
-        quantity: "1",
-        measure: "L",
-      },
-      {
-        name: "Chocolate em pó",
-        quantity: "1",
-        measure: "Xícara(s)",
-      },
-      {
-        name: "Manteiga",
-        quantity: "3",
-        measure: "Colher(es)",
-      },
-      {
-        name: "Açucar",
-        quantity: "1",
-        measure: "Colher(es)",
-      },
-      {
-        name: "Leite",
-        quantity: "1",
-        measure: "L",
-      },
-      {
-        name: "Chocolate em pó",
-        quantity: "1",
-        measure: "Xícara(s)",
-      },
-      {
-        name: "Manteiga",
-        quantity: "3",
-        measure: "Colher(es)",
-      },
-    ],
-    author: {
-      fullName: "Luidy Moura",
-    } as UserType,
-    preparetionTime: "01:30",
-    likeNumber: 10,
-    comments: [
-      {
-        author: {
-          fullName: "Lucas Nascimento",
-          avatar:
-            "https://imgs.search.brave.com/xIDwytv2xutDq2oHeLEkZwVL_q8jDk2cqgdeZhNDXWI/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9wdWIt/c3RhdGljLmZvdG9y/LmNvbS9hc3NldHMv/cHJvamVjdHMvcGFn/ZXMvNGIyZmNkN2Vi/NjhhNDdjNjk4ZmQ3/YWMzNTI4YzU2YTEv/Zm90b3ItZmJjNjc4/MGUyNTA2NDY5ZGE2/N2FiYjUxNWMxN2Uw/ZTYuanBn",
-        } as UserType,
-        text: `Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.`,
-        createdDatetime: "06/11/2023 20:01",
-      },
-      {
-        author: {
-          id: "test",
-          fullName: "Luidy Moura",
-          avatar:
-            "https://imgs.search.brave.com/VtUkZ_UfRNwFfcSEtdUTd-7tIBHE7FiIJdKsX0Vjirg/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1wc2QvM2Qt/aWxsdXN0cmF0aW9u/LWh1bWFuLWF2YXRh/ci1wcm9maWxlXzIz/LTIxNTA2NzExNDIu/anBnP3NpemU9NjI2/JmV4dD1qcGc",
-        } as UserType,
-        text: "Muito bom!!",
-        createdDatetime: "05/11/2023 22:58",
-      },
-      {
-        author: {
-          fullName: "Paulo Iury",
-          avatar:
-            "https://imgs.search.brave.com/qDwk5XMurETJUyZmI31i5PLVCimIotCqjpSbGaM_HVE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9jZG4u/bWVpa2VyLmlvL2Fz/c2V0cy81MDM3LzIw/MTkvMTIvaWNvbl8y/MDE5MTIxOTA3MTYx/NTVkZmIyM2JmYWE2/ZWIucG5n",
-        } as UserType,
-        text: `There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.`,
-        createdDatetime: "05/11/2023 15:25",
-      },
-    ],
-  } as RecipeType);
+//Data services
+import { getRecipe } from "@root/src/data/recipe.service";
 
+const ViewRecipePage = ({params}:{params:{recipeId:string}}) => {
+  const [recipe, setRecipe] = useState<RecipeType>({});
+  
   const [user, setUser] = useState<UserType>({
     id: "test",
     fullName: "Luidy Moura",
@@ -177,8 +94,29 @@ const ViewRecipePage: NextPage = () => {
     });
   };
 
+  const getRecipeData = async () =>{
+
+    getRecipe(params.recipeId).then((data)=>{
+
+      setRecipe({ title: data.title,
+                  description: data.description,
+                  ingredients: data.ingredients,  
+                  preparationTime   : data.preparationTimeConverted,  
+                  preparationMethod : data.preparationMethod,
+                  images            : data.images
+
+
+      });
+
+    })
+
+  };
+  
+  useEffect(()=>{
+    getRecipeData();
+  },[]);
+
   return (
-    <PageWrapper>
       <Container className="mt-10 mb-10">
         <div style={{ borderBottom: "1px solid #494949" }}>
           <Typography color="text.primary" variant="h2">
@@ -204,7 +142,7 @@ const ViewRecipePage: NextPage = () => {
                 color="info"
                 icon={<AccessAlarmIcon />}
               >
-                <b>Tempo de preparo:</b> {recipe.preparetionTime}
+                <b>Tempo de preparo:</b> {recipe.preparationTime}
               </Alert>
               <div className="mt-4">
                 <Typography color="text.primary" variant="body1">
@@ -236,7 +174,7 @@ const ViewRecipePage: NextPage = () => {
                     square
                     className="flex justify-center bg-transparent"
                   >
-                    <img style={{ width: "100%" }} src={image.src} />
+                    <img style={{ width: "100%" }} src={image} />
                   </Paper>
                 ))}
               </Carousel>
@@ -263,7 +201,7 @@ const ViewRecipePage: NextPage = () => {
               <b>Modo de preparo:</b>
             </Typography>
             <Typography color="text.primary" variant="body2">
-              {recipe.methodPreparation}
+              {recipe.preparationMethod}
             </Typography>
           </div>
           <form>
@@ -349,7 +287,6 @@ const ViewRecipePage: NextPage = () => {
           </form>
         </div>
       </Container>
-    </PageWrapper>
   );
 };
 

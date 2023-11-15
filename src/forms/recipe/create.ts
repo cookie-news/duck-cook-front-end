@@ -27,7 +27,7 @@ export const RecipeForm: FormType[] = [
         }
     },
     {
-        name: "methodPreparation",
+        name: "preparationMethod",
         placeholder: "",
         fullWidth: true,
         label: "Modo de Preparo",

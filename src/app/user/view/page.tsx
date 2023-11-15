@@ -129,7 +129,7 @@ const ViewRecipePage: NextPage = () => {
                                                         <CardMedia
                                                             component="img"
                                                             sx={{ width: 80 }}
-                                                            image={recipe.images[0].src}
+                                                            image={recipe.images[0]}
                                                             style={{ borderRadius: '0px 1px 1px 0px' }}
                                                         />
                                                         :

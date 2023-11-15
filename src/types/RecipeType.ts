@@ -6,13 +6,13 @@ import UserType from '@/types/UserType';
 export default interface RecipeType {
     title?: string,
     description?: string,
-    methodPreparation?: string
-    images?: Array<ImageType>
+    images?: Array<string>
     ingredients?: Array<IngredientType>
     author?: UserType,
-    preparetionTime?: string,
+    preparationTime?: string,
     preparetionTimeHours?: string,
     preparetionTimeMinutes?: string,
+    preparationMethod?: string,
     likeNumber?: number,
     commentsNumber?: number,
     comments?: Array<CommentType>,
