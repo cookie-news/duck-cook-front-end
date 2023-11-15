@@ -76,7 +76,7 @@ const RecipePage = ({ params, searchParams}: { params: { method: string }, searc
             createRecipe({ idUser: "",
                            description: recipe.description,
                            images: recipe.images,
-                           ingredients: [],
+                           ingredients: recipe.ingredients,
                            preparationMethod: recipe.methodPreparation,
                            preparationTime: ( (parseInt(recipe.preparetionTimeHours ?? '') * 60) * 60 + parseInt(recipe.preparetionTimeMinutes ?? '') * 60 ),
                            title: recipe.title } as any);
