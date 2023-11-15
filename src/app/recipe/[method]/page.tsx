@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
 
 //Material UI
@@ -28,9 +28,19 @@ import RecipeType from "@/types/RecipeType";
 import { createRecipe } from "@root/src/data/recipe.service";
 import InputDropzone from "@components/form/InputDropzone";
 
+//Contexts
+import { AuthContext } from "@context/AuthContext";
+import { LoadingContext } from "@context/LoadingContext";
+
 const RecipePage = ({ params, searchParams}: { params: { method: string }, searchParams: { id: string} }) => {
     // routers
     const router = useRouter();
+
+    //Loading
+    var { toggle: handleLoadingDialog } = useContext(LoadingContext);
+
+    //User
+    const { userData } = useContext(AuthContext);
 
     const cardLabelRecipeData = params?.method == 'create' ? 'Criar Receita' : 'Editar Receita';
     const cardLabelIngredientData = params?.method == 'create' ? 'Adicionar Ingredientes' : 'Editar/Adicionar Ingredientes';
@@ -72,13 +82,22 @@ const RecipePage = ({ params, searchParams}: { params: { method: string }, searc
     const handlerSaveRecipe = async () => {
 
         try {
-            createRecipe({ idUser: "",
+
+            handleLoadingDialog( );
+
+            createRecipe({ idUser: userData.id,
                            description: recipe.description,
                            images: recipe.images,
                            ingredients: recipe.ingredients,
                            preparationMethod: recipe.preparationMethod,
                            preparationTime: ( (parseInt(recipe.preparetionTimeHours ?? '') * 60) * 60 + parseInt(recipe.preparetionTimeMinutes ?? '') * 60 ),
-                           title: recipe.title } as any);
+                           title: recipe.title } as any)
+                           .then((sucess)=>{
+
+                            handleLoadingDialog();
+
+                           });
+                           
         } catch (error) {
             console.error(error);
         }

@@ -1,7 +1,10 @@
 'use client'
 
-import { NextPage } from "next";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+
+//Contexts
+import { AuthContext } from "@context/AuthContext";
+import { LoadingContext } from "@context/LoadingContext";
 
 //Material UI
 import Carousel from 'react-material-ui-carousel'
@@ -15,6 +18,7 @@ import ErrorMessages from "@utils/ErrorMessages";
 //Types
 import UserType from "@/types/UserType";
 import RecipeType from "@/types/RecipeType";
+import PageWrapper from "@components/PageWrapper";
 
 //Styles
 import './style.css'
@@ -23,16 +27,15 @@ import './style.css'
 import { getRecipe } from "@root/src/data/recipe.service";
 import { UserService } from "@root/src/data/user.service";
 
-
 const ViewRecipePage = ({ params }: { params: { recipeId: string } }) => {
 
     const [recipe, setRecipe] = useState<RecipeType>({});
     
-    const [user, setUser] = useState<UserType>({
-        id: 'test',
-        fullName: 'Luidy Moura',
-        avatar: 'https://imgs.search.brave.com/VtUkZ_UfRNwFfcSEtdUTd-7tIBHE7FiIJdKsX0Vjirg/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1wc2QvM2Qt/aWxsdXN0cmF0aW9u/LWh1bWFuLWF2YXRh/ci1wcm9maWxlXzIz/LTIxNTA2NzExNDIu/anBnP3NpemU9NjI2/JmV4dD1qcGc'
-    } as UserType);
+    //Loading
+    const { toggle: handleLoadingDialog } = useContext(LoadingContext);
+
+    //User
+    const { userData } = useContext(AuthContext);
 
     const [isLiked, setIsLiked] = useState(false);
     
@@ -65,7 +68,7 @@ const ViewRecipePage = ({ params }: { params: { recipeId: string } }) => {
 
         newRecipe.comments?.unshift({
             text: values.comment,
-            author: user,
+            author: userData,
             createdDatetime: (new Date()).toLocaleDateString()+' '+(new Date()).toLocaleTimeString().substring(0, 5)
         })
 
@@ -82,19 +85,22 @@ const ViewRecipePage = ({ params }: { params: { recipeId: string } }) => {
             recipeData['imagesSRC'] = recipeData.images;
             delete recipeData.images;
 
-            UserService.getUserData('_id', recipeData.idUser).then((userData:any) => {
-                userData['fullName'] = userData.name;
-                delete userData.name;
+            UserService.getUserData('_id', recipeData.idUser).then((authorData:any) => {
+                authorData['fullName'] = authorData.name;
+                delete authorData.name;
 
-                recipeData.author = userData;
+                recipeData.author = authorData;
                 console.log(recipeData);
 
                 setRecipe(recipeData);
+            }).finally(() => {
+              handleLoadingDialog();
             })
         })
     };
 
     useEffect(() => {
+        handleLoadingDialog();
         getRecipeData();
     }, []);
 
@@ -172,11 +178,11 @@ const ViewRecipePage = ({ params }: { params: { recipeId: string } }) => {
                             <b>Comentários</b>
                         </Typography>
                         {
-                            user &&
+                            userData &&
                             <div className="mt-2 flex flex-col md:flex-row">
                                 <Avatar 
                                     sx={{ width: 50, height: 50 }}
-                                    src={user.avatar}
+                                    src={userData.image}
                                     className="md:mr-2 hidden md:block"
                                 />
                                 <TextField
@@ -207,16 +213,16 @@ const ViewRecipePage = ({ params }: { params: { recipeId: string } }) => {
                     <div className="mt-4">
                         {
                             recipe.comments?.map((comment) => 
-                                <div className={'flex w-full mt-4 '+(comment.author.id == user.id ? 'flex-row-reverse' : '')} key={crypto.randomUUID()}>
+                                <div className={'flex w-full mt-4 '+(comment.author.id == userData.id ? 'flex-row-reverse' : '')} key={crypto.randomUUID()}>
                                     <div className="mr-2 w-5 h-5 md:w-11 md:h-11"></div>
                                     <div className="flex-1 mr-2 p-4 border border-solid rounded-md border-neutral-200 bg-neutral-50 text-left">
                                         <Avatar 
                                             sx={{ width: 30, height: 30 }}
-                                            src={comment.author.avatar}
+                                            src={comment.author.image}
                                             className="flex-none md:hidden float-right"
                                         />
                                         <Typography variant="body2">
-                                            <b>{comment.author.fullName}:</b>
+                                            <b>{comment.author.name}:</b>
                                         </Typography>
                                         <Typography variant="body2" className="mt-1">
                                             {comment.text}
@@ -229,7 +235,7 @@ const ViewRecipePage = ({ params }: { params: { recipeId: string } }) => {
                                     </div>
                                     <Avatar 
                                         sx={{ width: 45, height: 45 }}
-                                        src={comment.author.avatar}
+                                        src={comment.author.name}
                                         className="flex-none mr-2 hidden md:block"
                                     />
                                 </div>
