@@ -1,23 +1,22 @@
 @tailwind components;
 @tailwind utilities;
-/*@tailwind base;*/
+/* @tailwind base; */
 
 :root {
-    --primary-color: #095150;
-    --primary-color-hover: #053f3e;
-    --secundary-color: #edfffc;
+  --primary-color: #095150;
+  --primary-color-hover: #053f3e;
+  --secundary-color: #edfffc;
 }
 
 body {
-    background-color: white !important;
-    margin: 0;
+  background-color: white !important;
+  margin: 0;
 }
 
 .bg-primary {
-    background-color: #095150;
+  background-color: #095150;
 }
 
-.border-primary
-{
-    border-color: rgba(36, 133, 131, 0.548);
+.border-primary {
+  border-color: rgba(36, 133, 131, 0.548);
 }
