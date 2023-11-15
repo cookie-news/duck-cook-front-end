@@ -68,7 +68,7 @@ const RecipePage = ({ params, searchParams}: { params: { method: string }, searc
     }
 
     const handlerSaveRecipe = () => {
-        //apply rule
+        console.log(recipe);
     }
 
     return (

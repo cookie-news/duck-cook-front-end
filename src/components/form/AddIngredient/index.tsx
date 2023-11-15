@@ -72,6 +72,7 @@ const AddIngredient = ({onChange = (newIngredients:Array<IngredientType>) => {},
     }
 
     const addIngredientItem = (ingredient:any) => {
+        console.log('teste');
         ingredient.id = crypto.randomUUID();
         const newIngredients = [...ingredients, ingredient];
 
@@ -160,15 +161,15 @@ const AddIngredient = ({onChange = (newIngredients:Array<IngredientType>) => {},
                 {   
                     !ingredientEdit.isEdit 
                     ?
-                        <Button variant="outlined" startIcon={<AddIcon />} onClick={() => handleSubmit(addIngredientItem)}>
+                        <Button variant="outlined" startIcon={<AddIcon />} onClick={handleSubmit(addIngredientItem)}>
                             Adicionar Ingrediente
                         </Button>
                     :
                         <>
-                            <Button variant="outlined" color="primary" className="mr-2" startIcon={<CheckIcon />} onClick={() => handleSubmit(saveEditIngredientItem)}>
+                            <Button variant="outlined" color="primary" className="mr-2" startIcon={<CheckIcon />} onClick={handleSubmit(saveEditIngredientItem)}>
                                 Salvar
                             </Button>
-                            <Button variant="outlined" color="error" startIcon={<CloseIcon />} onClick={() => handleSubmit(resetEditingIngredient)}>
+                            <Button variant="outlined" color="error" startIcon={<CloseIcon />} onClick={handleSubmit(resetEditingIngredient)}>
                                 Cancelar
                             </Button>
                         </>
