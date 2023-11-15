@@ -1,15 +1,12 @@
 import axios from "axios";
-import { Cookies } from "@utils/Cookie";
 
 const baseUrl = process.env.NEXT_PUBLIC_AUTH_URL;
 
-export const COOKIE_AUTH_TOKEN = "COOKIE_AUTH_TOKEN";
-
-interface AuthResponse {
+export interface AuthResponse {
   token: string;
 }
 
-interface AuthRequest {
+export interface AuthRequest {
   user: string;
   pass: string;
 }
@@ -26,6 +23,6 @@ async function auth(body: AuthRequest) {
   }
 }
 
-export const Auth = {
+export const AuthService = {
   auth,
 };

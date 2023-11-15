@@ -1,9 +1,8 @@
-"user server";
 import axios from "axios";
 
 import { Cookies } from "@utils/Cookie";
 
-import { COOKIE_AUTH_TOKEN } from "./auth.service";
+import { COOKIE_AUTH_TOKEN } from "@context/AuthContext";
 
 const Api = axios.create({
   headers: {

@@ -9,6 +9,7 @@ import "@styles/globals.css";
 //Custom
 import Menu from "@components/Menu";
 import { AuthContextProvider } from "../context/AuthContext";
+import { LoadingProvider } from "@context/LoadingContext";
 
 export const metadata: Metadata = {
   title: "Duck Cook",
@@ -26,10 +27,14 @@ export default function RootLayout({
     <html lang="en">
       <body className="flex flex-col h-screen">
         <AuthContextProvider>
-          <ThemeProvider>
-            <Menu />
-            <div className="flex-1 max-h-full overflow-y-auto">{children}</div>
-          </ThemeProvider>
+          <LoadingProvider>
+            <ThemeProvider>
+              <Menu />
+              <div className="flex-1 max-h-full overflow-y-auto">
+                {children}
+              </div>
+            </ThemeProvider>
+          </LoadingProvider>
         </AuthContextProvider>
       </body>
     </html>

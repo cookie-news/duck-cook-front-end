@@ -5,8 +5,8 @@ import { useEffect } from "react";
 
 import { Cookies } from "@utils/Cookie";
 
-import { COOKIE_AUTH_TOKEN } from "../data/auth.service";
 import { authRoutes } from "@root/routes";
+import { COOKIE_AUTH_TOKEN } from "@context/AuthContext";
 
 interface PageWrapperProps {
   isProtected?: boolean;
