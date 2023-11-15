@@ -23,7 +23,7 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body className="flex flex-col h-screen">
+            <body className="flex flex-col h-scree">
                 <ThemeProvider>
                     <Menu />
                     <div className="flex-1 max-h-full overflow-y-auto">

@@ -13,7 +13,6 @@ import {
 //Custom Components
 import Loading from '@components/Loading';
 import ToastCMP from '@components/Toast';
-import InputDropzone from '@components/form/InputDropzone';
 import Card from '@components/Card';
 import AddIngredient from '@components/form/AddIngredient';
 
@@ -24,10 +23,10 @@ import { useForm } from "react-hook-form";
 //Types
 import { ToastType } from "@/types/ToastType";
 import RecipeType from "@/types/RecipeType";
-import { NextPage } from "next";
 
 //Data services
 import { createRecipe } from "@root/src/data/recipe.service";
+import InputDropzone from "@components/form/InputDropzone";
 
 const RecipePage = ({ params, searchParams}: { params: { method: string }, searchParams: { id: string} }) => {
     // routers
@@ -55,7 +54,7 @@ const RecipePage = ({ params, searchParams}: { params: { method: string }, searc
     const onNextStateRecipe = (values: any) => {
         setStateRecipe('addIngredients');
         values.ingredients = recipe.ingredients;
-        
+        console.log(values);
         setRecipe(values);
     };
 
@@ -143,9 +142,8 @@ const RecipePage = ({ params, searchParams}: { params: { method: string }, searc
                                     )
                                     )}
                                 </div>
-                                <div className="w-full">
-                                    <input multiple type="file" {...register("images")} ></input> 
-                                    {/* <InputDropzone name="images" registerInput={register} label="Adicione as imagens da receita:" acceptedFiles={['image/png']} /> */}
+                                <div className="flex flex-col w-full">        
+                                    <InputDropzone name="images" registerInput={register} files={recipe.images} />                            
                                 </div>
                             </div>
                         </form>

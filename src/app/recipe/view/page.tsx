@@ -3,6 +3,9 @@
 import { NextPage } from "next";
 import { useState } from "react";
 
+//Next
+import Image from "next/image";
+
 //Material UI
 import Carousel from 'react-material-ui-carousel'
 
@@ -16,15 +19,18 @@ import ErrorMessages from "@utils/ErrorMessages";
 import UserType from "@/types/UserType";
 import RecipeType from "@/types/RecipeType";
 
+//Styles
+import './style.css'
+
 const ViewRecipePage: NextPage = () => {
 
     const [recipe, setRecipe] = useState<RecipeType>({
         title: 'Teste',
         description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsu.`,
         methodPreparation: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsu.`,
-        images: [{
-            src: 'https://imgs.search.brave.com/09u0egwEI5oo55tfE80XFTtFQlEX7GhbFl18TXkyGfo/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9jbGFz/c2ljLmV4YW1lLmNv/bS93cC1jb250ZW50/L3VwbG9hZHMvMjAy/Mi8wNS9SZW1hbnNv/LWRvLVBlaXhlLmpw/Zz9xdWFsaXR5PTcw/JnN0cmlwPWluZm8m/dz0xMDI0'
-        }],
+        imagesSRC: [
+            'https://imgs.search.brave.com/oJSPuQZwtRfqQAPZKbhN46gD54yT5oaahiMFUiuDgFo/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTgy/MTQ3OTAzL3B0L2Zv/dG8vZGlldGEtYWJz/dXJkbHktcGVxdWVu/YS1yZWZlaSVDMyVB/NyVDMyVBM28uanBn/P3M9NjEyeDYxMiZ3/PTAmaz0yMCZjPTRf/b1RSMGp2MlgwWjhf/QU4waUVvNi1zMFNT/dURFTjdjbzBCaS1r/cW04Nk09',
+            'https://imgs.search.brave.com/09u0egwEI5oo55tfE80XFTtFQlEX7GhbFl18TXkyGfo/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9jbGFz/c2ljLmV4YW1lLmNv/bS93cC1jb250ZW50/L3VwbG9hZHMvMjAy/Mi8wNS9SZW1hbnNv/LWRvLVBlaXhlLmpw/Zz9xdWFsaXR5PTcw/JnN0cmlwPWluZm8m/dz0xMDI0'],
         ingredients: [{
             name: 'Açucar',
             quantity: '1',
@@ -64,6 +70,7 @@ const ViewRecipePage: NextPage = () => {
         } as UserType,
         preparetionTime: '01:30',
         likeNumber: 10,
+        commentsNumber: 100,
         comments: [{
             author: {
                 fullName: 'Lucas Nascimento',
@@ -122,12 +129,16 @@ const ViewRecipePage: NextPage = () => {
     const onCreateComment = (values:any) => {
         let newRecipe = {...recipe};
 
-        
+        if(newRecipe.commentsNumber) { newRecipe.commentsNumber++; }
+        else { newRecipe.commentsNumber = 1; }
+
         newRecipe.comments?.unshift({
             text: values.comment,
             author: user,
             createdDatetime: (new Date()).toLocaleDateString()+' '+(new Date()).toLocaleTimeString().substring(0, 5)
         })
+
+        setRecipe(newRecipe);
 
         reset({
             comment: ''
@@ -136,89 +147,81 @@ const ViewRecipePage: NextPage = () => {
 
     return (
         <Container className="mt-10 mb-10">
-            <div style={{borderBottom: '1px solid #494949'}}>
-                <Typography color="text.primary" variant="h2">
-                    <b>{recipe.title}</b>
-                </Typography>
-                <Typography color="text.primary" variant="subtitle2">
-                    Autor: {recipe?.author?.fullName}
-                </Typography>
-            </div>
-            <div className="p-0 pt-4 md:p-4">
-                <div className="md:grid md:grid-cols-2 gap-2 flex flex-col-reverse md:flex-col">
-                    <div>
-                        <Typography color="text.primary" variant="body1">
-                            <b>Descrição:</b>
+            <div className="p-0 md:p-10 bg-white shadow-2xl rounded-3xl overflow-auto">
+                <div className="md:grid md:grid-cols-2 md:grid-rows-none gap-2 md:gap-8">
+                    <Carousel 
+                        className="w-full h-96 md:h-full md:rounded-3xl md:shadow-2xl"
+                        fullHeightHover={false}
+                        autoPlay={true}
+                        indicators={false}
+                    >
+                        {
+                            recipe.imagesSRC?.map((image) => 
+                                <div key={crypto.randomUUID()} className="bg-cover bg-center h-full bg-no-repeat carousel-image" style={{backgroundImage: `url(${image})`}}></div>
+                            )
+                        }
+                    </Carousel>
+                    <div className="p-5 pb-0 md:p-0">
+                        <Typography color="text.primary" className="font-bold mb-2" variant="h4">
+                            {recipe.title}
                         </Typography>
-                        <Typography color="text.primary" variant="body2">
-                            {recipe.description}
-                        </Typography>
-                        <Alert variant="outlined" severity="info" className="mt-4" color="info" icon={<AccessAlarmIcon />}>
-                            <b>Tempo de preparo:</b> {recipe.preparetionTime}
+                        <div className="flex items-center">
+                            <IconButton aria-label="like" color={isLiked ? 'primary' : 'default'}  className="mr-2 p-0" onClick={isLiked ? onNotLikeRecipe : onLikeRecipe}>
+                                {isLiked ? <ThumbUpAltIcon fontSize="small" /> : <ThumbUpOffAltIcon fontSize="small" />}
+                            </IconButton>
+                            <Typography color="text.primary" className="font-bold" variant="caption">
+                                {recipe.likeNumber} curtidas
+                                <Typography color="CaptionText" className="ml-2 mr-2" variant="caption">|</Typography>
+                                {recipe.commentsNumber} comentários
+                            </Typography>
+                        </div>
+                        <Alert variant="outlined" severity="info" className="mt-4 flex items-center justify-center" color="info" icon={<AccessAlarmIcon />}>
+                            <b>Tempo de preparo</b>&nbsp;&nbsp;{recipe.preparetionTime}
                         </Alert>
                         <div className="mt-4">
                             <Typography color="text.primary" variant="body1">
-                                <b>Ingredientes:</b>
+                                <b>Ingredientes usados na receita</b>
                             </Typography>
-                            <ul>
+                            <div className="mt-2 border-solid border border-green-50dark shadow-lg shadow-green-50dark rounded-2xl bg-green-50 grid grid-cols-1">
                                 {
                                     recipe.ingredients?.map((ingredient:any) => 
-                                        <li key={crypto.randomUUID()}>
-                                            <Typography color="text.primary" variant="body2">
+                                        <div key={crypto.randomUUID()} className="p-4 border-b border-t-0 border-r-0 border-l-0 border-solid border-green-50dark">
+                                            <Typography color="text.primary" variant="body1">
                                                 {ingredient.quantity} {ingredient.measure} de {ingredient.name}.
                                             </Typography>
-                                        </li>
+                                        </div>
                                     )
                                 }
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="flex flex-col justify-center">
-                        <Carousel 
-                            className="w-full"
-                            fullHeightHover={false}
-                            autoPlay={true}
-                            indicators={false}
-                        >
-                            {
-                                recipe.images?.map((image) => 
-                                    <Paper key={crypto.randomUUID()} elevation={0} square className="flex justify-center bg-transparent">
-                                        <img style={{width: '100%'}} src={image.src} />
-                                    </Paper>
-                                )
-                            }
-                        </Carousel>
-                        <div className="mt-2 text-left md:text-right">
-                            <Typography color={isLiked ? 'primary' : 'text.primary'} variant="body1">
-                                <IconButton aria-label="like" color={isLiked ? 'primary' : 'default'} onClick={isLiked ? onNotLikeRecipe : onLikeRecipe}>
-                                    {isLiked ? <ThumbUpAltIcon /> : <ThumbUpOffAltIcon />}
-                                </IconButton>
-
-                                <b>{recipe.likeNumber}</b>
-                            </Typography>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div className="mt-4 md:mt-0">
+                <div className="mt-10 p-5 pt-0 md:p-0">
                     <Typography color="text.primary" variant="body1">
-                        <b>Modo de preparo:</b>
+                        <b>Descrição</b>
+                    </Typography>
+                    <Typography color="text.primary" variant="body2">
+                        {recipe.description}
+                    </Typography>
+                    <Typography className="mt-4" color="text.primary" variant="body1">
+                        <b>Modo de preparo</b>
                     </Typography>
                     <Typography color="text.primary" variant="body2">
                         {recipe.methodPreparation}
                     </Typography>
                 </div>
-                <form>
+                <form className="p-5 pt-0 md:p-0">
                     <div className="mt-4">
                         <Typography color="text.primary" variant="body1">
-                            <b>Comentários:</b>
+                            <b>Comentários</b>
                         </Typography>
                         {
                             user &&
-                            <div className="mt-2 flex">
+                            <div className="mt-2 flex flex-col md:flex-row">
                                 <Avatar 
                                     sx={{ width: 50, height: 50 }}
                                     src={user.avatar}
-                                    className="mr-2"
+                                    className="md:mr-2 hidden md:block"
                                 />
                                 <TextField
                                     placeholder="Adicione seu comentário aqui..."
@@ -240,6 +243,7 @@ const ViewRecipePage: NextPage = () => {
                             color="primary"
                             onClick={handleSubmit(onCreateComment)}
                             startIcon={<AddCommentIcon />}
+                            className="w-full md:w-auto"
                         >
                             ENVIAR COMENTÁRIO
                         </Button>
@@ -248,16 +252,21 @@ const ViewRecipePage: NextPage = () => {
                         {
                             recipe.comments?.map((comment) => 
                                 <div className={'flex w-full mt-4 '+(comment.author.id == user.id ? 'flex-row-reverse' : '')} key={crypto.randomUUID()}>
-                                    <div className="mr-2" style={{ width: '45px', height: '45px' }}></div>
+                                    <div className="mr-2 w-5 h-5 md:w-11 md:h-11"></div>
                                     <Paper elevation={2} className="flex-1 mr-2 p-4 border border-solid rounded border-neutral-100 text-left">
                                         <Typography variant="body2">
+                                            <Avatar 
+                                                sx={{ width: 30, height: 30 }}
+                                                src={comment.author.avatar}
+                                                className="flex-none md:hidden float-right"
+                                            />
                                             <b>{comment.author.fullName}:</b>
                                         </Typography>
                                         <Typography variant="body2" className="mt-1">
                                             {comment.text}
                                         </Typography>
                                         <div className="text-right mt-2">
-                                            <Typography style={{color: '#9d9d9d'}} variant="caption">
+                                            <Typography className="CaptionText" variant="caption">
                                                 {comment.createdDatetime}
                                             </Typography>
                                         </div>
@@ -265,7 +274,7 @@ const ViewRecipePage: NextPage = () => {
                                     <Avatar 
                                         sx={{ width: 45, height: 45 }}
                                         src={comment.author.avatar}
-                                        className="flex-none mr-2"
+                                        className="flex-none mr-2 hidden md:block"
                                     />
                                 </div>
                             )

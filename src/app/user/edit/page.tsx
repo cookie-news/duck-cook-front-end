@@ -15,7 +15,6 @@ import {
 //Custom Components
 import Loading from '@components/Loading';
 import ToastCMP from '@components/Toast';
-import InputDropzone from '@components/form/InputDropzone';
 import Card from '@components/Card';
 
 //Form
@@ -76,7 +75,7 @@ const EditUserPage = () => {
                                 accept="image/*"
                                 id="contained-button-file"
                                 multiple
-                                style={{display: 'none'}}
+                                className="hidden"
                                 type="file"
                                 onChange={handlChangeAvatarImg}
                             />

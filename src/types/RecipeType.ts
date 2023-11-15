@@ -6,9 +6,10 @@ import UserType from '@/types/UserType';
 export default interface RecipeType {
     title?: string,
     description?: string,
-    methodPreparation?: string
-    images?: Array<ImageType>
-    ingredients?: Array<IngredientType>
+    methodPreparation?: string,
+    images?: FileList,
+    imagesSRC?: Array<string>,
+    ingredients?: Array<IngredientType>,
     author?: UserType,
     preparetionTime?: string,
     preparetionTimeHours?: string,
@@ -16,5 +17,5 @@ export default interface RecipeType {
     likeNumber?: number,
     commentsNumber?: number,
     comments?: Array<CommentType>,
-    createdDatetime?: string,
+    createdDatetime?: string
 }

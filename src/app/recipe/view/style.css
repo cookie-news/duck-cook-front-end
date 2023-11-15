@@ -1,0 +1,4 @@
+div:has(> div.carousel-image)
+{
+    height: 100%;
+}

@@ -79,10 +79,7 @@ const LoginPage: NextPage = () => {
           src={LOGO}
           alt="logo"
           onClick={redirectToHomePage}
-          style={{
-            width: "264px",
-            height: "264px",
-          }}
+          className="w-64 h-64"
         />
       </div>
       {loading ? (

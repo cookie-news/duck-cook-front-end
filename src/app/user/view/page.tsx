@@ -41,7 +41,7 @@ const ViewRecipePage: NextPage = () => {
 
     return (
         <Container className="mt-10 mb-10">
-            <div className="flex pb-4 flex-col md:flex-row items-center	md:items-center" style={{ borderBottom: '1px solid #494949' }}>
+            <div className="flex pb-4 flex-col md:flex-row items-center	md:items-center border-b border-t-0 border-r-0 border-l-0 border-solid border-gray-default">
                 <Avatar
                     sx={{ width: 100, height: 100 }}
                     src={user.avatar}
@@ -100,12 +100,12 @@ const ViewRecipePage: NextPage = () => {
                                 <div>
                                     {
                                         fiveRecentsUserRecipes.map((recipe: RecipeType, index) =>
-                                            <Paper elevation={0} key={crypto.randomUUID()} className={'flex justify-between border border-solid rounded border-neutral-200 border-primary ' + (index > 0 ? 'mt-2' : '')}>
+                                            <Paper elevation={0} key={crypto.randomUUID()} className={'flex justify-between border border-solid rounded border-neutral-200 border-primary overflow-auto ' + (index > 0 ? 'mt-2' : '')}>
                                                 <div className="flex flex-col p-4">
                                                     <Typography component="div" variant="body1">
                                                         <b>{recipe.title}</b>
                                                     </Typography>
-                                                    <Typography style={{ color: '#9d9d9d' }} variant="caption">
+                                                    <Typography color="CaptionText" variant="caption">
                                                         {recipe.createdDatetime}
                                                     </Typography>
                                                     <div className="flex items-center mt-2">
@@ -129,11 +129,10 @@ const ViewRecipePage: NextPage = () => {
                                                         <CardMedia
                                                             component="img"
                                                             sx={{ width: 80 }}
-                                                            image={recipe.images[0].src}
-                                                            style={{ borderRadius: '0px 1px 1px 0px' }}
+                                                            //image={recipe.images[0].src}
                                                         />
                                                         :
-                                                        <div className="bg-primary" style={{ borderRadius: '0px 1px 1px 0px', width: '80px' }}></div>
+                                                        <div className="bg-primary"></div>
                                                 }
                                             </Paper>
                                         )
@@ -155,7 +154,7 @@ const ViewRecipePage: NextPage = () => {
                                 <div>
                                     {
                                         userRecipeLiked.map((recipe, index) =>
-                                            <Paper elevation={0} key={crypto.randomUUID()} className={'flex justify-between border border-solid rounded border-neutral-200 ' + (index > 0 ? 'mt-2' : '')}>
+                                            <Paper elevation={0} key={crypto.randomUUID()} className={'flex justify-between border border-solid rounded border-neutral-200 overflow-auto ' + (index > 0 ? 'mt-2' : '')}>
                                                 <div className="flex flex-col p-4">
                                                     <Typography component="div" variant="body1">
                                                         <b>{recipe.title}</b>
@@ -168,10 +167,9 @@ const ViewRecipePage: NextPage = () => {
                                                             component="img"
                                                             sx={{ width: 80 }}
                                                             image={recipe.images[0].src}
-                                                            style={{ borderRadius: '0px 1px 1px 0px' }}
                                                         />
                                                         :
-                                                        <div className="bg-primary" style={{ borderRadius: '0px 1px 1px 0px', width: '80px' }}></div>
+                                                        <div className="bg-primary" ></div>
                                                 }
                                             </Paper>
                                         )
