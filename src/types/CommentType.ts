@@ -1,7 +1,7 @@
-import UserType from '@/types/UserType';
+import { User } from '../data/user.service';
 
 export default interface CommentType {
-    author: UserType,
+    author: User,
     text: string,
     createdDatetime: string
 }

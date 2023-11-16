@@ -1,13 +1,12 @@
 'use client'
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
 
 //Material UI
 import {
     TextField,
     Button,
-    FormLabel,
     Avatar,
     IconButton
 } from "@mui/material";
@@ -15,7 +14,6 @@ import {
 //Custom Components
 import Loading from '@components/Loading';
 import ToastCMP from '@components/Toast';
-import InputDropzone from '@components/form/InputDropzone';
 import Card from '@components/Card';
 
 //Form
@@ -28,8 +26,14 @@ import { UserForm } from "@forms/user/UserForm";
 //Styels
 import './styles.css'
 
-//Types
-import UserType from "@/types/UserType";
+//Contexts
+import { AuthContext } from "@context/AuthContext";
+
+//Data Services
+import { User } from "@root/src/data/user.service";
+
+//Routes
+import { rootRoutes } from "@root/routes";
 
 const EditUserPage = () => {
     // routers
@@ -37,6 +41,9 @@ const EditUserPage = () => {
 
     // react hook form
     const { register, handleSubmit, formState: { errors } } = useForm();
+
+    //User
+    const { userData } = useContext(AuthContext);
 
     const [load, setLoad] = useState(false);
 
@@ -46,25 +53,23 @@ const EditUserPage = () => {
         message: "",
     } as ToastType);
 
-    const [user, setUser] = useState<UserType>({
-        fullName: 'Luidy Moura',
-        userName: 'luidymg',
-        email: 'luidy.mourawm@gmail.com'
-    } as UserType);
+    const [user, setUser] = useState<User>(userData);
 
-    const handlChangeAvatarImg = (event:any) => {
+    const handleChangeAvatarImg = (event:any) => {
         console.log(event.target.files);
 
         var reader = new FileReader();
 
         reader.onload = function (e) {
             let newUser = {...user};
-            newUser.avatar = e?.target?.result as string;
+            newUser.image = e?.target?.result as string;
             
             setUser(newUser);
         }
         reader.readAsDataURL(event.target.files[0]);
     }
+
+    const redirectToViewUserPage = () => router.push(rootRoutes.user.view.path);
 
     return (
         <>
@@ -76,15 +81,15 @@ const EditUserPage = () => {
                                 accept="image/*"
                                 id="contained-button-file"
                                 multiple
-                                style={{display: 'none'}}
+                                className="hidden"
                                 type="file"
-                                onChange={handlChangeAvatarImg}
+                                onChange={handleChangeAvatarImg}
                             />
                              <IconButton>
                                 <label htmlFor="contained-button-file" className="label-avatar-file-input">
                                         <Avatar 
                                             sx={{ width: 200, height: 200 }}
-                                            src={user.avatar}
+                                            src={user.image}
                                         />
                                 </label>
                             </IconButton>
@@ -100,7 +105,7 @@ const EditUserPage = () => {
                                     error={errors && !!errors[form.name as string]}
                                     helperText={errors && errors[form.name as string]?.message as string}
                                     fullWidth
-                                    defaultValue={user[form.name as keyof UserType]}
+                                    defaultValue={user[form.name as keyof User]}
                                     {...register(form.name as string, form.validates)}
                                     onChange={() => {}}
                                 />
@@ -123,6 +128,7 @@ const EditUserPage = () => {
                             variant="outlined"
                             size="large"
                             className="w-full"
+                            onClick={redirectToViewUserPage}
                         >
                             CANCELAR
                         </Button>

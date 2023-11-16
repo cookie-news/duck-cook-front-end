@@ -137,8 +137,6 @@ export async function createRecipe(body: createRecipe) {
         "Content-Type": "multipart/form-data",
       },
     });
-
-    console.log(data);
   
   } catch (e: any) {
     throw new Error(e);
@@ -208,7 +206,6 @@ export async function getRecipe(recipeId: string) {
 
     response.data.preparationTimeConverted = secondsToHourMinute(response.data.preparationTime);
     
-    console.log(response.data);
     return response.data;
   
   } catch (e: any) {

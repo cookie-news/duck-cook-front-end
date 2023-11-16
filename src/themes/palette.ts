@@ -17,7 +17,8 @@ const palette = {
     },
     info: {
         main: '#095150'
-    }
+    },
+    CaptionText: '#9d9d9d'
 }
 
 export default palette;

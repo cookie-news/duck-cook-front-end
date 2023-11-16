@@ -52,7 +52,7 @@ export function AuthContextProvider({
       setToken,
       isLogged: handleIsLogged(),
       userData,
-      setUserData,
+      setUserData
     }),
     []
   );

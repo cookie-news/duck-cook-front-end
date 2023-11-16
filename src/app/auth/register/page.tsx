@@ -47,10 +47,7 @@ const RegisterPage: NextPage = () => {
 					src={LOGO}
 					alt="logo"
 					onClick={redirectToHomePage}
-					style={{
-						width: "150px",
-						height: "150px",
-					}}
+					className="w-40 h-40"
 				/>
 			</div>
 			<form className="mt-6 w-10/12 max-w-md">
