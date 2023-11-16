@@ -10,15 +10,13 @@ import { LoadingContext } from "@context/LoadingContext";
 import Carousel from 'react-material-ui-carousel'
 
 //Custom
-import { Button, Paper, Typography, Container, Alert, IconButton, TextField, Avatar } from "@mui/material";
+import { Button, Typography, Container, Alert, IconButton, TextField, Avatar } from "@mui/material";
 import { AccessAlarm as AccessAlarmIcon, ThumbUpOffAlt as ThumbUpOffAltIcon, ThumbUpAlt as ThumbUpAltIcon, AddComment as AddCommentIcon } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
 import ErrorMessages from "@utils/ErrorMessages";
 
 //Types
-import UserType from "@/types/UserType";
 import RecipeType from "@/types/RecipeType";
-import PageWrapper from "@components/PageWrapper";
 
 //Styles
 import './style.css'
@@ -35,7 +33,7 @@ const ViewRecipePage = ({ params }: { params: { recipeId: string } }) => {
     const { toggle: handleLoadingDialog } = useContext(LoadingContext);
 
     //User
-    const { userData } = useContext(AuthContext);
+    const { userData, isLogged } = useContext(AuthContext);
 
     const [isLiked, setIsLiked] = useState(false);
     
@@ -178,7 +176,7 @@ const ViewRecipePage = ({ params }: { params: { recipeId: string } }) => {
                             <b>Comentários</b>
                         </Typography>
                         {
-                            userData &&
+                            isLogged &&
                             <div className="mt-2 flex flex-col md:flex-row">
                                 <Avatar 
                                     sx={{ width: 50, height: 50 }}
@@ -213,7 +211,7 @@ const ViewRecipePage = ({ params }: { params: { recipeId: string } }) => {
                     <div className="mt-4">
                         {
                             recipe.comments?.map((comment) => 
-                                <div className={'flex w-full mt-4 '+(comment.author.id == userData.id ? 'flex-row-reverse' : '')} key={crypto.randomUUID()}>
+                                <div className={'flex w-full mt-4 '+(isLogged && comment.author.id == userData.id ? 'flex-row-reverse' : '')} key={crypto.randomUUID()}>
                                     <div className="mr-2 w-5 h-5 md:w-11 md:h-11"></div>
                                     <div className="flex-1 mr-2 p-4 border border-solid rounded-md border-neutral-200 bg-neutral-50 text-left">
                                         <Avatar 

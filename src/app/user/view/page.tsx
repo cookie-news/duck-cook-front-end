@@ -1,25 +1,26 @@
 'use client'
 
 import { NextPage } from "next";
+import { useRouter } from "next/navigation";
 import { useState, useContext } from "react";
 
-//Material UI
-import Carousel from 'react-material-ui-carousel'
-
 //Custom
-import { Button, Paper, Typography, Container, Alert, IconButton, TextField, Avatar, CardContent, Box, Card, CardMedia } from "@mui/material";
+import { Button, Paper, Typography, Container, Alert, Avatar, CardMedia } from "@mui/material";
 import { Quiz as QuizIcon, ThumbUpOffAlt as ThumbUpOffAltIcon, Edit as EditIcon, Forum as ForumIcon, Key as KeyIcon } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
-import ErrorMessages from "@utils/ErrorMessages";
 
 //Types
 import RecipeType from "@/types/RecipeType";
-import { User } from "@root/src/data/user.service";
 
-//Data services
+//Routes
+import { rootRoutes } from "@root/routes";
+
+//Contexts
 import { AuthContext } from "@context/AuthContext";
 
+
 const ViewRecipePage: NextPage = () => {
+    const router = useRouter();
 
     //User
     const { userData } = useContext(AuthContext);
@@ -30,6 +31,8 @@ const ViewRecipePage: NextPage = () => {
 
     // react hook form
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
+
+    const redirectToEditUserPage = () => router.push(rootRoutes.user.edit.path);
 
     return (
         <Container className="mt-10 mb-10">
@@ -72,20 +75,20 @@ const ViewRecipePage: NextPage = () => {
                         <Button variant="outlined" className="flex-1 md:flex-none" startIcon={<KeyIcon />}>
                             Alterar senha
                         </Button>
-                        <Button variant="contained" className="flex-1 md:flex-none" endIcon={<EditIcon />}>
+                        <Button variant="contained" className="flex-1 md:flex-none" onClick={redirectToEditUserPage} endIcon={<EditIcon />}>
                             Editar dados
                         </Button>
                     </div>
                 </div>
                 <div className="md:grid md:grid-cols-2 gap-4 flex flex-col">
                     <div className="mt-4">
-                        <Typography color="text.primary" variant="h5">
+                        <Typography color="text.primary" variant="h5" className="mb-2">
                             <b>Receitas criadas pelo usuário:</b>
                         </Typography>
                         {
                             fiveRecentsUserRecipes.length == 0
                                 ?
-                                <Alert variant="outlined" severity="info" className="mt-4" color="info" icon={<QuizIcon />}>
+                                <Alert variant="outlined" severity="info" color="info" icon={<QuizIcon />}>
                                     <b>Nenhuma receita encontrada.</b>
                                 </Alert>
                                 :

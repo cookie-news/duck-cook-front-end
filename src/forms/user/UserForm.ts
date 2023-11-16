@@ -5,7 +5,7 @@ import { FormType } from "@/types/FormType";
 
 export const UserForm: FormType[] = [
     {
-        name: "fullName",
+        name: "name",
         placeholder: "",
         fullWidth: true,
         label: "Nome completo",
@@ -16,7 +16,7 @@ export const UserForm: FormType[] = [
         }
     },
     {
-        name: "userName",
+        name: "user",
         placeholder: "",
         fullWidth: true,
         label: "Nome do Usuário",

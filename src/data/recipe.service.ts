@@ -78,8 +78,6 @@ export async function createRecipe(body: createRecipe) {
         "Content-Type": "multipart/form-data",
       },
     });
-
-    console.log(data);
   
   } catch (e: any) {
     throw new Error(e);

@@ -11,6 +11,14 @@ const rootRoutes = {
   home: {
     path: "/",
   },
+  user: {
+    view: {
+      path: "/user/view"
+    },
+    edit: {
+      path: "/user/edit"
+    }
+  }
 };
 
 export { authRoutes, rootRoutes };
