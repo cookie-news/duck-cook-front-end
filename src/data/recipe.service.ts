@@ -25,6 +25,9 @@ interface updateRecipe {
 
 interface recipeComment {
   id: string,
+  idUser: string,
+  idRecipe: string,
+  userName: string,
   message: string
 }
 interface createRecipeComment {
@@ -47,8 +50,7 @@ interface createRecipeLike {
 
 interface deleteRecipeLike {
   idRecipe: string,
-  idUser: string,
-  id: string
+  idUser: string
 }
 
 interface getRecipeResponse {
@@ -205,7 +207,7 @@ export async function getRecipe(recipeId: string) {
     const response = await Api.get<getRecipeResponse>(baseUrl  + endpoint);
 
     response.data.preparationTimeConverted = secondsToHourMinute(response.data.preparationTime);
-    
+    console.log(response);
     return response.data;
   
   } catch (e: any) {
@@ -257,7 +259,7 @@ export async function getRecipiesMoreLikeds( ) {
   
 }
 
-export async function getRecipeByUser(userId: string) {
+export async function getRecipiesByUser(userId: string) {
 
   const endpoint = "/user/" + userId + "/recipe";
   try {
@@ -282,15 +284,9 @@ export async function createRecipeComment(body: createRecipeComment) {
   const endpoint = "/user/" + body.idUser + "/recipe/" + body.idRecipe + "/comment";
   try {
 
-    const formData = new FormData();
-
-    console.log(body);
-
-    formData.append("message", body.message);
-    
-    const { data } = await Api.post(baseUrl + endpoint, formData, {
+    const { data } = await Api.post(baseUrl + endpoint, body, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "multipart/json",
       },
     });
 
@@ -353,7 +349,7 @@ export async function createRecipeLike(body: createRecipeLike) {
 
 export async function deleteRecipeLike(body: deleteRecipeLike) {
 
-  const endpoint = "/user/" + body.idUser + "/recipe/" + body.idRecipe + "/like/" + body.id;
+  const endpoint = "/user/" + body.idUser + "/recipe/" + body.idRecipe + "/like";
   try {
 
     const response = await Api.delete(baseUrl  + endpoint);

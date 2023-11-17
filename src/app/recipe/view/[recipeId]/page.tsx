@@ -22,13 +22,15 @@ import RecipeType from "@/types/RecipeType";
 import './style.css'
 
 //Data service
-import { getRecipe } from "@root/src/data/recipe.service";
+import { getRecipe, getRecipeLikes, getRecipeComments, createRecipeComment, createRecipeLike, deleteRecipeLike } from "@root/src/data/recipe.service";
 import { UserService } from "@root/src/data/user.service";
+import { comment } from "postcss";
+import { error } from "console";
 
 const ViewRecipePage = ({ params }: { params: { recipeId: string } }) => {
 
     const [recipe, setRecipe] = useState<RecipeType>({});
-    
+
     //Loading
     const { toggle: handleLoadingDialog } = useContext(LoadingContext);
 
@@ -36,69 +38,224 @@ const ViewRecipePage = ({ params }: { params: { recipeId: string } }) => {
     const { userData, isLogged } = useContext(AuthContext);
 
     const [isLiked, setIsLiked] = useState(false);
-    
+
     // react hook form
-    const { register, handleSubmit, formState: { errors }, reset} = useForm();
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+
+    const [toast, setToast] = useState({
+        open: false,
+        type: "info",
+        message: "",
+    });
 
     const onLikeRecipe = () => {
-        let newRecipe = {...recipe};
-        if(!newRecipe.likeNumber) { newRecipe.likeNumber = 0; }
-        
-        newRecipe.likeNumber += 1;
-        setRecipe(newRecipe);
-        setIsLiked(true);
+        let newRecipe = { ...recipe };
+
+        handleLoadingDialog();
+
+        const newLike = {
+            idRecipe: params?.recipeId,
+            idUser: userData.id
+        }
+
+        createRecipeLike(newLike).then((data) => {
+
+            if (!newRecipe.likeNumber) { newRecipe.likeNumber = 0; }
+
+            newRecipe.likeNumber += 1;
+            setRecipe(newRecipe);
+            setIsLiked(true);
+
+        }).finally(() => {
+            handleLoadingDialog();
+        }).catch((error) => {
+            setToast({
+                open: true,
+                type: "error",
+                message: error.message
+            });
+        })
+
     }
 
     const onNotLikeRecipe = () => {
-        let newRecipe = {...recipe};
-        if(!newRecipe.likeNumber) { newRecipe.likeNumber = 0; }
-        
-        newRecipe.likeNumber -= 1;
-        setRecipe(newRecipe);
-        setIsLiked(false);
+        let newRecipe = { ...recipe };
+
+        handleLoadingDialog();
+
+        const deleteLike = {
+            idRecipe: params?.recipeId,
+            idUser: userData.id
+        }
+
+        deleteRecipeLike(deleteLike).then((data) => {
+
+            if (!newRecipe.likeNumber) { newRecipe.likeNumber = 0; }
+
+            newRecipe.likeNumber -= 1;
+            setRecipe(newRecipe);
+            setIsLiked(false);
+
+        }).finally(() => {
+            handleLoadingDialog();
+        }).catch((error) => {
+            console.error(error);
+            setToast({
+                open: true,
+                type: "error",
+                message: error.message
+            });
+        })
     }
 
-    const onCreateComment = (values:any) => {
-        let newRecipe = {...recipe};
+    const onCreateComment = async (values: any) => {
 
-        if(newRecipe.commentsNumber) { newRecipe.commentsNumber++; }
-        else { newRecipe.commentsNumber = 1; }
+        if (values.comment.replaceAll(" ", "") == "")
+            return;
 
-        newRecipe.comments?.unshift({
-            text: values.comment,
-            author: userData,
-            createdDatetime: (new Date()).toLocaleDateString()+' '+(new Date()).toLocaleTimeString().substring(0, 5)
+        handleLoadingDialog();
+
+        const newComment = {
+            idRecipe: params?.recipeId,
+            idUser: userData.id,
+            message: values.comment
+        }
+
+        await createRecipeComment(newComment).then((data) => {
+
+            let newRecipe = { ...recipe };
+
+            console.log(newRecipe);
+
+            if (newRecipe.commentsNumber) { newRecipe.commentsNumber++; }
+            else { newRecipe.commentsNumber = 1; newRecipe.comments = []; }
+
+            newRecipe.comments?.unshift({
+                text: values.comment,
+                author: userData,
+                createdDatetime: (new Date()).toLocaleDateString() + ' ' + (new Date()).toLocaleTimeString().substring(0, 5)
+            })
+
+            setRecipe(newRecipe);
+
+            reset({
+                comment: ''
+            })
+
+        }).finally(() => {
+            handleLoadingDialog();
+        }).catch((error) => {
+            setToast({
+                open: true,
+                type: "error",
+                message: error.message
+            });
         })
 
-        setRecipe(newRecipe);
-
-        reset({
-            comment: ''
-        })
     }
 
     const getRecipeData = async () => {
-        getRecipe(params?.recipeId).then((recipeData:any) => {
-            console.log(recipeData);
-            recipeData['imagesSRC'] = recipeData.images;
-            delete recipeData.images;
 
-            UserService.getUserData('_id', recipeData.idUser).then((authorData:any) => {
-                authorData['fullName'] = authorData.name;
-                delete authorData.name;
+        try {
 
-                recipeData.author = authorData;
+            await getRecipe(params?.recipeId).then((recipeData: any) => {
                 console.log(recipeData);
+                recipeData['imagesSRC'] = recipeData.images;
+                delete recipeData.images;
 
-                setRecipe(recipeData);
-            }).finally(() => {
-              handleLoadingDialog();
+                UserService.getUserData('_id', recipeData.idUser).then((authorData: any) => {
+                    authorData['fullName'] = authorData.name;
+                    delete authorData.name;
+
+                    recipeData.author = authorData;
+
+                    getRecipeLikes(params?.recipeId).then(async (numberOfLikes) => {
+
+                        recipeData.likeNumber = numberOfLikes.count;
+
+                        getRecipeComments(params?.recipeId).then(async (commentsOfRecipe: any[]) => {
+
+                            if (commentsOfRecipe) {
+
+                                recipeData.comments = [];
+
+                                commentsOfRecipe.forEach((commentOfRecipe) => {
+
+                                    const createdAt = new Date(commentOfRecipe.createdAt);
+
+                                    console.log(authorData);
+                                    recipeData.comments.push({
+                                        id: commentOfRecipe.id,
+                                        text: commentOfRecipe.message,
+                                        createdDatetime: createdAt.toLocaleDateString() + ' ' + createdAt.toLocaleTimeString(),
+                                        author: commentOfRecipe.user
+                                    });
+
+                                })
+
+                                recipeData.commentsNumber = commentsOfRecipe.length;
+
+                            } else {
+
+                                recipeData.commentsNumber = 0;
+
+                            }
+
+                        }).finally(() => {
+                            console.log(recipeData);
+                            setRecipe(recipeData);
+                            handleLoadingDialog(false);
+                        }).catch((error) => {
+                            setToast({
+                                open: true,
+                                type: "error",
+                                message: error.message
+                            });
+                            handleLoadingDialog(false);
+                        });
+
+                    }).catch((error) => {
+                        setToast({
+                            open: true,
+                            type: "error",
+                            message: error.message
+                        });
+                        handleLoadingDialog(false);
+                    })
+
+                }).catch((error) => {
+                    setToast({
+                        open: true,
+                        type: "error",
+                        message: error.message
+                    });
+                    handleLoadingDialog(false);
+                })
+
+            }).catch((error) => {
+                setToast({
+                    open: true,
+                    type: "error",
+                    message: error.message
+                });
+                handleLoadingDialog(false);
             })
-        })
+
+        } catch (error: any) {
+
+            setToast({
+                open: true,
+                type: "error",
+                message: error.message
+            });
+            handleLoadingDialog(false);
+
+        }
+
     };
 
     useEffect(() => {
-        handleLoadingDialog();
+        handleLoadingDialog(true);
         getRecipeData();
     }, []);
 
@@ -106,15 +263,15 @@ const ViewRecipePage = ({ params }: { params: { recipeId: string } }) => {
         <Container className="mt-10 mb-10">
             <div className="p-0 md:p-10 bg-white rounded-md overflow-auto">
                 <div className="md:grid md:grid-cols-2 md:grid-rows-none gap-2 md:gap-8">
-                    <Carousel 
+                    <Carousel
                         className="w-full h-96 md:h-full md:rounded-md"
                         fullHeightHover={false}
                         autoPlay={true}
                         indicators={false}
                     >
                         {
-                            recipe.imagesSRC?.map((image) => 
-                                <div key={crypto.randomUUID()} className="bg-cover bg-center h-full bg-no-repeat carousel-image" style={{backgroundImage: `url(${image})`}}></div>
+                            recipe.imagesSRC?.map((image) =>
+                                <div key={crypto.randomUUID()} className="bg-cover bg-center h-full bg-no-repeat carousel-image" style={{ backgroundImage: `url(${image})` }}></div>
                             )
                         }
                     </Carousel>
@@ -126,7 +283,7 @@ const ViewRecipePage = ({ params }: { params: { recipeId: string } }) => {
                             Autor: {recipe.author?.fullName}
                         </Typography>
                         <div className="flex items-center">
-                            <IconButton aria-label="like" color={isLiked ? 'primary' : 'default'}  className="mr-2 p-0" onClick={isLiked ? onNotLikeRecipe : onLikeRecipe}>
+                            <IconButton aria-label="like" color={isLiked ? 'primary' : 'default'} className="mr-2 p-0" onClick={isLiked ? onNotLikeRecipe : onLikeRecipe}>
                                 {isLiked ? <ThumbUpAltIcon fontSize="small" /> : <ThumbUpOffAltIcon fontSize="small" />}
                             </IconButton>
                             <Typography color="text.primary" className="font-bold" variant="caption">
@@ -144,7 +301,7 @@ const ViewRecipePage = ({ params }: { params: { recipeId: string } }) => {
                             </Typography>
                             <div className="mt-2 border-solid border border-neutral-200 rounded-md bg-neutral-50 grid grid-cols-1">
                                 {
-                                    recipe.ingredients?.map((ingredient:any) => 
+                                    recipe.ingredients?.map((ingredient: any) =>
                                         <div key={crypto.randomUUID()} className="p-4 border-b border-t-0 border-r-0 border-l-0 border-solid border-green-50dark">
                                             <Typography color="text.primary" variant="body1">
                                                 {ingredient.quantity} {ingredient.measure} de {ingredient.name}.
@@ -178,7 +335,7 @@ const ViewRecipePage = ({ params }: { params: { recipeId: string } }) => {
                         {
                             isLogged &&
                             <div className="mt-2 flex flex-col md:flex-row">
-                                <Avatar 
+                                <Avatar
                                     sx={{ width: 50, height: 50 }}
                                     src={userData.image}
                                     className="md:mr-2 hidden md:block"
@@ -191,8 +348,8 @@ const ViewRecipePage = ({ params }: { params: { recipeId: string } }) => {
                                     fullWidth
                                     multiline
                                     rows={3}
-                                    {...register('comment', {required: ErrorMessages.REQUIRED})}
-                                    onChange={() => {}}
+                                    {...register('comment', { required: ErrorMessages.REQUIRED })}
+                                    onChange={() => { }}
                                 />
                             </div>
                         }
@@ -210,11 +367,11 @@ const ViewRecipePage = ({ params }: { params: { recipeId: string } }) => {
                     </div>
                     <div className="mt-4">
                         {
-                            recipe.comments?.map((comment) => 
-                                <div className={'flex w-full mt-4 '+(isLogged && comment.author.id == userData.id ? 'flex-row-reverse' : '')} key={crypto.randomUUID()}>
+                            recipe.comments?.map((comment) =>
+                                <div className={'flex w-full mt-4 ' + (isLogged && comment.author.id == userData.id ? 'flex-row-reverse' : '')} key={crypto.randomUUID()}>
                                     <div className="mr-2 w-5 h-5 md:w-11 md:h-11"></div>
                                     <div className="flex-1 mr-2 p-4 border border-solid rounded-md border-neutral-200 bg-neutral-50 text-left">
-                                        <Avatar 
+                                        <Avatar
                                             sx={{ width: 30, height: 30 }}
                                             src={comment.author.image}
                                             className="flex-none md:hidden float-right"
@@ -231,9 +388,9 @@ const ViewRecipePage = ({ params }: { params: { recipeId: string } }) => {
                                             </Typography>
                                         </div>
                                     </div>
-                                    <Avatar 
+                                    <Avatar
                                         sx={{ width: 45, height: 45 }}
-                                        src={comment.author.name}
+                                        src={comment.author.image}
                                         className="flex-none mr-2 hidden md:block"
                                     />
                                 </div>

@@ -32,7 +32,7 @@ import InputDropzone from "@components/form/InputDropzone";
 import { AuthContext } from "@context/AuthContext";
 import { LoadingContext } from "@context/LoadingContext";
 
-const RecipePage = ({ params, searchParams}: { params: { method: string }, searchParams: { id: string} }) => {
+const RecipePage = ({ params, searchParams }: { params: { method: string }, searchParams: { id: string } }) => {
     // routers
     const router = useRouter();
 
@@ -72,9 +72,8 @@ const RecipePage = ({ params, searchParams}: { params: { method: string }, searc
         setStateRecipe('setRecipe');
     };
 
-    const onChangeIngredients = (newIngredients:any) =>
-    {
-        let newRecipe = {...recipe};
+    const onChangeIngredients = (newIngredients: any) => {
+        let newRecipe = { ...recipe };
         newRecipe.ingredients = newIngredients;
         setRecipe(newRecipe);
     }
@@ -83,21 +82,30 @@ const RecipePage = ({ params, searchParams}: { params: { method: string }, searc
 
         try {
 
-            handleLoadingDialog( );
+            handleLoadingDialog();
 
-            createRecipe({ idUser: userData.id,
-                           description: recipe.description,
-                           images: recipe.images,
-                           ingredients: recipe.ingredients,
-                           preparationMethod: recipe.preparationMethod,
-                           preparationTime: ( (parseInt(recipe.preparetionTimeHours ?? '') * 60) * 60 + parseInt(recipe.preparetionTimeMinutes ?? '') * 60 ),
-                           title: recipe.title } as any)
-                           .then((sucess)=>{
+            createRecipe({
+                idUser: userData.id,
+                description: recipe.description,
+                images: recipe.images,
+                ingredients: recipe.ingredients,
+                preparationMethod: recipe.preparationMethod,
+                preparationTime: ((parseInt(recipe.preparetionTimeHours ?? '') * 60) * 60 + parseInt(recipe.preparetionTimeMinutes ?? '') * 60),
+                title: recipe.title
+            } as any)
+                .then((sucess) => {
 
-                            handleLoadingDialog();
+                    handleLoadingDialog();
 
-                           });
-                           
+                }).catch((error)=>{ 
+                    console.error(error);
+                    setToast({
+                        open: true,
+                        type: "error",
+                        message: error.message 
+                    });
+                });
+
         } catch (error) {
             console.error(error);
         }
@@ -105,44 +113,44 @@ const RecipePage = ({ params, searchParams}: { params: { method: string }, searc
 
     return (
         <>
-            <Card title={ stateRecipe === 'setRecipe' ? cardLabelRecipeData || '' : cardLabelIngredientData || ''  }>
+            <Card title={stateRecipe === 'setRecipe' ? cardLabelRecipeData || '' : cardLabelIngredientData || ''}>
                 {
-                    stateRecipe === 'setRecipe' 
-                    ? 
+                    stateRecipe === 'setRecipe'
+                        ?
                         <form>
                             <div className="flex flex-row flex-wrap md:grid md:grid-cols-2 gap-2">
                                 <div className="w-full">
                                     <FormLabel>Informações da receita:</FormLabel>
                                     {RecipeForm.map((form) => (
-                                        form.type === 'time' 
-                                        ?
+                                        form.type === 'time'
+                                            ?
                                             <div className={form.className} key={crypto.randomUUID()}>
                                                 <FormLabel>{form.label}</FormLabel>
                                                 <div className="mt-2 md:grid md:grid-cols-2 gap-2">
                                                     <TextField
                                                         type="number"
                                                         label="Horas"
-                                                        error={errors && !!errors[form.name+'Hours' as string]}
-                                                        helperText={errors && errors[form.name+'Hours' as string]?.message as string}
+                                                        error={errors && !!errors[form.name + 'Hours' as string]}
+                                                        helperText={errors && errors[form.name + 'Hours' as string]?.message as string}
                                                         fullWidth
-                                                        defaultValue={recipe[form.name+'Hours' as keyof RecipeType]}
-                                                        {...register(form.name+'Hours' as string, form.validates)}
-                                                        onChange={() => {}}
+                                                        defaultValue={recipe[form.name + 'Hours' as keyof RecipeType]}
+                                                        {...register(form.name + 'Hours' as string, form.validates)}
+                                                        onChange={() => { }}
                                                     />
                                                     <TextField
                                                         type="number"
                                                         label="Minutos"
-                                                        error={errors && !!errors[form.name+'Minutes' as string]}
-                                                        helperText={errors && errors[form.name+'Minutes' as string]?.message as string}
+                                                        error={errors && !!errors[form.name + 'Minutes' as string]}
+                                                        helperText={errors && errors[form.name + 'Minutes' as string]?.message as string}
                                                         fullWidth
                                                         className="mt-4 md:mt-0"
-                                                        defaultValue={recipe[form.name+'Minutes' as keyof RecipeType]}
-                                                        {...register(form.name+'Minutes' as string, form.validates)}
-                                                        onChange={() => {}}
+                                                        defaultValue={recipe[form.name + 'Minutes' as keyof RecipeType]}
+                                                        {...register(form.name + 'Minutes' as string, form.validates)}
+                                                        onChange={() => { }}
                                                     />
                                                 </div>
                                             </div>
-                                        :
+                                            :
                                             <TextField
                                                 key={crypto.randomUUID()}
                                                 label={form.label}
@@ -156,17 +164,17 @@ const RecipePage = ({ params, searchParams}: { params: { method: string }, searc
                                                 rows={form.rows}
                                                 defaultValue={recipe[form.name as keyof RecipeType]}
                                                 {...register(form.name as string, form.validates)}
-                                                onChange={() => {}}
+                                                onChange={() => { }}
                                             />
                                     )
                                     )}
                                 </div>
-                                <div className="flex flex-col w-full">        
-                                    <InputDropzone name="images" registerInput={register} files={recipe.images} />                            
+                                <div className="flex flex-col w-full">
+                                    <InputDropzone name="images" registerInput={register} files={recipe.images} />
                                 </div>
                             </div>
                         </form>
-                    :
+                        :
                         <AddIngredient ingredients={recipe?.ingredients} onChange={onChangeIngredients} />
                 }
                 <>
@@ -177,7 +185,7 @@ const RecipePage = ({ params, searchParams}: { params: { method: string }, searc
                             className="w-full"
                             onClick={stateRecipe === 'setRecipe' ? handleSubmit(onNextStateRecipe) : handleSubmit(handlerSaveRecipe)}
                         >
-                            { stateRecipe === 'setRecipe' ? 'AVANÇAR' : 'SALVAR' }
+                            {stateRecipe === 'setRecipe' ? 'AVANÇAR' : 'SALVAR'}
                         </Button>
                     </div>
                     <div className="w-full">
@@ -187,7 +195,7 @@ const RecipePage = ({ params, searchParams}: { params: { method: string }, searc
                             className="w-full"
                             onClick={onBackStateRecipe}
                         >
-                            { stateRecipe === 'addIngredients' ? 'VOLTAR' : 'CANCELAR' }
+                            {stateRecipe === 'addIngredients' ? 'VOLTAR' : 'CANCELAR'}
                         </Button>
                     </div>
                 </>
