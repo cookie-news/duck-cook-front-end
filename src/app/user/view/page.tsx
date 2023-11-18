@@ -2,7 +2,7 @@
 
 import { NextPage } from "next";
 import { useRouter } from "next/navigation";
-import { useState, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 
 //Custom
 import { Button, Paper, Typography, Container, Alert, Avatar, CardMedia } from "@mui/material";
@@ -17,7 +17,11 @@ import { rootRoutes } from "@root/routes";
 
 //Contexts
 import { AuthContext } from "@context/AuthContext";
+import { LoadingContext } from "@context/LoadingContext";
 
+//Data service
+import { getRecipiesByUser, getRecipeLikes, getRecipeComments } from "@root/src/data/recipe.service";
+import { UserService } from "@root/src/data/user.service";
 
 const ViewRecipePage: NextPage = () => {
     const router = useRouter();
@@ -25,7 +29,10 @@ const ViewRecipePage: NextPage = () => {
     //User
     const { userData } = useContext(AuthContext);
 
-    const [fiveRecentsUserRecipes, setFiveRecetsUserRecipes] = useState([]);
+    //Loading
+    const { toggle: handleLoadingDialog } = useContext(LoadingContext);
+
+    const [fiveRecentsUserRecipes, setFiveRecetsUserRecipes] = useState<RecipeType[]>([]);
 
     const [userRecipeLiked, setUserRecipeLiked] = useState<RecipeType[]>([]);
 
@@ -33,6 +40,72 @@ const ViewRecipePage: NextPage = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
     const redirectToEditUserPage = () => router.push(rootRoutes.user.edit.path);
+
+    const [toast, setToast] = useState({
+        open: false,
+        type: "info",
+        message: "",
+      });
+      
+    const getRecipies = async () => {
+
+        await getRecipiesByUser(userData.id).then(async (recipeData:any[]) => {
+
+            for(let i = 0; i < recipeData.length; i ++){
+
+                console.log(recipeData[i]);
+                recipeData[i]['imagesSRC'] = recipeData[i].images;
+                delete recipeData[i].images;
+
+                await UserService.getUserData('_id', recipeData[i].idUser).then((authorData:any) => {
+                    authorData['fullName'] = authorData.name;
+                    delete authorData.name;
+
+                    recipeData[i].author = authorData;
+
+                    getRecipeLikes(recipeData[i].id).then(async (numberOfLikes)=>{
+
+                        recipeData[i].likeNumber = numberOfLikes.count;
+    
+                        getRecipeComments(recipeData[i].id).then(async (commentsOfRecipe: any[])=>{
+                            
+                            if(commentsOfRecipe){
+    
+                                recipeData[i].commentsNumber = commentsOfRecipe.length;
+    
+                            }else{
+    
+                                recipeData[i].commentsNumber = 0;
+    
+                            }
+                             
+                        })
+    
+                    })
+                })
+
+            }
+
+            setFiveRecetsUserRecipes(recipeData);
+
+        }).finally(()=>{
+            handleLoadingDialog(false);
+        }).catch((error)=>{ 
+            console.error(error);
+            setToast({
+                open: true,
+                type: "error",
+                message: error.message 
+            });
+        });
+        
+    };
+
+    useEffect(() => {
+        handleLoadingDialog(true);
+            
+        getRecipies();
+    }, []);
 
     return (
         <Container className="mt-10 mb-10">

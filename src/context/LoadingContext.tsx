@@ -5,7 +5,7 @@ import { createContext, useState } from "react";
 
 interface LoadingProviderProps {
   isLoading: boolean;
-  toggle: () => void;
+  toggle: (loading?: boolean) => void;
 }
 
 export const LoadingContext = createContext({
@@ -15,8 +15,11 @@ export const LoadingContext = createContext({
 export function LoadingProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleToggle = () => {
-    setIsLoading((state) => !state);
+  const handleToggle = (loading?: boolean) => {
+    if(loading == undefined)
+      setIsLoading((state) => !state);
+    else
+      setIsLoading(loading)
   };
 
   return (

@@ -69,6 +69,12 @@ const EditUserPage = () => {
         reader.readAsDataURL(event.target.files[0]);
     }
 
+    const updateUser = async (data: any) => {
+
+        console.log(data)
+
+    }
+
     const redirectToViewUserPage = () => router.push(rootRoutes.user.view.path);
 
     return (
@@ -119,6 +125,7 @@ const EditUserPage = () => {
                             variant="contained"
                             size="large"
                             className="w-full"
+                            onClick={handleSubmit(updateUser)}
                         >
                             SALVAR
                         </Button>
