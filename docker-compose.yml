@@ -1,0 +1,9 @@
+services:   
+  duck_cook_front:
+    build:
+      dockerfile: ./docker/next.Dockerfile
+    container_name: duck_cook_front
+    env_file:
+      - .env
+    ports:
+      - "3001:3000"
