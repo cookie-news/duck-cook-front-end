@@ -3,13 +3,13 @@
 //React
 import { useState } from "react";
 
+import {
+    CloudUploadOutlined as CloudUploadOutlinedIcon
+} from "@mui/icons-material";
 //Material UI
 import { 
     FormLabel, Typography
 } from "@mui/material";
-import {
-    CloudUploadOutlined as CloudUploadOutlinedIcon
-} from "@mui/icons-material";
 
 interface InputDropzoneParams
 {

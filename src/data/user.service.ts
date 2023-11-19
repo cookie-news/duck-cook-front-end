@@ -1,9 +1,9 @@
 import { ServiceError } from "@utils/Error";
 
-import Api from "./axios.config";
 import { AxiosHeaders, AxiosRequestConfig } from "axios";
 
-const base_url = process.env.NEXT_PUBLIC_USER_URL;
+import { CreateRegisterFormData } from "../app/auth/components/RegisterForm";
+import UserConfig from "./config/UserConfig";
 
 export type FieldNameOptions = "_id" | "user" | "name" | "email";
 export interface User {
@@ -19,14 +19,25 @@ async function getUserData(
   value: string,
   token?: string
 ) {
-  const endpoint = `${base_url}/customer/${fieldName}/${value}`;
+  const endpoint = `/customer/${fieldName}/${value}`;
   const axiosOpts: AxiosRequestConfig<AxiosHeaders> = token
     ? {
         headers: { Authorization: `Bearer ${token}` },
       }
     : {};
   try {
-    const { data } = await Api.get<User>(endpoint, axiosOpts);
+    const { data } = await UserConfig.get<User>(endpoint, axiosOpts);
+    return data;
+  } catch (e: any) {
+    throw new ServiceError(endpoint);
+  }
+}
+
+async function createUser(body: CreateRegisterFormData) {
+  const endpoint = "/customer";
+
+  try {
+    const { data } = await UserConfig.post(endpoint, body);
     return data;
   } catch (e: any) {
     throw new ServiceError(endpoint);
@@ -35,4 +46,5 @@ async function getUserData(
 
 export const UserService = {
   getUserData,
+  createUser,
 };

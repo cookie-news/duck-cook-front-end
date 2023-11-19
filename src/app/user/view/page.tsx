@@ -1,22 +1,23 @@
 'use client'
 
-import { NextPage } from "next";
-import { useRouter } from "next/navigation";
-import { useState, useContext } from "react";
-
-//Custom
-import { Button, Paper, Typography, Container, Alert, Avatar, CardMedia } from "@mui/material";
-import { Quiz as QuizIcon, ThumbUpOffAlt as ThumbUpOffAltIcon, Edit as EditIcon, Forum as ForumIcon, Key as KeyIcon } from "@mui/icons-material";
+import { useContext,useState } from "react";
 import { useForm } from "react-hook-form";
 
-//Types
-import RecipeType from "@/types/RecipeType";
+import { NextPage } from "next";
+import { useRouter } from "next/navigation";
+
+import { Edit as EditIcon, Forum as ForumIcon, Key as KeyIcon,Quiz as QuizIcon, ThumbUpOffAlt as ThumbUpOffAltIcon } from "@mui/icons-material";
+//Custom
+import { Alert, Avatar, Button, CardMedia,Container, Paper, Typography } from "@mui/material";
 
 //Routes
 import { rootRoutes } from "@root/routes";
 
 //Contexts
 import { AuthContext } from "@context/AuthContext";
+
+//Types
+import RecipeType from "@/types/RecipeType";
 
 
 const ViewRecipePage: NextPage = () => {
