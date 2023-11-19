@@ -36,6 +36,8 @@ import ErrorMessages from "@utils/ErrorMessages";
 import "./style.css";
 //Types
 import RecipeType from "@/types/RecipeType";
+import { error } from "console";
+import { comment } from "postcss";
 
 const ViewRecipePage = ({ params }: { params: { recipeId: string } }) => {
   const [recipe, setRecipe] = useState<RecipeType>({});
@@ -56,77 +58,224 @@ const ViewRecipePage = ({ params }: { params: { recipeId: string } }) => {
     reset,
   } = useForm();
 
+  const [toast, setToast] = useState({
+    open: false,
+    type: "info",
+    message: "",
+  });
+
   const onLikeRecipe = () => {
     let newRecipe = { ...recipe };
-    if (!newRecipe.likeNumber) {
-      newRecipe.likeNumber = 0;
-    }
 
-    newRecipe.likeNumber += 1;
-    setRecipe(newRecipe);
-    setIsLiked(true);
+    handleLoadingDialog();
+
+    const newLike = {
+      idRecipe: params?.recipeId,
+      idUser: userData.id,
+    };
+
+    RecipeService.createRecipeLike(newLike)
+      .then((data) => {
+        if (!newRecipe.likeNumber) {
+          newRecipe.likeNumber = 0;
+        }
+
+        newRecipe.likeNumber += 1;
+        setRecipe(newRecipe);
+        setIsLiked(true);
+      })
+      .finally(() => {
+        handleLoadingDialog();
+      })
+      .catch((error) => {
+        setToast({
+          open: true,
+          type: "error",
+          message: error.message,
+        });
+      });
   };
 
   const onNotLikeRecipe = () => {
     let newRecipe = { ...recipe };
-    if (!newRecipe.likeNumber) {
-      newRecipe.likeNumber = 0;
-    }
 
-    newRecipe.likeNumber -= 1;
-    setRecipe(newRecipe);
-    setIsLiked(false);
+    handleLoadingDialog();
+
+    const deleteLike = {
+      idRecipe: params?.recipeId,
+      idUser: userData.id,
+    };
+
+    RecipeService.deleteRecipeLike(deleteLike)
+      .then((data) => {
+        if (!newRecipe.likeNumber) {
+          newRecipe.likeNumber = 0;
+        }
+
+        newRecipe.likeNumber -= 1;
+        setRecipe(newRecipe);
+        setIsLiked(false);
+      })
+      .finally(() => {
+        handleLoadingDialog();
+      })
+      .catch((error) => {
+        console.error(error);
+        setToast({
+          open: true,
+          type: "error",
+          message: error.message,
+        });
+      });
   };
 
-  const onCreateComment = (values: any) => {
-    let newRecipe = { ...recipe };
+  const onCreateComment = async (values: any) => {
+    if (values.comment.replaceAll(" ", "") == "") return;
 
-    if (newRecipe.commentsNumber) {
-      newRecipe.commentsNumber++;
-    } else {
-      newRecipe.commentsNumber = 1;
-    }
+    handleLoadingDialog();
 
-    newRecipe.comments?.unshift({
-      text: values.comment,
-      author: userData,
-      createdDatetime:
-        new Date().toLocaleDateString() +
-        " " +
-        new Date().toLocaleTimeString().substring(0, 5),
-    });
+    const newComment = {
+      idRecipe: params?.recipeId,
+      idUser: userData.id,
+      message: values.comment,
+    };
 
-    setRecipe(newRecipe);
+    await RecipeService.createRecipeComment(newComment)
+      .then((data) => {
+        let newRecipe = { ...recipe };
 
-    reset({
-      comment: "",
-    });
+        console.log(newRecipe);
+
+        if (newRecipe.commentsNumber) {
+          newRecipe.commentsNumber++;
+        } else {
+          newRecipe.commentsNumber = 1;
+          newRecipe.comments = [];
+        }
+
+        newRecipe.comments?.unshift({
+          text: values.comment,
+          author: userData,
+          createdDatetime:
+            new Date().toLocaleDateString() +
+            " " +
+            new Date().toLocaleTimeString().substring(0, 5),
+        });
+
+        setRecipe(newRecipe);
+
+        reset({
+          comment: "",
+        });
+      })
+      .finally(() => {
+        handleLoadingDialog();
+      })
+      .catch((error) => {
+        setToast({
+          open: true,
+          type: "error",
+          message: error.message,
+        });
+      });
   };
 
   const getRecipeData = async () => {
-    RecipeService.getRecipe(params?.recipeId).then((recipeData: any) => {
-      console.log(recipeData);
-      recipeData["imagesSRC"] = recipeData.images;
-      delete recipeData.images;
-
-      UserService.getUserData("_id", recipeData.idUser)
-        .then((authorData: any) => {
-          authorData["fullName"] = authorData.name;
-          delete authorData.name;
-
-          recipeData.author = authorData;
+    try {
+      await RecipeService.getRecipe(params?.recipeId)
+        .then((recipeData: any) => {
           console.log(recipeData);
+          recipeData["imagesSRC"] = recipeData.images;
+          delete recipeData.images;
 
-          setRecipe(recipeData);
+          UserService.getUserData("_id", recipeData.idUser)
+            .then((authorData: any) => {
+              authorData["fullName"] = authorData.name;
+              delete authorData.name;
+
+              recipeData.author = authorData;
+
+              RecipeService.getRecipeLikes(params?.recipeId)
+                .then(async (numberOfLikes) => {
+                  recipeData.likeNumber = numberOfLikes.count;
+
+                  RecipeService.getRecipeComments(params?.recipeId)
+                    .then(async (commentsOfRecipe: any[]) => {
+                      if (commentsOfRecipe) {
+                        recipeData.comments = [];
+
+                        commentsOfRecipe.forEach((commentOfRecipe) => {
+                          const createdAt = new Date(commentOfRecipe.createdAt);
+
+                          console.log(authorData);
+                          recipeData.comments.push({
+                            id: commentOfRecipe.id,
+                            text: commentOfRecipe.message,
+                            createdDatetime:
+                              createdAt.toLocaleDateString() +
+                              " " +
+                              createdAt.toLocaleTimeString(),
+                            author: commentOfRecipe.user,
+                          });
+                        });
+
+                        recipeData.commentsNumber = commentsOfRecipe.length;
+                      } else {
+                        recipeData.commentsNumber = 0;
+                      }
+                    })
+                    .finally(() => {
+                      console.log(recipeData);
+                      setRecipe(recipeData);
+                      handleLoadingDialog(false);
+                    })
+                    .catch((error) => {
+                      setToast({
+                        open: true,
+                        type: "error",
+                        message: error.message,
+                      });
+                      handleLoadingDialog(false);
+                    });
+                })
+                .catch((error) => {
+                  setToast({
+                    open: true,
+                    type: "error",
+                    message: error.message,
+                  });
+                  handleLoadingDialog(false);
+                });
+            })
+            .catch((error) => {
+              setToast({
+                open: true,
+                type: "error",
+                message: error.message,
+              });
+              handleLoadingDialog(false);
+            });
         })
-        .finally(() => {
-          handleLoadingDialog();
+        .catch((error) => {
+          setToast({
+            open: true,
+            type: "error",
+            message: error.message,
+          });
+          handleLoadingDialog(false);
         });
-    });
+    } catch (error: any) {
+      setToast({
+        open: true,
+        type: "error",
+        message: error.message,
+      });
+      handleLoadingDialog(false);
+    }
   };
 
   useEffect(() => {
-    handleLoadingDialog();
+    handleLoadingDialog(true);
     getRecipeData();
   }, []);
 
@@ -301,7 +450,7 @@ const ViewRecipePage = ({ params }: { params: { recipeId: string } }) => {
                 </div>
                 <Avatar
                   sx={{ width: 45, height: 45 }}
-                  src={comment.author.name}
+                  src={comment.author.image}
                   className="flex-none mr-2 hidden md:block"
                 />
               </div>

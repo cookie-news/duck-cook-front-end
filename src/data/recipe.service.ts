@@ -1,6 +1,3 @@
-import { COOKIE_AUTH_TOKEN } from "@context/AuthContext";
-
-import { Cookies } from "@utils/Cookie";
 import { ServiceError } from "@utils/Error";
 
 import IngredientType from "@/types/IngredientType";
@@ -28,6 +25,9 @@ interface updateRecipe {
 
 interface recipeComment {
   id: string;
+  idUser: string;
+  idRecipe: string;
+  userName: string;
   message: string;
 }
 interface createRecipeComment {
@@ -51,7 +51,6 @@ interface createRecipeLike {
 interface deleteRecipeLike {
   idRecipe: string;
   idUser: string;
-  id: string;
 }
 
 interface getRecipeResponse {
@@ -197,6 +196,10 @@ async function getRecipe(recipeId: string) {
       response.data.preparationTime
     );
 
+    response.data.preparationTimeConverted = secondsToHourMinute(
+      response.data.preparationTime
+    );
+    console.log(response);
     return response.data;
   } catch (e: any) {
     throw new Error(e);
@@ -210,7 +213,6 @@ async function getRecipiesPagging(page: number) {
     const response = await RecipeConfig.get<getRecipiesPaggingResponse>(
       endpoint
     );
-
 
     response.data.itemsArray = JSON.parse(response.data.items);
 
@@ -243,7 +245,7 @@ async function getRecipiesMoreLikeds() {
   }
 }
 
-async function getRecipeByUser(userId: string) {
+export async function getRecipiesByUser(userId: string) {
   const endpoint = "/user/" + userId + "/recipe";
   try {
     const response = await RecipeConfig.get<getRecipiesByUserResponse["items"]>(
@@ -265,15 +267,9 @@ async function createRecipeComment(body: createRecipeComment) {
   const endpoint =
     "/user/" + body.idUser + "/recipe/" + body.idRecipe + "/comment";
   try {
-    const formData = new FormData();
-
-    console.log(body);
-
-    formData.append("message", body.message);
-
-    const { data } = await RecipeConfig.post(endpoint, formData, {
+    const { data } = await RecipeConfig.post(endpoint, body, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "multipart/json",
       },
     });
 
@@ -326,9 +322,21 @@ async function createRecipeLike(body: createRecipeLike) {
 
 async function deleteRecipeLike(body: deleteRecipeLike) {
   const endpoint =
-    "/user/" + body.idUser + "/recipe/" + body.idRecipe + "/like/" + body.id;
+    "/user/" + body.idUser + "/recipe/" + body.idRecipe + "/like";
   try {
     const response = await RecipeConfig.delete(endpoint);
+
+    console.log(response.data);
+    return response.data;
+  } catch (e: any) {
+    throw new Error(e);
+  }
+}
+
+async function getRecipeLikes(recipeId: string) {
+  const endpoint = "/recipe/" + recipeId + "/like";
+  try {
+    const response = await RecipeConfig.get(endpoint);
 
     console.log(response.data);
     return response.data;
@@ -343,11 +351,12 @@ export const RecipeService = {
   deleteRecipe,
   getRecipe,
   getRecipiesPagging,
-  getRecipeByUser,
   getRecipiesMoreLikeds,
   deleteRecipeLike,
   createRecipeComment,
   deleteRecipeComment,
   getRecipeComments,
+  getRecipiesByUser,
   createRecipeLike,
+  getRecipeLikes,
 };

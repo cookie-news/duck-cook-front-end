@@ -66,6 +66,10 @@ const EditUserPage = () => {
     reader.readAsDataURL(event.target.files[0]);
   };
 
+  const updateUser = async (data: any) => {
+    console.log(data);
+  };
+
   const redirectToViewUserPage = () => router.push(rootRoutes.user.view.path);
 
   return (
@@ -113,21 +117,77 @@ const EditUserPage = () => {
           </div>
         </form>
         <>
-          <div className="w-full">
-            <Button variant="contained" size="large" className="w-full">
-              SALVAR
-            </Button>
-          </div>
-          <div className="w-full">
-            <Button
-              variant="outlined"
-              size="large"
-              className="w-full"
-              onClick={redirectToViewUserPage}
-            >
-              CANCELAR
-            </Button>
-          </div>
+          <Card title="Editar Usuário">
+            <form>
+              <div className="flex flex-row flex-wrap md:grid md:grid-cols-2 gap-2">
+                <div className="w-full flex justify-center">
+                  <input
+                    accept="image/*"
+                    id="contained-button-file"
+                    multiple
+                    className="hidden"
+                    type="file"
+                    onChange={handleChangeAvatarImg}
+                  />
+                  <IconButton>
+                    <label
+                      htmlFor="contained-button-file"
+                      className="label-avatar-file-input"
+                    >
+                      <Avatar
+                        sx={{ width: 200, height: 200 }}
+                        src={user.image}
+                      />
+                    </label>
+                  </IconButton>
+                </div>
+                <div className="w-full">
+                  {UserForm.map((form) => (
+                    <TextField
+                      key={crypto.randomUUID()}
+                      label={form.label}
+                      placeholder={form.placeholder}
+                      className={form.className}
+                      type={form.type}
+                      error={errors && !!errors[form.name as string]}
+                      helperText={
+                        errors &&
+                        (errors[form.name as string]?.message as string)
+                      }
+                      fullWidth
+                      defaultValue={user[form.name as keyof User]}
+                      {...register(form.name as string, form.validates)}
+                      onChange={() => {}}
+                    />
+                  ))}
+                </div>
+              </div>
+            </form>
+            <>
+              <div className="w-full">
+                <Button
+                  variant="contained"
+                  size="large"
+                  className="w-full"
+                  onClick={handleSubmit(updateUser)}
+                >
+                  SALVAR
+                </Button>
+              </div>
+              <div className="w-full">
+                <Button
+                  variant="outlined"
+                  size="large"
+                  className="w-full"
+                  onClick={redirectToViewUserPage}
+                >
+                  CANCELAR
+                </Button>
+              </div>
+            </>
+          </Card>
+
+          <ToastCMP toast={toast} />
         </>
       </Card>
 

@@ -102,9 +102,18 @@ const RecipePage = ({
           parseInt(recipe.preparetionTimeHours ?? "") * 60 * 60 +
           parseInt(recipe.preparetionTimeMinutes ?? "") * 60,
         title: recipe.title,
-      } as any).then((sucess) => {
-        handleLoadingDialog();
-      });
+      } as any)
+        .then((sucess) => {
+          handleLoadingDialog();
+        })
+        .catch((error) => {
+          console.error(error);
+          setToast({
+            open: true,
+            type: "error",
+            message: error.message,
+          });
+        });
     } catch (error) {
       console.error(error);
     }
