@@ -2,7 +2,7 @@ import { ServiceError } from "@utils/Error";
 
 import { AxiosHeaders, AxiosRequestConfig } from "axios";
 
-import { CreateRegisterFormData } from "../app/auth/components/RegisterForm";
+import { CreateRegisterFormData } from "../app/auth/_components/RegisterForm";
 import UserConfig from "./config/UserConfig";
 
 export type FieldNameOptions = "_id" | "user" | "name" | "email";

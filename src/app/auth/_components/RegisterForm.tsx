@@ -58,6 +58,7 @@ const RegisterForm: React.FC<any> = () => {
     toggleLoading();
     try {
       const result = await UserService.createUser(body);
+      toast.success("Usuário cadastrado com sucesso");
     } catch (e: any) {
       toast.error(e.message);
     } finally {

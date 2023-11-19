@@ -8,8 +8,8 @@ import { authRoutes } from "@root/routes";
 
 import PageWrapper from "@components/PageWrapper";
 
-import LoginForm from "../components/LoginForm";
-import RegisterForm from "../components/RegisterForm";
+import LoginForm from "../_components/LoginForm";
+import RegisterForm from "../_components/RegisterForm";
 
 type AuthPageProps = {
   params: {

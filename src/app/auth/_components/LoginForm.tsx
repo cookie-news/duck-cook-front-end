@@ -60,7 +60,6 @@ const LoginForm: React.FC<any> = () => {
     try {
       const { token, userData } = await Login.doLogin(e);
       setAuthData(token, userData);
-      router.push(rootRoutes.home.path);
     } catch (e: any) {
       toast.error(e.message);
     } finally {

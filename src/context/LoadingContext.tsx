@@ -14,11 +14,8 @@ export const LoadingContext = createContext({
 export function LoadingProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleToggle = (loading?: boolean) => {
-    if(loading == undefined)
-      setIsLoading((state) => !state);
-    else
-      setIsLoading(loading)
+  const handleToggle = () => {
+    setIsLoading((state) => !state);
   };
 
   return (

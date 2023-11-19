@@ -67,8 +67,7 @@ interface getRecipeResponse {
 
 interface getRecipiesPaggingResponse {
   currentPage: number;
-  items: string;
-  itemsArray: getRecipeResponse[];
+  items: any[];
   next: number;
   previous: number;
   recordPerPage: number;
@@ -214,16 +213,13 @@ async function getRecipiesPagging(page: number) {
       endpoint
     );
 
-    response.data.itemsArray = JSON.parse(response.data.items);
-
-    response.data.itemsArray.forEach((item) => {
+    response.data.items.forEach((item) => {
       item.preparationTimeConverted = secondsToHourMinute(item.preparationTime);
     });
 
-    console.log(response.data);
     return response.data;
   } catch (e: any) {
-    throw new Error(e);
+    throw new ServiceError(e);
   }
 }
 
