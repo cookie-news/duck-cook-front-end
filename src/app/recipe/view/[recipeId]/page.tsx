@@ -22,7 +22,7 @@ import RecipeType from "@/types/RecipeType";
 import './style.css'
 
 //Data service
-import { getRecipe, getRecipeLikes, getRecipeComments, createRecipeComment, createRecipeLike, deleteRecipeLike } from "@root/src/data/recipe.service";
+import { getRecipe, getRecipeLikes, getRecipeComments, createRecipeComment, createRecipeLike, deleteRecipeLike, getRecipeIsLikedByUser } from "@root/src/data/recipe.service";
 import { UserService } from "@root/src/data/user.service";
 import { comment } from "postcss";
 import { error } from "console";
@@ -200,6 +200,13 @@ const ViewRecipePage = ({ params }: { params: { recipeId: string } }) => {
                                 recipeData.commentsNumber = 0;
 
                             }
+
+                            await getRecipeIsLikedByUser(params?.recipeId, userData.id).then((isLiked : any)=>{
+                                
+                                if(isLiked != undefined)
+                                    setIsLiked(isLiked.liked);
+                    
+                            });
 
                         }).finally(() => {
                             console.log(recipeData);

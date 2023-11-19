@@ -379,3 +379,19 @@ export async function getRecipeLikes(recipeId: string) {
   
 }
 
+export async function getRecipeIsLikedByUser(recipeId: string, userId: string) {
+
+  const endpoint = "/user/" + userId + "/recipe/" + recipeId + "/like";
+  try {
+
+    const response = await Api.get(baseUrl  + endpoint);
+    
+    console.log(response.data);
+    return response.data;
+  
+  } catch (e: any) {
+    throw new Error(e);
+  }
+  
+}
+
