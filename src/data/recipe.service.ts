@@ -4,7 +4,7 @@ import { ServiceError } from "@utils/Error";
 import IngredientType from "@/types/IngredientType";
 
 import { PaginationData } from "../types/PaginationData";
-import { LikeRequest, Recipe } from "../types/Recipe";
+import { Comment, LikeRequest, Recipe } from "../types/Recipe";
 import RecipeConfig from "./config/RecipeConfig";
 
 interface createRecipe {
@@ -26,13 +26,6 @@ interface updateRecipe {
   title: string;
 }
 
-interface recipeComment {
-  id: string;
-  idUser: string;
-  idRecipe: string;
-  userName: string;
-  message: string;
-}
 interface createRecipeComment {
   idRecipe: string;
   idUser: string;
@@ -67,10 +60,6 @@ interface getRecipiesByUserResponse {
   items: getRecipeResponse[];
 }
 
-interface getRecipeCommentsResponse {
-  comments: recipeComment[];
-}
-
 async function createRecipe(body: Recipe<FileList>) {
   const endpoint = "/recipe";
   try {
@@ -103,29 +92,29 @@ async function updateRecipe(body: Recipe<FileList>) {
   }
 }
 
-function getFormDataByRecipe(body: Recipe<FileList>)
-{
-    const formData = new FormData();
+function getFormDataByRecipe(body: Recipe<FileList>) {
+  const formData = new FormData();
 
-    for(let keyBody in body) 
-    { 
-      if(keyBody == 'images') { continue; }
-      formData.append(keyBody, body[keyBody as keyof Recipe] as string); 
+  for (let keyBody in body) {
+    if (keyBody == "images") {
+      continue;
     }
+    formData.append(keyBody, body[keyBody as keyof Recipe] as string);
+  }
 
-    for (let i = 0; i < body.images.length; i++) {
-        const img = body.images.item(i);
+  for (let i = 0; i < body.images.length; i++) {
+    const img = body.images.item(i);
 
-        if (img) {
-          formData.append("images", img);
-        }
+    if (img) {
+      formData.append("images", img);
     }
+  }
 
-    body.ingredients.forEach((ingredient) => {
-        formData.append("ingredients", JSON.stringify(ingredient));
-    });
+  body.ingredients.forEach((ingredient) => {
+    formData.append("ingredients", JSON.stringify(ingredient));
+  });
 
-    return formData;
+  return formData;
 }
 
 async function deleteRecipe(recipeId: string) {
@@ -167,6 +156,17 @@ async function getRecipiesMoreLikeds() {
 
   try {
     const { data } = await RecipeConfig.get<Recipe[]>(endpoint);
+
+    return data;
+  } catch (e: any) {
+    throw new ServiceError(endpoint);
+  }
+}
+
+async function getRecipeIsLikedByUser(recipeId: string, userId: string) {
+  const endpoint = "/user/" + userId + "/recipe/" + recipeId + "/like";
+  try {
+    const { data } = await RecipeConfig.get(endpoint);
 
     return data;
   } catch (e: any) {
@@ -225,9 +225,7 @@ async function deleteRecipeComment(body: deleteRecipeComment) {
 async function getRecipeComments(recipeId: string) {
   const endpoint = "/recipe/" + recipeId + "/comment";
   try {
-    const response = await RecipeConfig.get<
-      getRecipeCommentsResponse["comments"]
-    >(endpoint);
+    const response = await RecipeConfig.get<Comment[]>(endpoint);
 
     return response.data;
   } catch (e: any) {
@@ -247,7 +245,7 @@ async function createLike(body: LikeRequest) {
   }
 }
 
-async function deleteRecipeLike(body: deleteRecipeLike) {
+async function deleteRecipeLike(body: LikeRequest) {
   const endpoint =
     "/user/" + body.idUser + "/recipe/" + body.idRecipe + "/like";
   try {
@@ -285,4 +283,5 @@ export const RecipeService = {
   getRecipiesByUser,
   createLike,
   getRecipeLikes,
+  getRecipeIsLikedByUser,
 };

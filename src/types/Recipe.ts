@@ -19,6 +19,11 @@ export type Comment = {
   id: string;
 };
 
+export type LikeRequest = {
+  idUser: string;
+  idRecipe: string;
+};
+
 interface RecipeFactoryType {
   createRecipeByRecipeForm(
     recipeForm: any,

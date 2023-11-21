@@ -2,7 +2,6 @@ import React from "react";
 
 import { RecipeService } from "@root/src/data/recipe.service";
 import { User, UserService } from "@root/src/data/user.service";
-import { Recipe } from "@root/src/types/Recipe";
 
 import parseToHtml from "html-react-parser";
 

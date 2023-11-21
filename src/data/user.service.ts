@@ -17,20 +17,11 @@ export interface User {
   image: string;
 }
 
-async function getUser(
-  fieldName: FieldNameOptions,
-  value: string,
-  token?: string
-) {
+async function getUser(fieldName: FieldNameOptions, value: string) {
   const endpoint = `/customer/${fieldName}/${value}`;
-  const axiosOpts: AxiosRequestConfig<AxiosHeaders> = token
-    ? {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    : {};
+
   try {
-    console.log(Cookies.get(COOKIE_AUTH_TOKEN));
-    const { data } = await UserConfig.get<User>(endpoint, axiosOpts);
+    const { data } = await UserConfig.get<User>(endpoint);
     return data;
   } catch (e: any) {
     throw new ServiceError(endpoint);

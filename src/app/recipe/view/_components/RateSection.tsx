@@ -9,6 +9,8 @@ import {
 } from "react";
 import { toast } from "react-toastify";
 
+import { ThumbUpAlt } from "@mui/icons-material";
+
 import { RecipeService } from "@root/src/data/recipe.service";
 
 import { AuthContext } from "@context/AuthContext";
@@ -48,7 +50,7 @@ function Card({ label, icon: Icon, animate, ...props }: CardProps) {
       }
     >
       <Icon className={iconVariant({ animate })} />
-      <p className="text-green-800 font-semibold">{label}</p>
+      <p className="text-black font-semibold">{label}</p>
     </button>
   );
 }
@@ -67,18 +69,41 @@ const RateSection: React.FC<RateSectionProps> = ({
   commentsNumber,
 }) => {
   const [likes, setLikes] = useState(likesNumber);
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeIsLoading, setLikeIsLoading] = useState(false);
 
   const { userData } = useContext(AuthContext);
 
+  const fetchUserIsLiked = useCallback(() => {
+    RecipeService.getRecipeIsLikedByUser(idRecipe, userData.id)
+      .then((result) => {
+        setIsLiked(result.liked);
+      })
+      .catch((error) => toast.error(error.message));
+  }, [idRecipe, userData.id]);
+
+  useEffect(() => {
+    fetchUserIsLiked();
+  }, [fetchUserIsLiked]);
+
   const handleLike = async () => {
     try {
-      await RecipeService.createLike({
-        idRecipe,
-        idUser: userData.id,
-      });
-      setLikes((state) => (state += 1));
+      setLikeIsLoading(true);
+      if (isLiked) {
+        await RecipeService.deleteRecipeLike({ idRecipe, idUser: userData.id });
+        setLikes((state) => (state -= 1));
+      } else {
+        await RecipeService.createLike({
+          idRecipe,
+          idUser: userData.id,
+        });
+        setLikes((state) => (state += 1));
+      }
     } catch (e: any) {
       toast.error(e.message);
+    } finally {
+      setLikeIsLoading(false);
+      fetchUserIsLiked();
     }
   };
 
@@ -88,7 +113,13 @@ const RateSection: React.FC<RateSectionProps> = ({
         label={Date.parseSecondsToHours(preparationTime)}
         icon={ClockIcon}
       />
-      <Card label={likes} icon={ThumbsUp} onClick={handleLike} animate />
+      <Card
+        label={likes}
+        icon={isLiked ? ThumbUpAlt : ThumbsUp}
+        onClick={handleLike}
+        animate
+        disabled={likeIsLoading}
+      />
       <Card label={commentsNumber} icon={MessagesSquare} />
     </div>
   );
