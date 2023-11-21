@@ -2,7 +2,6 @@ import { ToastContainer } from "react-toastify";
 
 import { Metadata } from "next";
 
-import Footer from "@components/Footer";
 //Themes
 import ThemeProvider from "@components/ThemeProvider";
 
@@ -34,7 +33,6 @@ export default function RootLayout({
               <div className="flex-1 max-h-full overflow-y-auto">
                 {children}
               </div>
-              <Footer />
             </ThemeProvider>
           </LoadingProvider>
         </AuthContextProvider>

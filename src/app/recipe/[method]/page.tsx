@@ -1,11 +1,13 @@
 "use client";
 
-import { useContext, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import ReactQuill from 'react-quill';
+import { toast } from "react-toastify";
 
 import { useRouter } from "next/navigation";
 
+import { authRoutes, userRoutes } from "@root/routes";
 //Data services
 import { RecipeService } from "@root/src/data/recipe.service";
 
@@ -16,7 +18,6 @@ import AddIngredient from "@components/form/AddIngredient";
 import InputDropzone from "@components/form/InputDropzone";
 import { Input } from "@components/Input";
 import PageWrapper from "@components/PageWrapper";
-import ToastCMP from "@components/Toast";
 
 //Contexts
 import { AuthContext } from "@context/AuthContext";
@@ -28,6 +29,8 @@ import { RecipeFactory } from "@/types/Recipe";
 import { ToastType } from "@/types/ToastType";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+
+import { Date } from '@utils/Date'
 
 const createRecipeFormSchema = z.object({
     title: z.string().nonempty("O campo é obrigatório."),
@@ -72,6 +75,7 @@ const RecipePage = ({
     const {
         register,
         handleSubmit,
+        setValue,
         formState: { errors }
     } = useForm<CreateIngredientFormData>({
         resolver: zodResolver(createRecipeFormSchema),
@@ -79,20 +83,14 @@ const RecipePage = ({
     
     const [customErrors, setCustomErrors] = useState<any>();
 
-    const [toast, setToast] = useState<ToastType>({
-        open: false,
-        type: "info",
-        message: "",
-    });
-
     const [stateRecipe, setStateRecipe] = useState("setRecipe");
     let [recipe, setRecipe] = useState<RecipeForm>({} as RecipeForm);
 
     const onNextStateRecipe = (values: any) => {
         verifyRichTextsInputs();
 
-        if(!customErrors || Object.keys(customErrors).length > 0) { return; }
-
+        if(customErrors && Object.keys(customErrors).length > 0) { return; }
+        
         setStateRecipe("addIngredients");
 
         let newRecipe = {...recipe};
@@ -103,7 +101,8 @@ const RecipePage = ({
     };
 
     const onBackStateRecipe = () => {
-        setStateRecipe("setRecipe");
+        if(stateRecipe == 'setRecipe') { router.back(); }
+        else { setStateRecipe("setRecipe"); }
     };
 
     const handlerChangeDescription = (value: string) => {
@@ -145,20 +144,34 @@ const RecipePage = ({
 
         let recipeRequest = RecipeFactory.createRecipeByRecipeForm(recipe, userData.id);
 
-        RecipeService.createRecipe(recipeRequest)
+        if(params?.method == 'edit')
+        {
+            RecipeService.updateRecipe(recipeRequest, searchParams?.id)
+                .then((sucess) => {
+                    toast.success('Receita criada com sucesso!!');
+                    router.push(userRoutes.view.path);
+                })
+                .catch((error) => {
+                    toast.error(error.message);
+                })
+                .finally(() => {
+                    handleLoadingDialog();
+                });
+        }
+        else
+        {
+            RecipeService.createRecipe(recipeRequest)
             .then((sucess) => {
-                handleLoadingDialog();
+                toast.success('Receita criada com sucesso!!');
+                router.push(userRoutes.view.path);
             })
             .catch((error) => {
-                setToast({
-                    open: true,
-                    type: "error",
-                    message: error.message,
-                });
+                toast.error(error.message);
             })
             .finally(() => {
                 handleLoadingDialog();
             });
+        }
 };
 
     const onChangeIngredients = (value:any) => {
@@ -168,6 +181,35 @@ const RecipePage = ({
 
         setRecipe(newRecipe);
     }
+
+    const getRecipe = (recipeId:string) => {
+        handleLoadingDialog();
+
+        RecipeService.getRecipeById(recipeId).then((data:any) => {
+            setValue('title', data.title);
+
+            const preparationTimeNumbers:any = Date.separateParseHoursAndMinutes(data.preparationTime);
+
+            data.preparationTimeHours = preparationTimeNumbers.hours;
+            data.preparationTimeMinutes = preparationTimeNumbers.minutes;
+
+            setValue('preparationTimeHours', preparationTimeNumbers.hours);
+            setValue('preparationTimeMinutes', preparationTimeNumbers.minutes);
+
+            delete data.images;
+
+            data.ingredients = data.ingredients.map((ingredient:string) => {return {id: crypto.randomUUID(), description: ingredient};})
+
+            setRecipe(data);
+        })
+        .finally(() => {
+            handleLoadingDialog();
+        });
+    }
+
+    useEffect(() => {
+        if(params?.method == 'edit' && searchParams && searchParams.id) { getRecipe(searchParams.id); }
+    }, []);
 
     return (
         <PageWrapper hasMenu>
@@ -180,7 +222,7 @@ const RecipePage = ({
             >
                 {stateRecipe === "setRecipe" ? (
                     <form>
-                        <div className="flex flex-row flex-wrap md:grid md:grid-rows-2 gap-2">
+                        <div className={"flex flex-row flex-wrap md:grid gap-2 " + (params.method != 'edit' && "md:grid-rows-2")}>
                             <div className="w-full">
                                 <h2 className="text-gray-600">Informações da receita:</h2>
 
@@ -232,18 +274,21 @@ const RecipePage = ({
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex flex-col w-full">
-                                <InputDropzone
-                                    label="Imagens da receita:"
-                                    name="images"
-                                    register={register}
-                                    files={recipe.images}
-                                />
-                            </div>
+                            {
+                                params?.method != 'edit' &&
+                                <div className="flex flex-col w-full">
+                                    <InputDropzone
+                                        label="Imagens da receita:"
+                                        name="images"
+                                        register={register}
+                                        files={recipe.images}
+                                    />
+                                </div>
+                            }
                         </div>
                     </form>
                 ) : (
-                    <AddIngredient
+                    recipe && <AddIngredient
                         ingredients={recipe?.ingredients}
                         onChange={onChangeIngredients}
                     />
@@ -272,8 +317,6 @@ const RecipePage = ({
                     </div>
                 </>
             </Card>
-
-            <ToastCMP toast={toast} />
         </PageWrapper>
     );
 };
