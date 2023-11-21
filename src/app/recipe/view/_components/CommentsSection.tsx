@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 import { useEventCallback } from "@mui/material";
 
 import { RecipeService } from "@root/src/data/recipe.service";
 import { Comment } from "@root/src/types/Recipe";
+
+import { AuthContext } from "@context/AuthContext";
 
 interface CommentsSectionProps {
   idRecipe: string;
@@ -15,6 +17,8 @@ interface CommentsSectionProps {
 const CommentsSection: React.FC<CommentsSectionProps> = ({ idRecipe }) => {
   const [comments, setComments] = useState<Comment[]>(null as any);
   const [isLoading, setIsLoading] = useState(true);
+
+  const { isLogged } = useContext(AuthContext);
 
   const fetchComments = useEventCallback(async () => {
     setIsLoading(true);
@@ -37,6 +41,9 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ idRecipe }) => {
   return (
     <div className="flex flex-col gap-8">
       <h3 className="text-slate-700 font-bold  text-xl">Comentários</h3>
+
+      {isLogged && <div className="flex gap-3"></div>}
+
       {comments.map((item: Comment) => (
         <div key={item.id} className="flex flex-col gap-6">
           <div className="bg-neutral-default border border-gray-dark rounded-md p-3">

@@ -19,24 +19,27 @@ const CarouselImages: React.FC<CarouselImagesProps> = ({ images }) => {
   return (
     <div className="relative w-full h-96" key={crypto.randomUUID()}>
       <Image
-        src={currentImage}
+        src={currentImage ?? fallbackImage}
         alt="recipe image"
         className="rounded-md"
         objectFit="cover"
         fill
       />
-      {images.length > 0 &&
-        images.map((urlImage) => (
-          <div key={crypto.randomUUID()}>
-            <Image
-              src={urlImage}
-              alt="recipe image"
-              className="rounded-md"
-              objectFit="cover"
-              fill
-            />
-          </div>
-        ))}
+      <div>
+        {images &&
+          images.length > 0 &&
+          images.map((urlImage) => (
+            <div key={crypto.randomUUID()}>
+              <Image
+                src={urlImage}
+                alt="recipe image"
+                className="rounded-md"
+                objectFit="cover"
+                fill
+              />
+            </div>
+          ))}
+      </div>
     </div>
   );
 };

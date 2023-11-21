@@ -1,3 +1,5 @@
+import { User } from "../data/user.service";
+
 export type Recipe<ImageType = Array<string>> = {
   id: string;
   idUser: string;
@@ -9,6 +11,12 @@ export type Recipe<ImageType = Array<string>> = {
   images: ImageType;
   countLikes: number;
   countComments: number;
+};
+
+export type Comment = {
+  user: User;
+  message: string;
+  id: string;
 };
 
 interface RecipeFactoryType {
