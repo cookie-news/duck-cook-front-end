@@ -1,6 +1,6 @@
 "use client";
 
-import Carousel from "react-material-ui-carousel";
+import { useState } from "react";
 
 import Image from "next/image";
 
@@ -8,17 +8,35 @@ type CarouselImagesProps = {
   images: Array<string>;
 };
 
+const fallbackImage =
+  "https://www.pulsecarshalton.co.uk/wp-content/uploads/2016/08/jk-placeholder-image.jpg";
+
 const CarouselImages: React.FC<CarouselImagesProps> = ({ images }) => {
+  const [currentImage, setCurrentImage] = useState(
+    images !== null ? images[0] : ""
+  );
+
   return (
     <div className="relative w-full h-96" key={crypto.randomUUID()}>
       <Image
-        src="https://dcqgxwhjxkkignjziqvf.supabase.co/storage/v1/object/public/duck-cook/65540c1cfe1a98737c019377/a1508f3c-8456-4144-badd-20d13308d9b8"
+        src={currentImage}
         alt="recipe image"
         className="rounded-md"
         objectFit="cover"
         fill
       />
-      ;
+      {images.length > 0 &&
+        images.map((urlImage) => (
+          <div key={crypto.randomUUID()}>
+            <Image
+              src={urlImage}
+              alt="recipe image"
+              className="rounded-md"
+              objectFit="cover"
+              fill
+            />
+          </div>
+        ))}
     </div>
   );
 };

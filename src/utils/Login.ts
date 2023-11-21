@@ -7,12 +7,10 @@ async function doLogin(
   body: AuthRequest
 ): Promise<{ token: string; userData: User }> {
   return AuthService.auth(body).then(({ token }) => {
-    return UserService.getUserData(FIELD_ID_NAME, body.user, token).then(
-      (userData) => ({
-        token,
-        userData,
-      })
-    );
+    return UserService.getUser(FIELD_ID_NAME, body.user).then((userData) => ({
+      token,
+      userData,
+    }));
   });
 }
 

@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: false,
   images: {
-    domains: ["dcqgxwhjxkkignjziqvf.supabase.co"],
+    domains: ["dcqgxwhjxkkignjziqvf.supabase.co", "www.pulsecarshalton.co.uk"],
   },
   output: "standalone",
 };

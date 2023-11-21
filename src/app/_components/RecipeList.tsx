@@ -14,6 +14,10 @@ import { RecipeService } from "@root/src/data/recipe.service";
 import { PaginationData } from "@root/src/types/PaginationData";
 import { Recipe } from "@root/src/types/Recipe";
 
+import { Date } from "@utils/Date";
+
+import parseToHtml from "html-react-parser";
+
 import { SkeletonFallbackRecipes } from "./skeletons/SkeletonFallbackRecipesList";
 
 export function RecipesList() {
@@ -61,10 +65,10 @@ export function RecipesList() {
           <div className="flex flex-1 flex-col h-full">
             <p className="font-bold uppercase text-green-800">{item.title}</p>
             <span className="font-thin w-32 text-xs text-neutral-500 truncate">
-              {item.preparationMethod}
+              {Date.parseSecondsToHours(item.preparationTime)}
             </span>
             <p className="mt-3 break-words text-base text-neutral-500">
-              {item.description}
+              {parseToHtml(item.description)}
             </p>
           </div>
           {item.images !== null && (

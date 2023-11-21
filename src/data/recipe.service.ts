@@ -4,7 +4,7 @@ import { ServiceError } from "@utils/Error";
 import IngredientType from "@/types/IngredientType";
 
 import { PaginationData } from "../types/PaginationData";
-import { Recipe } from "../types/Recipe";
+import { LikeRequest, Recipe } from "../types/Recipe";
 import RecipeConfig from "./config/RecipeConfig";
 
 interface createRecipe {
@@ -44,11 +44,6 @@ interface deleteRecipeComment {
   idUser: string;
   id: string;
   message: string;
-}
-
-interface createRecipeLike {
-  idRecipe: string;
-  idUser: string;
 }
 
 interface deleteRecipeLike {
@@ -147,7 +142,7 @@ async function deleteRecipe(recipeId: string) {
 async function getRecipe(recipeId: string) {
   const endpoint = "/recipe/" + recipeId;
   try {
-    const response = await RecipeConfig.get<Recipe[]>(endpoint);
+    const response = await RecipeConfig.get<Recipe>(endpoint);
 
     return response.data;
   } catch (e: any) {
@@ -222,8 +217,6 @@ async function deleteRecipeComment(body: deleteRecipeComment) {
     console.log(body);
 
     const { data } = await RecipeConfig.delete(endpoint);
-
-    console.log(data);
   } catch (e: any) {
     throw new Error(e);
   }
@@ -236,20 +229,18 @@ async function getRecipeComments(recipeId: string) {
       getRecipeCommentsResponse["comments"]
     >(endpoint);
 
-    console.log(response.data);
     return response.data;
   } catch (e: any) {
     throw new Error(e);
   }
 }
 
-async function createRecipeLike(body: createRecipeLike) {
+async function createLike(body: LikeRequest) {
   const endpoint =
     "/user/" + body.idUser + "/recipe/" + body.idRecipe + "/like";
   try {
     const response = await RecipeConfig.post(endpoint);
 
-    console.log(response.data);
     return response.data;
   } catch (e: any) {
     throw new Error(e);
@@ -274,7 +265,6 @@ async function getRecipeLikes(recipeId: string) {
   try {
     const response = await RecipeConfig.get(endpoint);
 
-    console.log(response.data);
     return response.data;
   } catch (e: any) {
     throw new Error(e);
@@ -293,6 +283,6 @@ export const RecipeService = {
   deleteRecipeComment,
   getRecipeComments,
   getRecipiesByUser,
-  createRecipeLike,
+  createLike,
   getRecipeLikes,
 };

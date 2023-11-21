@@ -1,10 +1,12 @@
 function parseSecondsToHours(seconds: number) {
-  var hours = String(Math.floor(seconds / 3600)).padStart(2, "0");
+  var hours = Math.floor(seconds / 3600);
   var minutes = String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
 
-  var result = `${hours}h e ${minutes} min`;
+  let result: Array<string> = [];
+  if (hours !== 0) result.push(`${hours}h`);
+  if (minutes !== "00") result.push(`${minutes} min`);
 
-  return result;
+  return result.join("e");
 }
 
 export const Date = {

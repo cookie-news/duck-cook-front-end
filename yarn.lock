@@ -1938,10 +1938,47 @@ dom-helpers@^5.0.1:
     "@babel/runtime" "^7.8.7"
     csstype "^3.0.2"
 
+<<<<<<< Updated upstream
 dompurify@^2.4.3:
   version "2.4.7"
   resolved "https://registry.npmjs.org/dompurify/-/dompurify-2.4.7.tgz"
   integrity sha512-kxxKlPEDa6Nc5WJi+qRgPbOAbgTpSULL+vI3NUXsZMlkJxTqYI9wg5ZTay2sFrdZRWHPWNi+EdAhcJf81WtoMQ==
+=======
+"dom-serializer@^2.0.0":
+  "integrity" "sha512-wIkAryiqt/nV5EQKqQpo3SToSOV9J0DnbJqwK7Wv/Trc92zIAYZ4FlMu+JPFW1DfGFt81ZTCGgDEabffXeLyJg=="
+  "resolved" "https://registry.npmjs.org/dom-serializer/-/dom-serializer-2.0.0.tgz"
+  "version" "2.0.0"
+  dependencies:
+    "domelementtype" "^2.3.0"
+    "domhandler" "^5.0.2"
+    "entities" "^4.2.0"
+
+"domelementtype@^2.3.0":
+  "integrity" "sha512-OLETBj6w0OsagBwdXnPdN0cnMfF9opN69co+7ZrbfPGrdpPVNBUj02spi6B1N7wChLQiPn4CSH/zJvXw56gmHw=="
+  "resolved" "https://registry.npmjs.org/domelementtype/-/domelementtype-2.3.0.tgz"
+  "version" "2.3.0"
+
+"domhandler@^5.0.2", "domhandler@^5.0.3", "domhandler@5.0.3":
+  "integrity" "sha512-cgwlv/1iFQiFnU96XXgROh8xTeetsnJiDsTc7TYCLFd9+/WNkIqPTxiM/8pSd8VIrhXGTf1Ny1q1hquVqDJB5w=="
+  "resolved" "https://registry.npmjs.org/domhandler/-/domhandler-5.0.3.tgz"
+  "version" "5.0.3"
+  dependencies:
+    "domelementtype" "^2.3.0"
+
+"domutils@^3.1.0":
+  "integrity" "sha512-H78uMmQtI2AhgDJjWeQmHwJJ2bLPD3GMmO7Zja/ZZh84wkm+4ut+IUnUdRa8uCGX88DiVx1j6FRe1XfxEgjEZA=="
+  "resolved" "https://registry.npmjs.org/domutils/-/domutils-3.1.0.tgz"
+  "version" "3.1.0"
+  dependencies:
+    "dom-serializer" "^2.0.0"
+    "domelementtype" "^2.3.0"
+    "domhandler" "^5.0.3"
+
+"electron-to-chromium@^1.4.535":
+  "integrity" "sha512-W1+g9qs9hviII0HAwOdehGYkr+zt7KKdmCcJcjH0mYg6oL8+ioT3Skjmt7BLoAQqXhjf40AXd+HlR4oAWMlXjA=="
+  "resolved" "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.537.tgz"
+  "version" "1.4.537"
+>>>>>>> Stashed changes
 
 draft-js@^0.11.7:
   version "0.11.7"
@@ -1952,6 +1989,7 @@ draft-js@^0.11.7:
     immutable "~3.7.4"
     object-assign "^4.1.1"
 
+<<<<<<< Updated upstream
 electron-to-chromium@^1.4.535:
   version "1.4.537"
   resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.537.tgz"
@@ -1966,6 +2004,17 @@ enhanced-resolve@^5.12.0:
   version "5.15.0"
   resolved "https://registry.npmjs.org/enhanced-resolve/-/enhanced-resolve-5.15.0.tgz"
   integrity sha512-LXYT42KJ7lpIKECr2mAXIaMldcNCh/7E0KBKOu4KSfkHmP+mZmSs+8V5gBAqisWBy0OO4W5Oyys0GO1Y8KtdKg==
+=======
+"entities@^4.2.0", "entities@^4.5.0":
+  "integrity" "sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw=="
+  "resolved" "https://registry.npmjs.org/entities/-/entities-4.5.0.tgz"
+  "version" "4.5.0"
+
+"error-ex@^1.3.1":
+  "integrity" "sha512-7dFHNmqeFSEt2ZBsCriorKnn3Z2pj+fd9kmI6QoWw4//DL+icEBfc0U7qJCisqrTsKTjw4fNFy2pW9OqStD84g=="
+  "resolved" "https://registry.npmjs.org/error-ex/-/error-ex-1.3.2.tgz"
+  "version" "1.3.2"
+>>>>>>> Stashed changes
   dependencies:
     graceful-fs "^4.2.4"
     tapable "^2.2.0"
@@ -2681,10 +2730,50 @@ history@^5.1.0:
   dependencies:
     "@babel/runtime" "^7.7.6"
 
+<<<<<<< Updated upstream
 hoist-non-react-statics@^3.3.1:
   version "3.3.2"
   resolved "https://registry.npmjs.org/hoist-non-react-statics/-/hoist-non-react-statics-3.3.2.tgz"
   integrity sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==
+=======
+"html-dom-parser@5.0.4":
+  "integrity" "sha512-azy8THLKd4Ar0OVJpEgX+MSjYvKdNDWlGiRBIlovMqEQYMAnLLXBhhiSwjylDD3RDdcCYT8Utg6uoRDeLHUyHg=="
+  "resolved" "https://registry.npmjs.org/html-dom-parser/-/html-dom-parser-5.0.4.tgz"
+  "version" "5.0.4"
+  dependencies:
+    "domhandler" "5.0.3"
+    "htmlparser2" "9.0.0"
+
+"html-react-parser@^5.0.6":
+  "integrity" "sha512-aPSzFhO2bK/L/mYQbMwFz+1QG8nhxozbwENt/52HTApasrBvDX87MFD5uSQIjq7Io0bnKzH4uh7PM42zZ4ag9A=="
+  "resolved" "https://registry.npmjs.org/html-react-parser/-/html-react-parser-5.0.6.tgz"
+  "version" "5.0.6"
+  dependencies:
+    "domhandler" "5.0.3"
+    "html-dom-parser" "5.0.4"
+    "react-property" "2.0.2"
+    "style-to-js" "1.1.9"
+
+"htmlparser2@9.0.0":
+  "integrity" "sha512-uxbSI98wmFT/G4P2zXx4OVx04qWUmyFPrD2/CNepa2Zo3GPNaCaaxElDgwUrwYWkK1nr9fft0Ya8dws8coDLLQ=="
+  "resolved" "https://registry.npmjs.org/htmlparser2/-/htmlparser2-9.0.0.tgz"
+  "version" "9.0.0"
+  dependencies:
+    "domelementtype" "^2.3.0"
+    "domhandler" "^5.0.3"
+    "domutils" "^3.1.0"
+    "entities" "^4.5.0"
+
+"ignore@^5.2.0":
+  "integrity" "sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ=="
+  "resolved" "https://registry.npmjs.org/ignore/-/ignore-5.2.4.tgz"
+  "version" "5.2.4"
+
+"import-fresh@^3.2.1":
+  "integrity" "sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw=="
+  "resolved" "https://registry.npmjs.org/import-fresh/-/import-fresh-3.3.0.tgz"
+  "version" "3.3.0"
+>>>>>>> Stashed changes
   dependencies:
     react-is "^16.7.0"
 
@@ -2721,6 +2810,7 @@ imurmurhash@^0.1.4:
   resolved "https://registry.npmjs.org/imurmurhash/-/imurmurhash-0.1.4.tgz"
   integrity sha512-JmXMZ6wuvDmLiHEml9ykzqO6lwFbof0GG4IkcGaENdCRDDmMVnny7s5HsIgHCbaq0w2MyPhDqkhTUgS2LU2PHA==
 
+<<<<<<< Updated upstream
 inflection@~1.12.0:
   version "1.12.0"
   resolved "https://registry.npmjs.org/inflection/-/inflection-1.12.0.tgz"
@@ -2730,6 +2820,17 @@ inflight@^1.0.4:
   version "1.0.6"
   resolved "https://registry.npmjs.org/inflight/-/inflight-1.0.6.tgz"
   integrity sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==
+=======
+"inline-style-parser@0.2.2":
+  "integrity" "sha512-EcKzdTHVe8wFVOGEYXiW9WmJXPjqi1T+234YpJr98RiFYKHV3cdy1+3mkTE+KHTHxFFLH51SfaGOoUdW+v7ViQ=="
+  "resolved" "https://registry.npmjs.org/inline-style-parser/-/inline-style-parser-0.2.2.tgz"
+  "version" "0.2.2"
+
+"internal-slot@^1.0.5":
+  "integrity" "sha512-Y+R5hJrzs52QCG2laLn4udYVnxsfny9CpOhNhUvk/SSSVyF6T27FzRbF0sroPidSu3X8oEAkOn2K804mjpt6UQ=="
+  "resolved" "https://registry.npmjs.org/internal-slot/-/internal-slot-1.0.5.tgz"
+  "version" "1.0.5"
+>>>>>>> Stashed changes
   dependencies:
     once "^1.3.0"
     wrappy "1"
@@ -4003,10 +4104,22 @@ react-material-ui-carousel@^3.4.2:
     "@mui/system" "^5.4.1"
     framer-motion "^4.1.17"
 
+<<<<<<< Updated upstream
 react-pro-sidebar@^1.1.0-alpha.1:
   version "1.1.0-alpha.1"
   resolved "https://registry.npmjs.org/react-pro-sidebar/-/react-pro-sidebar-1.1.0-alpha.1.tgz"
   integrity sha512-kIo4p3gHIdxqANG2KXv7V8KXDmDFsRhk23AGLbXsicCV39k32EP3Os2DXyOj9S6UCDYB+4G3WoeJFiMIkkHe0w==
+=======
+"react-property@2.0.2":
+  "integrity" "sha512-+PbtI3VuDV0l6CleQMsx2gtK0JZbZKbpdu5ynr+lbsuvtmgbNcS3VM0tuY2QjFNOcWxvXeHjDpy42RO+4U2rug=="
+  "resolved" "https://registry.npmjs.org/react-property/-/react-property-2.0.2.tgz"
+  "version" "2.0.2"
+
+"react-toastify@^9.1.3":
+  "integrity" "sha512-fPfb8ghtn/XMxw3LkxQBk3IyagNpF/LIKjOBflbexr2AWxAH1MJgvnESwEwBn9liLFXgTKWgBSdZpw9m4OTHTg=="
+  "resolved" "https://registry.npmjs.org/react-toastify/-/react-toastify-9.1.3.tgz"
+  "version" "9.1.3"
+>>>>>>> Stashed changes
   dependencies:
     "@emotion/react" "^11.10.5"
     "@emotion/styled" "^11.10.5"
@@ -4022,10 +4135,17 @@ react-query@^3.32.1:
     broadcast-channel "^3.4.1"
     match-sorter "^6.0.2"
 
+<<<<<<< Updated upstream
 react-quill@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/react-quill/-/react-quill-2.0.0.tgz"
   integrity sha512-4qQtv1FtCfLgoD3PXAur5RyxuUbPXQGOHgTlFie3jtxp43mXDtzCKaOgQ3mLyZfi1PUlyjycfivKelFhy13QUg==
+=======
+"react@^16.5.1 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17 || ^18", "react@^17.0.0 || ^18.0.0", "react@^17.0.1 || ^18.0.0", "react@^18.2.0", "react@>= 0.14.0", "react@>= 16.8", "react@>= 16.8.0 || 17.x.x || ^18.0.0-0", "react@>= 17.0", "react@>=16", "react@>=16.6.0", "react@>=16.8 || ^17.0.0", "react@>=16.8.0", "react@0.14 || 15 || 16 || 17 || 18":
+  "integrity" "sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ=="
+  "resolved" "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
+  "version" "18.2.0"
+>>>>>>> Stashed changes
   dependencies:
     "@types/quill" "^1.3.10"
     lodash "^4.17.4"
@@ -4248,10 +4368,36 @@ shebang-regex@^3.0.0:
   resolved "https://registry.npmjs.org/shebang-regex/-/shebang-regex-3.0.0.tgz"
   integrity sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==
 
+<<<<<<< Updated upstream
 side-channel@^1.0.4:
   version "1.0.4"
   resolved "https://registry.npmjs.org/side-channel/-/side-channel-1.0.4.tgz"
   integrity sha512-q5XPytqFEIKHkGdiMIrY10mvLRvnQh42/+GoBlFW3b2LXLE2xxJpZFdm94we0BaoV3RwJyGqg5wS7epxTv0Zvw==
+=======
+"strip-json-comments@^3.1.1":
+  "integrity" "sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig=="
+  "resolved" "https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-3.1.1.tgz"
+  "version" "3.1.1"
+
+"style-to-js@1.1.9":
+  "integrity" "sha512-6bkwhOlPOx+wKiHVlPTHjUqM4zDKv9pyccehB8zetZL0hhQ7MVp7UEWUsohjiMdxwhSsEdjMrEve+8qzUVmY4w=="
+  "resolved" "https://registry.npmjs.org/style-to-js/-/style-to-js-1.1.9.tgz"
+  "version" "1.1.9"
+  dependencies:
+    "style-to-object" "1.0.4"
+
+"style-to-object@1.0.4":
+  "integrity" "sha512-KyNO6mfijxSnypdvEjeXlhvbGPSh0l1zBJp80n+ncBQvrEbSwBHwZCpo0xz6Q4AKSPfXowWwypCBAUAdfz3rFQ=="
+  "resolved" "https://registry.npmjs.org/style-to-object/-/style-to-object-1.0.4.tgz"
+  "version" "1.0.4"
+  dependencies:
+    "inline-style-parser" "0.2.2"
+
+"style-value-types@4.1.4":
+  "integrity" "sha512-LCJL6tB+vPSUoxgUBt9juXIlNJHtBMy8jkXzUJSBzeHWdBu6lhzHqCvLVkXFGsFIlNa2ln1sQHya/gzaFmB2Lg=="
+  "resolved" "https://registry.npmjs.org/style-value-types/-/style-value-types-4.1.4.tgz"
+  "version" "4.1.4"
+>>>>>>> Stashed changes
   dependencies:
     call-bind "^1.0.0"
     get-intrinsic "^1.0.2"
