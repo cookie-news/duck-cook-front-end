@@ -20,6 +20,9 @@ const recipeRoutes = {
   view: {
     path: "/recipe/view"
   },
+  edit: {
+    path: "/recipe/edit"
+  }
 };
 
 const rootRoutes = {

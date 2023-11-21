@@ -1,6 +1,7 @@
 import InputButton from "./InputButton";
 import InputError from "./InputError";
 import InputIcon from "./InputIcon";
+import InputLabel from "./InputLabel";
 import InputRoot from "./InputRoot";
 import InputTextfield from "./InputTextfield";
 
@@ -10,4 +11,5 @@ export const Input = {
   Icon: InputIcon,
   Button: InputButton,
   Error: InputError,
+  Label: InputLabel
 };

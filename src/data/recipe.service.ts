@@ -76,36 +76,10 @@ interface getRecipeCommentsResponse {
   comments: recipeComment[];
 }
 
-async function createRecipe(body: createRecipe) {
+async function createRecipe(body: Recipe<FileList>) {
   const endpoint = "/recipe";
   try {
-    const formData = new FormData();
-
-    console.log(body);
-
-    formData.append("idUser", body.idUser);
-    formData.append("title", body.title);
-    formData.append("description", body.description);
-    formData.append("preparationTime", body.preparationTime.toString());
-    formData.append("preparationMethod", body.preparationMethod);
-
-    for (let i = 0; i < body.images.length; i++) {
-      const img = body.images.item(i);
-
-      if (img) {
-        formData.append("images", img);
-      }
-    }
-
-    body.ingredients.forEach((ingredient) => {
-      const ingredientData = {
-        measure: ingredient.measure,
-        name: ingredient.name,
-        quantity: parseFloat(ingredient.quantity),
-      };
-
-      formData.append("ingredients", JSON.stringify(ingredientData));
-    });
+    const formData = getFormDataByRecipe(body);
 
     const { data } = await RecipeConfig.post(endpoint, formData, {
       headers: {
@@ -117,28 +91,10 @@ async function createRecipe(body: createRecipe) {
   }
 }
 
-async function updateRecipe(body: updateRecipe) {
+async function updateRecipe(body: Recipe<FileList>) {
   const endpoint = "/recipe";
   try {
-    const formData = new FormData();
-
-    console.log(body);
-
-    formData.append("idUser", body.idUser);
-    formData.append("title", body.title);
-    formData.append("description", body.description);
-    formData.append("preparationTime", body.preparationTime.toString());
-    formData.append("preparationMethod", body.preparationMethod);
-
-    body.ingredients.forEach((ingredient) => {
-      const ingredientData = {
-        measure: ingredient.measure,
-        name: ingredient.name,
-        quantity: parseFloat(ingredient.quantity),
-      };
-
-      formData.append("ingredients", JSON.stringify(ingredientData));
-    });
+    const formData = getFormDataByRecipe(body);
 
     const { data } = await RecipeConfig.put(endpoint, formData, {
       headers: {
@@ -150,6 +106,31 @@ async function updateRecipe(body: updateRecipe) {
   } catch (e: any) {
     throw new Error(e);
   }
+}
+
+function getFormDataByRecipe(body: Recipe<FileList>)
+{
+    const formData = new FormData();
+
+    for(let keyBody in body) 
+    { 
+      if(keyBody == 'images') { continue; }
+      formData.append(keyBody, body[keyBody as keyof Recipe] as string); 
+    }
+
+    for (let i = 0; i < body.images.length; i++) {
+        const img = body.images.item(i);
+
+        if (img) {
+          formData.append("images", img);
+        }
+    }
+
+    body.ingredients.forEach((ingredient) => {
+        formData.append("ingredients", JSON.stringify(ingredient));
+    });
+
+    return formData;
 }
 
 async function deleteRecipe(recipeId: string) {

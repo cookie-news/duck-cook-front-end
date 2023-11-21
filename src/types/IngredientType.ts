@@ -1,7 +1,5 @@
 export default interface IngredientType {
-    name: string,
-    quantity: string,
-    measure: string,
+    description: string,
     isEdit?: boolean,
     id: string
 }

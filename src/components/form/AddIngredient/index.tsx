@@ -1,354 +1,269 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { isMobile } from "react-device-detect";
 import { useForm } from "react-hook-form";
 
-import {
-  Add as AddIcon,
-  Check as CheckIcon,
-  Close as CloseIcon,
-  Delete as DeleteIcon,
-  Edit as EditIcon,
-} from "@mui/icons-material";
 //Material UI
 import {
-  Button,
-  Card,
-  CardContent,
-  IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
-  Typography,
+    Card,
+    CardContent,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
 } from "@mui/material";
+
+import Button from "@components/Button";
+import { Input } from "@components/Input";
 
 //Form
 import { IngredientForm } from "@forms/recipe/ingredient";
 
 import "./index.css";
-import { FormType } from "@/types/FormType";
 //Types
-import IngredientType from "@/types/IngredientType";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Check as CheckIcon, Pencil, Plus, Trash2, X as CloseIcon } from "lucide-react";
+import { z } from "zod";
 
 import {
-  StyledMenuItem,
-  StyledTableThreadCell,
-  StyledTableThreadRow,
+    StyledTableThreadCell,
+    StyledTableThreadRow,
 } from "./styles";
 
+const addIngredientFormSchema = z.object({
+    description: z.string().nonempty("O campo é obrigatório.")
+});
+
+type AddIngredientFormData = z.infer<typeof addIngredientFormSchema>;
+
 const AddIngredient = ({
-  onChange = (newIngredients: Array<IngredientType>) => {},
-  ...props
+    onChange = (newIngredients: Array<any>) => { },
+    ...props
 }) => {
-  /**
-   * @TODO Retirar o useRef de dentro do map
-   */
+    /**
+     * @TODO Retirar o useRef de dentro do map
+     */
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  IngredientForm.map((form) => (form.ref = useRef()));
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    IngredientForm.map((form) => (form.ref = useRef()));
 
-  const getDefaultIngredient = () => {
-    return {
-      name: "",
-      quantity: "0",
-      measure: "",
-    } as IngredientType;
-  };
+    const getDefaultIngredient = () => {
+        return {
+            description: ""
+        } as any;
+    };
 
-  const [ingredients, setIngredients] = useState<IngredientType[]>(
-    props.ingredients
-  );
-  let [ingredientEdit, setIngredientEdit] = useState<IngredientType>(
-    getDefaultIngredient()
-  );
+    const [ingredients, setIngredients] = useState<any[]>(
+        props.ingredients
+    );
+    let [ingredientEdit, setIngredientEdit] = useState<any>(
+        getDefaultIngredient()
+    );
 
-  // react hook form
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-    setFocus,
-  } = useForm();
-
-  const updateIngredients = (newIngredients: Array<IngredientType>) => {
-    setIngredients(newIngredients);
-    onChange(newIngredients);
-  };
-
-  const resetIngredientItem = (ingredient: IngredientType) => {
-    reset(ingredient);
-    setIngredientEdit(ingredient);
-  };
-
-  const resetEditingIngredient = () => {
-    let newIngredients = [...ingredients];
-
-    newIngredients.map((ingredient: IngredientType) => {
-      if (ingredient.isEdit) {
-        ingredient.isEdit = false;
-      }
+    // react hook form
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors }
+    } = useForm<AddIngredientFormData>({
+        resolver: zodResolver(addIngredientFormSchema),
     });
 
-    updateIngredients(newIngredients);
-    resetIngredientItem(getDefaultIngredient());
-  };
+    const updateIngredients = (newIngredients: Array<any>) => {
+        setIngredients(newIngredients);
+        onChange(newIngredients);
+    };
 
-  const addIngredientItem = (ingredient: any) => {
-    console.log("teste");
-    ingredient.id = crypto.randomUUID();
-    const newIngredients = [...ingredients, ingredient];
+    const resetIngredientItem = (ingredient: any) => {
+        reset(ingredient);
+        setIngredientEdit(ingredient);
+    };
 
-    updateIngredients(newIngredients);
-    resetIngredientItem(getDefaultIngredient());
-  };
+    const resetEditingIngredient = () => {
+        let newIngredients = [...ingredients];
 
-  const deleteIngredientItem = (ingredientIndex: number) => {
-    let newIngredients = [...ingredients];
-    newIngredients.splice(ingredientIndex, 1);
+        newIngredients.map((ingredient: any) => {
+            if (ingredient.isEdit) {
+                ingredient.isEdit = false;
+            }
+        });
 
-    updateIngredients(newIngredients);
-  };
+        updateIngredients(newIngredients);
+        resetIngredientItem(getDefaultIngredient());
+    };
 
-  const editIngredientItem = (ingredientIndex: number) => {
-    resetEditingIngredient();
+    const addIngredientItem = (ingredient: any) => {
+        ingredient.id = crypto.randomUUID();
+        const newIngredients = ingredients ? [...ingredients, ingredient] : [ingredient];
 
-    let newIngredients = [...ingredients];
-    newIngredients[ingredientIndex].isEdit = true;
-    updateIngredients(newIngredients);
+        updateIngredients(newIngredients);
+        resetIngredientItem(getDefaultIngredient());
+    };
 
-    console.log(IngredientForm.find((x) => x.name == "name"));
-    IngredientForm.find((x) => x.name == "name")?.ref?.current?.focus();
-    resetIngredientItem(ingredients[ingredientIndex]);
-  };
+    const deleteIngredientItem = (ingredientIndex: number) => {
+        let newIngredients = [...ingredients];
+        newIngredients.splice(ingredientIndex, 1);
 
-  const saveEditIngredientItem = (ingredient: any) => {
-    resetEditingIngredient();
+        updateIngredients(newIngredients);
+    };
 
-    let newIngredients = [...ingredients];
-    let ingredientEditedIndex = newIngredients.findIndex(
-      (x) => x.id == ingredient.id
+    const editIngredientItem = (ingredientIndex: number) => {
+        resetEditingIngredient();
+
+        let newIngredients = [...ingredients];
+        newIngredients[ingredientIndex].isEdit = true;
+        updateIngredients(newIngredients);
+
+        resetIngredientItem(ingredients[ingredientIndex]);
+    };
+
+    const saveEditIngredientItem = (ingredient: any) => {
+        resetEditingIngredient();
+
+        let newIngredients = [...ingredients];
+        let ingredientEditedIndex = newIngredients.findIndex(
+            (x) => x.id == ingredientEdit.id
+        );
+        ingredient.isEdit = false;
+        ingredient.id = ingredientEdit.id;
+        newIngredients[ingredientEditedIndex] = ingredient;
+
+        updateIngredients(newIngredients);
+    };
+
+    return (
+        <div className="p-2 max-h-96 overflow-y-auto">
+            <div
+                key={crypto.randomUUID()}
+                className="mt-4 mb-4"
+            >
+                {ingredientEdit &&
+                    <>
+                        <Input.Root>
+                            <Input.Textfield
+                                name="description"
+                                register={register}
+                                type="text"
+                                placeholder="Descreva o ingrediente aqui, ex: 3 ovos"
+                            />
+                        </Input.Root>
+                        {errors.description && <Input.Error>{errors.description.message}</Input.Error>}
+                    </>
+                }
+            </div>
+            <div className="mt-4 mb-8 w-full flex justify-center gap-2">
+                {!ingredientEdit.isEdit ? (
+                    <Button
+                        onClick={handleSubmit(addIngredientItem)}
+                        variant="secondary"
+                    >
+                        <Plus /> Adicionar Ingrediente
+                    </Button>
+                ) : (
+                    <>
+                        <Button
+                            onClick={handleSubmit(saveEditIngredientItem)}
+                        >
+                            <CheckIcon /> Salvar
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            color="error"
+                            onClick={handleSubmit(resetEditingIngredient)}
+                        >
+                            <CloseIcon /> Cancelar
+                        </Button>
+                    </>
+                )}
+            </div>
+            {ingredients && ingredients.length > 0 &&
+                <>
+                    <div className="md:hidden">
+                        {ingredients.map((ingredient: any, ingredientIndex: number) => (
+                            <Card
+                                key={crypto.randomUUID()}
+                                className={
+                                    (ingredient.isEdit ? "editing-item" : "") +
+                                    " card-border-top mt-4"
+                                }
+                            >
+                                <CardContent className="flex justify-between">
+                                    <div>
+                                        <span>
+                                            Decrição:
+                                        </span>
+                                        <h6>
+                                            {ingredient.description}
+                                        </h6>
+                                    </div>
+                                    <div className="flex flex-col justify-center">
+                                        <Button
+                                            variant="none"
+                                            aria-label="delete"
+                                            onClick={() => deleteIngredientItem(ingredientIndex)}
+                                        >
+                                            <Trash2 fontSize="large" />
+                                        </Button>
+                                        <Button
+                                            variant="none"
+                                            aria-label="edit"
+                                            onClick={() => editIngredientItem(ingredientIndex)}
+                                        >
+                                            <Pencil fontSize="large" />
+                                        </Button>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
+
+                    <TableContainer className="hidden md:flex">
+                        <Table aria-label="customized table">
+                            <TableHead>
+                                <StyledTableThreadRow>
+                                    <StyledTableThreadCell>Descrição</StyledTableThreadCell>
+                                    <TableCell style={{ width: "20%" }} />
+                                </StyledTableThreadRow>
+                            </TableHead>
+                            <TableBody>
+                                {ingredients.map((ingredient: any, ingredientIndex: number) => (
+                                    <TableRow
+                                        className={ingredient.isEdit ? "editing-item" : ""}
+                                        key={ingredient.id}
+                                    >
+                                        <TableCell component="th" scope="row">
+                                            {ingredient.description}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <div className="flex">
+                                                <Button
+                                                    variant="none"
+                                                    aria-label="delete"
+                                                    onClick={() => deleteIngredientItem(ingredientIndex)}
+                                                >
+                                                    <Trash2 size={20} />
+                                                </Button>
+                                                <Button
+                                                    variant="none"
+                                                    aria-label="edit"
+                                                    onClick={() => editIngredientItem(ingredientIndex)}
+                                                >
+                                                    <Pencil size={20} />
+                                                </Button>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </>
+            }
+        </div>
     );
-    ingredient.isEdit = false;
-    newIngredients[ingredientEditedIndex] = ingredient;
-
-    updateIngredients(newIngredients);
-  };
-
-  const ingredientFormMeasureOption = IngredientForm.find(
-    (x: FormType) => x.name == "measure"
-  )?.options;
-
-  return (
-    <div className="p-2 max-h-96 overflow-y-auto">
-      <div
-        key={crypto.randomUUID()}
-        className="flex flex-row flex-wrap md:grid md:grid-cols-3 gap-2 mt-4 mb-4"
-      >
-        {ingredientEdit &&
-          IngredientForm.map((form) =>
-            form.type === "select" ? (
-              <TextField
-                select
-                key={crypto.randomUUID()}
-                label={form.label}
-                defaultValue={
-                  ingredientEdit[form.name as keyof IngredientType] || ""
-                }
-                error={errors && !!errors[form.name as string]}
-                helperText={
-                  errors && (errors[form.name as string]?.message as string)
-                }
-                {...register(form.name as string, form.validates)}
-                className="md:mt-0 mt-2"
-                fullWidth
-                inputRef={form.ref}
-                onChange={() => {}}
-              >
-                {form.options?.map((option: any) => (
-                  <StyledMenuItem
-                    key={crypto.randomUUID() + option.value}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </StyledMenuItem>
-                ))}
-              </TextField>
-            ) : (
-              <TextField
-                key={crypto.randomUUID()}
-                label={form.label}
-                placeholder={form.placeholder}
-                className="md:mt-0 mt-2"
-                type={form.type}
-                error={errors && !!errors[form.name as string]}
-                helperText={
-                  errors && (errors[form.name as string]?.message as string)
-                }
-                {...register(form.name as string, form.validates)}
-                onChange={() => {}}
-                inputRef={form.ref}
-                fullWidth
-              />
-            )
-          )}
-      </div>
-      <div className="mt-4 mb-8 w-full flex justify-center ">
-        {!ingredientEdit.isEdit ? (
-          <Button
-            variant="outlined"
-            startIcon={<AddIcon />}
-            onClick={handleSubmit(addIngredientItem)}
-          >
-            Adicionar Ingrediente
-          </Button>
-        ) : (
-          <>
-            <Button
-              variant="outlined"
-              color="primary"
-              className="mr-2"
-              startIcon={<CheckIcon />}
-              onClick={handleSubmit(saveEditIngredientItem)}
-            >
-              Salvar
-            </Button>
-            <Button
-              variant="outlined"
-              color="error"
-              startIcon={<CloseIcon />}
-              onClick={handleSubmit(resetEditingIngredient)}
-            >
-              Cancelar
-            </Button>
-          </>
-        )}
-      </div>
-      {ingredients.length > 0 &&
-        (isMobile ? (
-          <div>
-            {ingredients.map((ingredient: any, ingredientIndex: number) => (
-              <Card
-                key={crypto.randomUUID()}
-                className={
-                  (ingredient.isEdit ? "editing-item" : "") +
-                  " card-border-top mt-4"
-                }
-              >
-                <CardContent className="flex justify-between">
-                  <div>
-                    <Typography
-                      sx={{ fontSize: 14 }}
-                      color="text.secondary"
-                      gutterBottom
-                    >
-                      Nome:
-                    </Typography>
-                    <Typography variant="h6" component="div">
-                      {ingredient.name}
-                    </Typography>
-                    <Typography
-                      sx={{ fontSize: 14 }}
-                      color="text.secondary"
-                      gutterBottom
-                    >
-                      Quandidate:
-                    </Typography>
-                    <Typography variant="h6" component="div">
-                      {ingredient.quantity}
-                    </Typography>
-                    <Typography
-                      sx={{ fontSize: 14 }}
-                      color="text.secondary"
-                      gutterBottom
-                    >
-                      Medida:
-                    </Typography>
-                    <Typography variant="h6" component="div">
-                      {
-                        ingredientFormMeasureOption?.find(
-                          (x: any) => x.value == ingredient.measure
-                        ).label
-                      }
-                    </Typography>
-                  </div>
-                  <div className="flex flex-col justify-center">
-                    <IconButton
-                      aria-label="delete"
-                      onClick={() => deleteIngredientItem(ingredientIndex)}
-                    >
-                      <DeleteIcon fontSize="large" />
-                    </IconButton>
-                    <IconButton
-                      aria-label="edit"
-                      onClick={() => editIngredientItem(ingredientIndex)}
-                    >
-                      <EditIcon fontSize="large" />
-                    </IconButton>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        ) : (
-          <TableContainer>
-            <Table aria-label="customized table">
-              <TableHead>
-                <StyledTableThreadRow>
-                  <StyledTableThreadCell>Nome</StyledTableThreadCell>
-                  <StyledTableThreadCell align="left">
-                    Quandidate
-                  </StyledTableThreadCell>
-                  <StyledTableThreadCell align="left">
-                    Medida
-                  </StyledTableThreadCell>
-                  <TableCell style={{ width: "20%" }} />
-                </StyledTableThreadRow>
-              </TableHead>
-              <TableBody>
-                {ingredients.map((ingredient: any, ingredientIndex: number) => (
-                  <TableRow
-                    className={ingredient.isEdit ? "editing-item" : ""}
-                    key={crypto.randomUUID() + ingredient.name}
-                  >
-                    <TableCell component="th" scope="row">
-                      {ingredient.name}
-                    </TableCell>
-                    <TableCell align="left">{ingredient.quantity}</TableCell>
-                    <TableCell align="left">
-                      {
-                        ingredientFormMeasureOption?.find(
-                          (x: any) => x.value == ingredient.measure
-                        ).label
-                      }
-                    </TableCell>
-                    <TableCell align="right">
-                      <IconButton
-                        aria-label="delete"
-                        onClick={() => deleteIngredientItem(ingredientIndex)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                      <IconButton
-                        aria-label="edit"
-                        onClick={() => editIngredientItem(ingredientIndex)}
-                      >
-                        <EditIcon />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        ))}
-    </div>
-  );
 };
 
 export default AddIngredient;

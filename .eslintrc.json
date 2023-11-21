@@ -9,6 +9,7 @@
           ["^react"],
           ["^next"],
           ["^@mui"],
+          ["^@lexical"],
           ["^@root"],
           ["^@components"],
           ["^@context"],
