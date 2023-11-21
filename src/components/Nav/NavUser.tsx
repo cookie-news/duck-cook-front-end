@@ -5,7 +5,7 @@ import { useContext } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { rootRoutes } from "@root/routes";
+import { userRoutes } from "@root/routes";
 
 import { AuthContext } from "@context/AuthContext";
 
@@ -16,10 +16,7 @@ const NavUser: React.FC<any> = () => {
 
   return (
     <div className="flex absolute right-6 items-center gap-3 cursor-pointer">
-      <Link
-        className="flex gap-3 items-center"
-        href={rootRoutes.user.view.path}
-      >
+      <Link className="flex gap-3 items-center" href={userRoutes.view.path}>
         <div className="relative w-10 h-10">
           <Image
             src={userData.image}

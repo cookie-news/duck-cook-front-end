@@ -1,10 +1,10 @@
 "use client";
 
-import { createContext, useState } from "react";
+import { createContext, useCallback, useState } from "react";
 
 interface LoadingProviderProps {
   isLoading: boolean;
-  toggle: (loading?: boolean) => void;
+  toggle: () => void;
 }
 
 export const LoadingContext = createContext({
@@ -14,9 +14,9 @@ export const LoadingContext = createContext({
 export function LoadingProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleToggle = () => {
+  const handleToggle = useCallback(() => {
     setIsLoading((state) => !state);
-  };
+  }, []);
 
   return (
     <LoadingContext.Provider value={{ isLoading, toggle: handleToggle }}>

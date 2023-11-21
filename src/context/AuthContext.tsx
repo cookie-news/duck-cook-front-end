@@ -60,14 +60,18 @@ export function AuthContextProvider({
     setUserData(userData);
   };
 
+  const handles = useMemo(
+    () => ({ setAuthData: handleSetAuthData, logout: handleLogout }),
+    []
+  );
+
   return (
     <AuthContext.Provider
       value={{
         token,
         isLogged,
         userData,
-        setAuthData: handleSetAuthData,
-        logout: handleLogout,
+        ...handles,
       }}
     >
       {children}

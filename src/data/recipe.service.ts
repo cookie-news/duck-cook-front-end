@@ -1,7 +1,10 @@
+import { Date } from "@utils/Date";
 import { ServiceError } from "@utils/Error";
 
 import IngredientType from "@/types/IngredientType";
 
+import { PaginationData } from "../types/PaginationData";
+import { Recipe } from "../types/Recipe";
 import RecipeConfig from "./config/RecipeConfig";
 
 interface createRecipe {
@@ -65,37 +68,12 @@ interface getRecipeResponse {
   title: string;
 }
 
-interface getRecipiesPaggingResponse {
-  currentPage: number;
-  items: any[];
-  next: number;
-  previous: number;
-  recordPerPage: number;
-  totalPage: number;
-}
-
-interface getRecipiesMoreLikedsResponse {
-  items: getRecipeResponse[];
-}
-
 interface getRecipiesByUserResponse {
   items: getRecipeResponse[];
 }
 
 interface getRecipeCommentsResponse {
   comments: recipeComment[];
-}
-
-function secondsToHourMinute(seconds: number) {
-  var hours = Math.floor(seconds / 3600);
-  var minutes = Math.floor((seconds % 3600) / 60);
-
-  var formattedHours = hours < 10 ? "0" + hours : hours;
-  var formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
-
-  var result = `${formattedHours}:${formattedMinutes}`;
-
-  return result;
 }
 
 async function createRecipe(body: createRecipe) {
@@ -179,7 +157,6 @@ async function deleteRecipe(recipeId: string) {
   try {
     const data = await RecipeConfig.delete(endpoint);
 
-    console.log(data);
     return data;
   } catch (e: any) {
     throw new Error(e);
@@ -189,37 +166,23 @@ async function deleteRecipe(recipeId: string) {
 async function getRecipe(recipeId: string) {
   const endpoint = "/recipe/" + recipeId;
   try {
-    const response = await RecipeConfig.get<getRecipeResponse>(endpoint);
+    const response = await RecipeConfig.get<Recipe[]>(endpoint);
 
-    response.data.preparationTimeConverted = secondsToHourMinute(
-      response.data.preparationTime
-    );
-
-    response.data.preparationTimeConverted = secondsToHourMinute(
-      response.data.preparationTime
-    );
-    console.log(response);
     return response.data;
   } catch (e: any) {
     throw new Error(e);
   }
 }
 
-async function getRecipiesPagging(page: number) {
+async function getRecipes(page: number) {
   const endpoint = "recipe/page/" + page;
 
   try {
-    const response = await RecipeConfig.get<getRecipiesPaggingResponse>(
-      endpoint
-    );
-
-    response.data.items.forEach((item) => {
-      item.preparationTimeConverted = secondsToHourMinute(item.preparationTime);
-    });
-
-    return response.data;
+    const { data } = await RecipeConfig.get<PaginationData<Recipe>>(endpoint);
+    return data;
   } catch (e: any) {
-    throw new ServiceError(e);
+    console.error(e);
+    throw new ServiceError(endpoint);
   }
 }
 
@@ -227,15 +190,9 @@ async function getRecipiesMoreLikeds() {
   const endpoint = "/recipe/more-like";
 
   try {
-    const response = await RecipeConfig.get<
-      getRecipiesMoreLikedsResponse["items"]
-    >(endpoint);
+    const { data } = await RecipeConfig.get<Recipe[]>(endpoint);
 
-    response.data.forEach((item) => {
-      item.preparationTimeConverted = secondsToHourMinute(item.preparationTime);
-    });
-
-    return response.data;
+    return data;
   } catch (e: any) {
     throw new ServiceError(endpoint);
   }
@@ -249,7 +206,9 @@ export async function getRecipiesByUser(userId: string) {
     );
 
     response.data.forEach((item) => {
-      item.preparationTimeConverted = secondsToHourMinute(item.preparationTime);
+      item.preparationTimeConverted = Date.parseSecondsToHours(
+        item.preparationTime
+      );
     });
 
     console.log(response.data);
@@ -346,7 +305,7 @@ export const RecipeService = {
   updateRecipe,
   deleteRecipe,
   getRecipe,
-  getRecipiesPagging,
+  getRecipes,
   getRecipiesMoreLikeds,
   deleteRecipeLike,
   createRecipeComment,
