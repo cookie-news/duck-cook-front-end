@@ -141,27 +141,25 @@ const RecipePage = ({
     }
 
     const handlerSaveRecipe = async () => {
-        try {
-            handleLoadingDialog();
+        handleLoadingDialog();
 
-            let recipeRequest = RecipeFactory.createRecipeByRecipeForm(recipe, userData.id);
+        let recipeRequest = RecipeFactory.createRecipeByRecipeForm(recipe, userData.id);
 
-            RecipeService.createRecipe(recipeRequest)
-                .then((sucess) => {
-                    handleLoadingDialog();
-                })
-                .catch((error) => {
-                    console.error(error);
-                    setToast({
-                        open: true,
-                        type: "error",
-                        message: error.message,
-                    });
+        RecipeService.createRecipe(recipeRequest)
+            .then((sucess) => {
+                handleLoadingDialog();
+            })
+            .catch((error) => {
+                setToast({
+                    open: true,
+                    type: "error",
+                    message: error.message,
                 });
-        } catch (error) {
-            console.error(error);
-        }
-    };
+            })
+            .finally(() => {
+                handleLoadingDialog();
+            });
+};
 
     const onChangeIngredients = (value:any) => {
         let newRecipe = {...recipe};

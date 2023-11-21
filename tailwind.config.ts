@@ -11,6 +11,7 @@ const config: Config = {
       colors: {
         green: {
           "800": "#095150",
+          "900": "#073938",
           "50": "#f8fff8",
           "50dark": "#eff5ef",
         },

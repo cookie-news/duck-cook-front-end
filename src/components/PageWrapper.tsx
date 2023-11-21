@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 
 import { Drawer } from "@mui/material";
 
-import { authRoutes, recipeRoutes } from "@root/routes";
+import { authRoutes, recipeRoutes, rootRoutes } from "@root/routes";
 
 import { AuthContext } from "@context/AuthContext";
 import { LoadingContext } from "@context/LoadingContext";
@@ -55,16 +55,28 @@ export default function PageWrapper({
                             </Link>
                         }
                         <Nav.MobileMenu>
-                            {isLogged ? <Nav.User variant="mobile" /> : <Nav.Actions variant="mobile" />}
+                            {isLogged && <Nav.User variant="mobile" />}
+                            <div className="flex flex-col mt-3">
+                                {
+                                    isLogged
+                                    &&
+                                    <Link className="flex gap-2 text-white p-2 ml-[-8px] mr-[-8px] bg-green-900" href={recipeRoutes.edit.path}>
+                                        <Plus /> CRIAR RECEITA
+                                    </Link>
+                                }
+                            </div>
+                            {!isLogged && <Nav.Actions variant="mobile" />}
                             <Nav.Logout variant="mobile" />
                         </Nav.MobileMenu>
-                        <Image
-                            src="/assets/imgs/logo_name.svg"
-                            width={250}
-                            height={50}
-                            className="bg-white rounded-lg"
-                            alt="Duck Cook logo"
-                        />
+                        <Link href={rootRoutes.home.path}>
+                            <Image
+                                src="/assets/imgs/logo_name.svg"
+                                width={250}
+                                height={50}
+                                className="bg-white rounded-lg"
+                                alt="Duck Cook logo"
+                            />
+                        </Link>
                         {isLogged ? <Nav.User><Nav.Logout /></Nav.User> : <Nav.Actions />}
                     </Nav.Root>
                 </>
