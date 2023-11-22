@@ -43,11 +43,13 @@ const ViewRecipePage = async ({ params }: { params: { recipeId: string } }) => {
             <div className="flex gap-8 mt-10 flex-col md:flex-row mb-7">
                 <div className="flex flex-1 flex-col gap-4">
                     <h2 className="text-slate-700 font-bold text-2xl ">Igredientes</h2>
-                    <div className="bg-neutral-default p-2 rounded-md border border-gray-dark flex flex-col gap-2">
+                    <div className="bg-neutral-default rounded-md border border-gray-dark flex flex-col divide-y">
                         {recipe.ingredients.map((item) => (
-                            <p key={crypto.randomUUID()} className="capitalize">
-                                {item}
-                            </p>
+                            <div key={crypto.randomUUID()} className="p-3">
+                                <span className="m-0 capitalize">
+                                    {item}
+                                </span>
+                            </div>
                         ))}
                     </div>
                 </div>
