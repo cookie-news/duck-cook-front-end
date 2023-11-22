@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import Button from "@components/Button";
+import { Information } from "@components/Information";
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -8,22 +9,19 @@ interface ErrorProps {
 }
 
 export default function Error({ error, reset }: ErrorProps) {
-  useEffect(() => {
-    // Log the error to an error reporting service
-    console.error(error);
-  }, [error]);
-
   return (
-    <div className="flex w-full h-screen">
-      <h2>Something went wrong!</h2>
-      <button
-        onClick={
-          // Attempt to recover by trying to re-render the segment
-          () => reset()
-        }
-      >
-        Try again
-      </button>
-    </div>
+    <Information.Root>
+      <Information.Image />
+      <Information.Content>
+        <span className="bg-neutral-default border border-neutral-dark rounded-sm p-2 text-red-800 mt-11">
+          {error.message}
+        </span>
+      </Information.Content>
+      <Information.Actions>
+        <Button className="mt-11" onClick={reset}>
+          Tentar novamente
+        </Button>
+      </Information.Actions>
+    </Information.Root>
   );
 }
