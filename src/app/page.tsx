@@ -4,9 +4,7 @@ import React from "react";
 // Components
 import PageWrapper from "@components/PageWrapper";
 
-import { MoreLikedsList } from "./_components/MoreLikedsList";
 import { RecipesList } from "./_components/RecipeList";
-import SkeletonFallbackMoreLikeds from "./_components/skeletons/SkeletonFallbackMoreLikedsList";
 
 function PageRoot() {
   return (
