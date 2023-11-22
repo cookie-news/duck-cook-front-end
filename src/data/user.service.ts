@@ -32,7 +32,11 @@ async function createUser(body: CreateRegisterFormData) {
   const endpoint = "/customer";
 
   try {
-    const { data } = await UserConfig.post(endpoint, body);
+    const { data } = await UserConfig.post(endpoint, body,{
+      headers: {
+        "Content-Type": "multipart/form-data",
+      }
+    });
     return data;
   } catch (e: any) {
     throw new ServiceError(endpoint);
