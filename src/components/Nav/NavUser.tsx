@@ -36,20 +36,20 @@ const navUserVariants = tv({
   }
 });
 
-const NavUser: React.FC<NavUserProps> = ({variant = 'primary', children}) => {
+const NavUser: React.FC<NavUserProps> = ({ variant = 'primary', children }) => {
   const { userData } = useContext(AuthContext);
 
   const {
     base,
     description
-  } = navUserVariants({variant});
+  } = navUserVariants({ variant });
 
   return (
     <div className={base()}>
       <Link className="flex gap-3 items-center" href={userRoutes.view.path}>
         <div className="relative w-10 h-10">
           <Image
-            src={userData.image}
+            src={userData.image === "" ? "/assets/imgs/logo.png" : userData.image}
             fill
             className="border border-white rounded-full"
             objectFit="cover"
