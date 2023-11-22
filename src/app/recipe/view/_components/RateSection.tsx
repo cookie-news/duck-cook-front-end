@@ -72,15 +72,15 @@ const RateSection: React.FC<RateSectionProps> = ({
   const [isLiked, setIsLiked] = useState(false);
   const [likeIsLoading, setLikeIsLoading] = useState(false);
 
-  const { userData, isLogged } = useContext(AuthContext);
+  const { token, userData, isLogged } = useContext(AuthContext);
 
   const fetchUserIsLiked = useCallback(() => {
-    RecipeService.getRecipeIsLikedByUser(idRecipe, userData.id)
+    RecipeService.getRecipeIsLikedByUser(idRecipe, userData.id, token)
       .then((result) => {
         setIsLiked(result.liked);
       })
       .catch((error) => toast.error(error.message));
-  }, [idRecipe, userData.id]);
+  }, [idRecipe, token, userData.id]);
 
   useEffect(() => {
     if (isLogged) {
