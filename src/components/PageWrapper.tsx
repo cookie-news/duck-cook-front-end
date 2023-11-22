@@ -50,7 +50,7 @@ export default function PageWrapper({
                 {isLogged && (
                   <Link
                     className="hidden md:flex gap-2 text-white absolute left-6"
-                    href={recipeRoutes.edit.path}
+                    href={recipeRoutes.create.path}
                   >
                     <Plus /> CRIAR RECEITA
                   </Link>
@@ -61,7 +61,7 @@ export default function PageWrapper({
                     {isLogged && (
                       <Link
                         className="flex gap-2 text-white p-2 ml-[-8px] mr-[-8px] bg-green-900"
-                        href={recipeRoutes.edit.path}
+                        href={recipeRoutes.create.path}
                       >
                         <Plus /> CRIAR RECEITA
                       </Link>

@@ -18,11 +18,14 @@ const userRoutes = {
 
 const recipeRoutes = {
   view: {
-    path: "/recipe/view"
+    path: "/recipe/view",
+  },
+  create: {
+    path: "/recipe/create",
   },
   edit: {
-    path: "/recipe/edit"
-  }
+    path: "/recipe/edit",
+  },
 };
 
 const rootRoutes = {
