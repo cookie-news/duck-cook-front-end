@@ -11,7 +11,7 @@ import SkeletonFallbackMoreLikeds from "./_components/skeletons/SkeletonFallback
 function PageRoot() {
   return (
     <PageWrapper isProtected={false} hasMenu>
-      <div className="flex flex-col gap-8 mt-16">
+      <div className="flex flex-col gap-8 mt-16 px-4 md:px-0">
         <p className="bg-green-800 p-3 text-white uppercase w-fit font-bold">
           RECEITAS MAIS CURTIDAS
         </p>

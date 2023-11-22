@@ -11,7 +11,7 @@ export default function LayoutRecipeView({
 }) {
   return (
     <PageWrapper hasMenu isProtected={false}>
-      <div className="mt-20">
+      <div className="mt-20 px-4 md:px-0">
         <React.Suspense fallback={<Loading />}>{children}</React.Suspense>
       </div>
     </PageWrapper>
