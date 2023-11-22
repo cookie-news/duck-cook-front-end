@@ -162,16 +162,11 @@ async function getRecipiesMoreLikeds() {
 
 async function getRecipeIsLikedByUser(
   recipeId: string,
-  userId: string,
-  token: string
+  userId: string
 ) {
   const endpoint = "/user/" + userId + "/recipe/" + recipeId + "/like";
   try {
-    const { data } = await RecipeConfig.get(endpoint, {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    });
+    const { data } = await RecipeConfig.get(endpoint);
 
     return data;
   } catch (e: any) {
