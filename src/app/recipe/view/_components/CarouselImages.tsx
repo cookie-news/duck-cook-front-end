@@ -35,13 +35,16 @@ const CarouselImages: React.FC<CarouselImagesProps> = ({ images }) => {
 
   return (
     <div className="relative w-full h-96" key={crypto.randomUUID()}>
-      <Image
-        src={images[currentIndex] ?? fallbackImage}
-        alt="recipe image"
-        className="rounded-md"
-        objectFit="cover"
-        fill
-      />
+      {
+        images &&
+        <Image
+          src={images && images[currentIndex] ?? fallbackImage}
+          alt="recipe image"
+          className="rounded-md"
+          objectFit="cover"
+          fill
+        />
+      }
     </div>
   );
 };
