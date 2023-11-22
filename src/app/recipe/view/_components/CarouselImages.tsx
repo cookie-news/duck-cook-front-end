@@ -15,7 +15,7 @@ const CarouselImages: React.FC<CarouselImagesProps> = ({ images }) => {
   return (
     <div className="relative w-full h-96" key={crypto.randomUUID()}>
       <Image
-        src={images[0] ?? fallbackImage}
+        src={(images && images[0]) ?? fallbackImage}
         alt="recipe image"
         className="rounded-md"
         objectFit="cover"
