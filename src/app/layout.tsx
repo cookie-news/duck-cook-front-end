@@ -26,7 +26,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className="pb-16">
         <AuthContextProvider>
           <LoadingProvider>
             <ThemeProvider>

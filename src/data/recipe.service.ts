@@ -78,10 +78,7 @@ async function createRecipe(body: Recipe<FileList>) {
 async function updateRecipe(body: Recipe<FileList>, recipeId: string) {
   const endpoint = "/recipe";
   try {
-
     const { data } = await RecipeConfig.put(endpoint, body);
-
-
   } catch (e: any) {
     throw new Error(e);
   }
@@ -163,10 +160,18 @@ async function getRecipiesMoreLikeds() {
   }
 }
 
-async function getRecipeIsLikedByUser(recipeId: string, userId: string) {
+async function getRecipeIsLikedByUser(
+  recipeId: string,
+  userId: string,
+  token: string
+) {
   const endpoint = "/user/" + userId + "/recipe/" + recipeId + "/like";
   try {
-    const { data } = await RecipeConfig.get(endpoint);
+    const { data } = await RecipeConfig.get(endpoint, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
 
     return data;
   } catch (e: any) {
