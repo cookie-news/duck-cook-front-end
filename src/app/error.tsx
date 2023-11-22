@@ -10,18 +10,20 @@ interface ErrorProps {
 
 export default function Error({ error, reset }: ErrorProps) {
   return (
-    <Information.Root>
-      <Information.Image />
-      <Information.Content>
-        <span className="bg-neutral-default border border-neutral-dark rounded-sm p-2 text-red-800 mt-11">
-          {error.message}
-        </span>
-      </Information.Content>
-      <Information.Actions>
-        <Button className="mt-11" onClick={reset}>
-          Tentar novamente
-        </Button>
-      </Information.Actions>
-    </Information.Root>
+    <div className="w-full h-screen">
+      <Information.Root>
+        <Information.Image />
+        <Information.Content>
+          <span className="bg-neutral-default border border-neutral-dark rounded-sm p-2 text-red-800 mt-11">
+            {error.message}
+          </span>
+        </Information.Content>
+        <Information.Actions>
+          <Button className="mt-11" onClick={reset}>
+            Tentar novamente
+          </Button>
+        </Information.Actions>
+      </Information.Root>
+    </div>
   );
 }

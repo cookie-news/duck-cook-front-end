@@ -14,6 +14,8 @@ import { RecipeService } from "@root/src/data/recipe.service";
 import { PaginationData } from "@root/src/types/PaginationData";
 import { Recipe } from "@root/src/types/Recipe";
 
+import EmptyState from "@components/EmptyState";
+
 import { Date } from "@utils/Date";
 
 import parseToHtml from "html-react-parser";
@@ -50,7 +52,8 @@ export function RecipesList() {
         setPage(page);
     };
 
-    if (isLoading) return <SkeletonFallbackRecipes />;
+  if (isLoading) return <SkeletonFallbackRecipes />;
+  if (recipesList.items.length === 0) return <EmptyState />;
 
     return (
         <>
