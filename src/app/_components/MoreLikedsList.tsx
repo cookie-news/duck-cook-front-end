@@ -15,8 +15,6 @@ export async function MoreLikedsList() {
     let moreLikedsRecipes: Array<Recipe> =
         await RecipeService.getRecipiesMoreLikeds();
 
-    console.log(moreLikedsRecipes);
-
     if (moreLikedsRecipes == null) return <></>;
 
     return moreLikedsRecipes
