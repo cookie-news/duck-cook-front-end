@@ -6,7 +6,7 @@ type InformationRootProps = {
 
 const InformationRoot: React.FC<InformationRootProps> = ({ children }) => {
   return (
-    <div className="flex flex-col justify-center items-center w-full h-screen px-4 md:px-0">
+    <div className="flex flex-col justify-center items-center w-full h-full px-4 md:px-0">
       {children}
     </div>
   );
