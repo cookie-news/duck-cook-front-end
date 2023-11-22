@@ -65,7 +65,7 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ idRecipe }) => {
                 <div className="flex gap-3">
                     <div className="relative w-11 h-11">
                         <Image
-                            src={userData.image}
+                            src={userData.image ? userData.image : "/assets/imgs/logo.png"}
                             alt="user profile"
                             objectFit="cover"
                             className="rounded-full"
