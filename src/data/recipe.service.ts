@@ -94,13 +94,8 @@ async function createRecipe(body: Recipe<FileList>) {
 async function updateRecipe(body: Recipe<FileList>, recipeId: string) {
   const endpoint = "/recipe";
   try {
-    const formData = getFormDataByRecipe(body);
 
-    const { data } = await RecipeConfig.put(endpoint, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const { data } = await RecipeConfig.put(endpoint, body);
 
 
   } catch (e: any) {
