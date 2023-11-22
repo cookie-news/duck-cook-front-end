@@ -72,7 +72,7 @@ const RateSection: React.FC<RateSectionProps> = ({
   const [isLiked, setIsLiked] = useState(false);
   const [likeIsLoading, setLikeIsLoading] = useState(false);
 
-  const { userData } = useContext(AuthContext);
+  const { userData, isLogged } = useContext(AuthContext);
 
   const fetchUserIsLiked = useCallback(() => {
     RecipeService.getRecipeIsLikedByUser(idRecipe, userData.id)
@@ -113,13 +113,16 @@ const RateSection: React.FC<RateSectionProps> = ({
         label={Date.parseSecondsToHours(preparationTime)}
         icon={ClockIcon}
       />
-      <Card
-        label={likes}
-        icon={isLiked ? ThumbUpAlt : ThumbsUp}
-        onClick={handleLike}
-        animate
-        disabled={likeIsLoading}
-      />
+      {isLogged && (
+        <Card
+          label={likes}
+          icon={isLiked ? ThumbUpAlt : ThumbsUp}
+          onClick={handleLike}
+          animate
+          disabled={likeIsLoading}
+        />
+      )}
+
       <Card label={commentsNumber} icon={MessagesSquare} />
     </div>
   );
