@@ -9,6 +9,14 @@ function parseSecondsToHours(seconds: number) {
   return result.join("e");
 }
 
+function separateParseHoursAndMinutes(seconds: number) {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+
+  return { hours, minutes };
+}
+
 export const Date = {
   parseSecondsToHours,
+  separateParseHoursAndMinutes,
 };

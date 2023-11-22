@@ -13,17 +13,18 @@ type NavLogoutVariants = VariantProps<typeof navLogoutVariants>;
 
 const navLogoutVariants = tv({
     slots: {
-        divider: "bg-green-800 w-full md:w-[2px] h-[2px] md:h-10 border-none",
+        base: "flex",
         logoutElement: ""
     },
     variants: {
         variant: {
+        base: "",
             primary: {
-                divider: "bg-gray-100 hidden md:block",
+                base: "hidden md:flex justify-center border-green-950 border-[2px] border-r-0 border-t-0 border-b-0 pl-2 h-10",
                 logoutElement: "hidden md:block"
             },
             mobile: {
-                divider: "mt-2 mb-2",
+                base: "absolute bottom-6 left-0 p-2 border-green-950 border-[2px] border-r-0 border-l-0 border-b-0 w-full",
                 logoutElement: "flex gap-3"
             }
         }
@@ -34,19 +35,17 @@ const NavLogout: React.FC<NavLogoutProps> = ({ variant = 'primary' }) => {
     const { logout } = useContext(AuthContext);
 
     const {
-        divider,
+        base,
         logoutElement
     } = navLogoutVariants({ variant });
 
     return (
-        <>
-            <hr className={divider()} />
-
+        <div className={base()}>
             <button onClick={logout} className={logoutElement()}>
-                <LogOut size={24} className="text-green-800 md:text-white" />
-                <span className="md:hidden text-green-800">Sair</span>
+                <LogOut size={24} className="text-white" />
+                <span className="md:hidden text-white">Sair</span>
             </button>
-        </>
+        </div>
     );
 };
 

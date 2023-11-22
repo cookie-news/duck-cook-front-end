@@ -49,6 +49,8 @@ const AddIngredient = ({
     // eslint-disable-next-line react-hooks/rules-of-hooks
     IngredientForm.map((form) => (form.ref = useRef()));
 
+    console.log(props);
+
     const getDefaultIngredient = () => {
         return {
             description: ""

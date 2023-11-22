@@ -12,7 +12,7 @@ import { AuthContext } from "@context/AuthContext";
 import { tv, VariantProps } from "tailwind-variants";
 
 interface NavUserProps extends NavUserVariants {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 type NavUserVariants = VariantProps<typeof navUserVariants>;
@@ -57,8 +57,8 @@ const NavUser: React.FC<NavUserProps> = ({variant = 'primary', children}) => {
           />
         </div>
         <div className={description()}>
-          <p className="font-bold leading-4 m-0 p-0 text-green-800 md:text-white">Bem vindo,</p>
-          <p className="text-sm leading-4 text-green-800 md:text-white">{userData.name}</p>
+          <p className="font-bold leading-4 m-0 p-0 text-white">Bem vindo,</p>
+          <p className="text-sm leading-4 text-white">{userData.name}</p>
         </div>
       </Link>
 

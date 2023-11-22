@@ -75,7 +75,7 @@ async function createRecipe(body: Recipe<FileList>) {
   }
 }
 
-async function updateRecipe(body: Recipe<FileList>) {
+async function updateRecipe(body: Recipe<FileList>, recipeId: string) {
   const endpoint = "/recipe";
   try {
     const formData = getFormDataByRecipe(body);
@@ -85,8 +85,6 @@ async function updateRecipe(body: Recipe<FileList>) {
         "Content-Type": "multipart/form-data",
       },
     });
-
-    console.log(data);
   } catch (e: any) {
     throw new Error(e);
   }
@@ -99,19 +97,24 @@ function getFormDataByRecipe(body: Recipe<FileList>) {
     if (keyBody == "images") {
       continue;
     }
+    if (keyBody == "ingredients") {
+      continue;
+    }
     formData.append(keyBody, body[keyBody as keyof Recipe] as string);
   }
 
-  for (let i = 0; i < body.images.length; i++) {
-    const img = body.images.item(i);
+  if (body.images) {
+    for (let i = 0; i < body.images.length; i++) {
+      const img = body.images.item(i);
 
-    if (img) {
-      formData.append("images", img);
+      if (img) {
+        formData.append("images", img);
+      }
     }
   }
 
   body.ingredients.forEach((ingredient) => {
-    formData.append("ingredients", JSON.stringify(ingredient));
+    formData.append("ingredients", ingredient);
   });
 
   return formData;
@@ -128,7 +131,7 @@ async function deleteRecipe(recipeId: string) {
   }
 }
 
-async function getRecipe(recipeId: string) {
+async function getRecipeById(recipeId: string) {
   const endpoint = "/recipe/" + recipeId;
   try {
     const response = await RecipeConfig.get<Recipe>(endpoint);
@@ -181,13 +184,14 @@ export async function getRecipiesByUser(userId: string) {
       endpoint
     );
 
+    console.log(response.data);
+
     response.data.forEach((item) => {
       item.preparationTimeConverted = Date.parseSecondsToHours(
         item.preparationTime
       );
     });
 
-    console.log(response.data);
     return response.data;
   } catch (e: any) {
     throw new Error(e);
@@ -203,8 +207,6 @@ async function createRecipeComment(body: createRecipeComment) {
         "Content-Type": "multipart/json",
       },
     });
-
-    console.log(data);
   } catch (e: any) {
     throw new Error(e);
   }
@@ -214,8 +216,6 @@ async function deleteRecipeComment(body: deleteRecipeComment) {
   const endpoint =
     "/user/" + body.idUser + "/recipe/" + body.idRecipe + "/comment/" + body.id;
   try {
-    console.log(body);
-
     const { data } = await RecipeConfig.delete(endpoint);
   } catch (e: any) {
     throw new Error(e);
@@ -251,7 +251,6 @@ async function deleteRecipeLike(body: LikeRequest) {
   try {
     const response = await RecipeConfig.delete(endpoint);
 
-    console.log(response.data);
     return response.data;
   } catch (e: any) {
     throw new Error(e);
@@ -273,7 +272,7 @@ export const RecipeService = {
   createRecipe,
   updateRecipe,
   deleteRecipe,
-  getRecipe,
+  getRecipeById,
   getRecipes,
   getRecipiesMoreLikeds,
   deleteRecipeLike,

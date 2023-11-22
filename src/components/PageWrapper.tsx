@@ -6,9 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { Drawer } from "@mui/material";
-
-import { authRoutes, recipeRoutes } from "@root/routes";
+import { authRoutes, recipeRoutes, rootRoutes } from "@root/routes";
 
 import { AuthContext } from "@context/AuthContext";
 import { LoadingContext } from "@context/LoadingContext";
@@ -46,38 +44,51 @@ export default function PageWrapper({
     <>
       {hasMenu && (
         <>
-          <Nav.Root>
-            {isLogged && (
-              <Link
-                className="hidden md:flex gap-2 text-white absolute left-6"
-                href={recipeRoutes.edit.path}
-              >
-                <Plus /> CRIAR RECEITA
-              </Link>
-            )}
-            <Nav.MobileMenu>
-              {isLogged ? (
-                <p>Nav User Mobile</p>
-              ) : (
-                <Nav.Actions variant="mobile" />
-              )}
-              <Nav.Logout variant="mobile" />
-            </Nav.MobileMenu>
-            <Image
-              src="/assets/imgs/logo_name.svg"
-              width={250}
-              height={50}
-              className="bg-white rounded-lg"
-              alt="Duck Cook logo"
-            />
-            {isLogged ? (
-              <Nav.User>
-                <Nav.Logout />
-              </Nav.User>
-            ) : (
-              <Nav.Actions />
-            )}
-          </Nav.Root>
+          {hasMenu && (
+            <>
+              <Nav.Root>
+                {isLogged && (
+                  <Link
+                    className="hidden md:flex gap-2 text-white absolute left-6"
+                    href={recipeRoutes.edit.path}
+                  >
+                    <Plus /> CRIAR RECEITA
+                  </Link>
+                )}
+                <Nav.MobileMenu>
+                  {isLogged && <Nav.User variant="mobile" />}
+                  <div className="flex flex-col mt-3">
+                    {isLogged && (
+                      <Link
+                        className="flex gap-2 text-white p-2 ml-[-8px] mr-[-8px] bg-green-900"
+                        href={recipeRoutes.edit.path}
+                      >
+                        <Plus /> CRIAR RECEITA
+                      </Link>
+                    )}
+                  </div>
+                  {!isLogged && <Nav.Actions variant="mobile" />}
+                  <Nav.Logout variant="mobile" />
+                </Nav.MobileMenu>
+                <Link href={rootRoutes.home.path}>
+                  <Image
+                    src="/assets/imgs/logo_name.svg"
+                    width={250}
+                    height={50}
+                    className="bg-white rounded-lg"
+                    alt="Duck Cook logo"
+                  />
+                </Link>
+                {isLogged ? (
+                  <Nav.User>
+                    <Nav.Logout />
+                  </Nav.User>
+                ) : (
+                  <Nav.Actions />
+                )}
+              </Nav.Root>
+            </>
+          )}
         </>
       )}
       <div className="w-full lg:w-[60%] mx-auto">{children}</div>

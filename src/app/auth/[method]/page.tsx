@@ -28,7 +28,7 @@ const AuthPage: NextPage<AuthPageProps> = ({ params }) => {
   };
 
   return (
-    <PageWrapper isProtected={false}>
+    <PageWrapper hasMenu isProtected={false}>
       <div className="flex flex-col gap-6 w-full h-[100vh] justify-center items-center">
         <Image
           src="/assets/imgs/logo.png"
