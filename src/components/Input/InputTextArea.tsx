@@ -3,6 +3,7 @@ interface InputTextAreaProps
     register?: any;
     name: string;
     value?: string;
+    rows?: number;
 }
 
 const InputTextArea: React.FC<InputTextAreaProps> = ({

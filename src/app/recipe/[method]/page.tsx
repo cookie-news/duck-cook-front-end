@@ -96,8 +96,6 @@ const RecipePage = ({
 
         let newRecipe = {...recipe};
 
-        console.log(values);
-
         setRecipe(Object.assign(newRecipe, values));
     };
 
@@ -105,13 +103,6 @@ const RecipePage = ({
         if(stateRecipe == 'setRecipe') { router.back(); }
         else { setStateRecipe("setRecipe"); }
     };
-
-    const handlerChangeDescription = (value: string) => {
-        let newRecipe = { ...recipe };
-        newRecipe.description = value;
-        setRecipe(newRecipe);
-        clearCustomErrorByInputName('description');
-    }
 
     const handlerChangePreparationMethod = (value: string) => {
         let newRecipe = { ...recipe };
@@ -123,7 +114,6 @@ const RecipePage = ({
     const verifyRichTextsInputs = () => {
         let newCustomErrors:any = {};
 
-        if(!replaceTagsByText(recipe?.description as string)) { newCustomErrors.description = 'O campo é obrigatório.'; }
         if(!replaceTagsByText(recipe?.preparationMethod as string)) { newCustomErrors.preparationMethod = 'O campo é obrigatório.'; }
 
         setCustomErrors(newCustomErrors);
@@ -188,6 +178,7 @@ const RecipePage = ({
 
         RecipeService.getRecipe(recipeId).then((data:any) => {
             setValue('title', data.title);
+            setValue('description', data.description);
 
             const preparationTimeNumbers:any = Date.separateParseHoursAndMinutes(data.preparationTime);
 
@@ -242,6 +233,7 @@ const RecipePage = ({
                                 <Input.Label className="mt-3" text="Descrição" />
                                 <Input.Root>
                                     <Input.TextArea
+                                        rows={3}
                                         name="description"
                                         register={register}
                                         value={recipe?.description}

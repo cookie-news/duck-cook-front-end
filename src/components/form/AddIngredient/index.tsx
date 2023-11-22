@@ -69,7 +69,8 @@ const AddIngredient = ({
         register,
         handleSubmit,
         reset,
-        formState: { errors }
+        formState: { errors },
+        setFocus
     } = useForm<AddIngredientFormData>({
         resolver: zodResolver(addIngredientFormSchema),
     });
@@ -113,6 +114,7 @@ const AddIngredient = ({
     };
 
     const editIngredientItem = (ingredientIndex: number) => {
+        setFocus('description');
         resetEditingIngredient();
 
         let newIngredients = [...ingredients];
@@ -137,7 +139,7 @@ const AddIngredient = ({
     };
 
     return (
-        <div className="p-2 max-h-96 overflow-y-auto">
+        <div className="p-2">
             <div
                 key={crypto.randomUUID()}
                 className="mt-4 mb-4"
@@ -181,89 +183,91 @@ const AddIngredient = ({
                     </>
                 )}
             </div>
-            {ingredients && ingredients.length > 0 &&
-                <>
-                    <div className="md:hidden">
-                        {ingredients.map((ingredient: any, ingredientIndex: number) => (
-                            <Card
-                                key={crypto.randomUUID()}
-                                className={
-                                    (ingredient.isEdit ? "editing-item" : "") +
-                                    " card-border-top mt-4"
-                                }
-                            >
-                                <CardContent className="flex justify-between">
-                                    <div>
-                                        <span>
-                                            Decrição:
-                                        </span>
-                                        <h6>
-                                            {ingredient.description}
-                                        </h6>
-                                    </div>
-                                    <div className="flex flex-col justify-center">
-                                        <Button
-                                            variant="none"
-                                            aria-label="delete"
-                                            onClick={() => deleteIngredientItem(ingredientIndex)}
-                                        >
-                                            <Trash2 fontSize="large" />
-                                        </Button>
-                                        <Button
-                                            variant="none"
-                                            aria-label="edit"
-                                            onClick={() => editIngredientItem(ingredientIndex)}
-                                        >
-                                            <Pencil fontSize="large" />
-                                        </Button>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        ))}
-                    </div>
+            <div className="max-h-96 overflow-y-auto">
+                {ingredients && ingredients.length > 0 &&
+                    <>
+                        <div className="md:hidden">
+                            {ingredients.map((ingredient: any, ingredientIndex: number) => (
+                                <Card
+                                    key={crypto.randomUUID()}
+                                    className={
+                                        (ingredient.isEdit ? "editing-item" : "") +
+                                        " card-border-top mt-4"
+                                    }
+                                >
+                                    <CardContent className="flex justify-between">
+                                        <div>
+                                            <span>
+                                                Decrição:
+                                            </span>
+                                            <h6>
+                                                {ingredient.description}
+                                            </h6>
+                                        </div>
+                                        <div className="flex flex-col justify-center">
+                                            <Button
+                                                variant="none"
+                                                aria-label="delete"
+                                                onClick={() => deleteIngredientItem(ingredientIndex)}
+                                            >
+                                                <Trash2 fontSize="large" />
+                                            </Button>
+                                            <Button
+                                                variant="none"
+                                                aria-label="edit"
+                                                onClick={() => editIngredientItem(ingredientIndex)}
+                                            >
+                                                <Pencil fontSize="large" />
+                                            </Button>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            ))}
+                        </div>
 
-                    <TableContainer className="hidden md:flex">
-                        <Table aria-label="customized table">
-                            <TableHead>
-                                <StyledTableThreadRow>
-                                    <StyledTableThreadCell>Descrição</StyledTableThreadCell>
-                                    <TableCell style={{ width: "20%" }} />
-                                </StyledTableThreadRow>
-                            </TableHead>
-                            <TableBody>
-                                {ingredients.map((ingredient: any, ingredientIndex: number) => (
-                                    <TableRow
-                                        className={ingredient.isEdit ? "editing-item" : ""}
-                                        key={ingredient.id}
-                                    >
-                                        <TableCell component="th" scope="row">
-                                            {ingredient.description}
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <div className="flex">
-                                                <Button
-                                                    variant="none"
-                                                    aria-label="delete"
-                                                    onClick={() => deleteIngredientItem(ingredientIndex)}
-                                                >
-                                                    <Trash2 size={20} />
-                                                </Button>
-                                                <Button
-                                                    variant="none"
-                                                    aria-label="edit"
-                                                    onClick={() => editIngredientItem(ingredientIndex)}
-                                                >
-                                                    <Pencil size={20} />
-                                                </Button>
-                                            </div>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </>
-            }
+                        <TableContainer className="hidden md:flex">
+                            <Table aria-label="customized table">
+                                <TableHead>
+                                    <StyledTableThreadRow>
+                                        <StyledTableThreadCell>Descrição</StyledTableThreadCell>
+                                        <TableCell style={{ width: "20%" }} />
+                                    </StyledTableThreadRow>
+                                </TableHead>
+                                <TableBody>
+                                    {ingredients.map((ingredient: any, ingredientIndex: number) => (
+                                        <TableRow
+                                            className={ingredient.isEdit ? "editing-item" : ""}
+                                            key={ingredient.id}
+                                        >
+                                            <TableCell component="th" scope="row">
+                                                {ingredient.description}
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <div className="flex">
+                                                    <Button
+                                                        variant="none"
+                                                        aria-label="delete"
+                                                        onClick={() => deleteIngredientItem(ingredientIndex)}
+                                                    >
+                                                        <Trash2 size={20} />
+                                                    </Button>
+                                                    <Button
+                                                        variant="none"
+                                                        aria-label="edit"
+                                                        onClick={() => editIngredientItem(ingredientIndex)}
+                                                    >
+                                                        <Pencil size={20} />
+                                                    </Button>
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </>
+                }
+            </div>
         </div>
     );
 };

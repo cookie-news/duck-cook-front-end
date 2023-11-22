@@ -6,6 +6,7 @@ import Link from "next/link";
 
 //Routes
 import { recipeRoutes } from "@root/routes";
+import { User } from "@root/src/data/user.service";
 
 //Types
 import { Recipe } from "@/types/Recipe"
@@ -14,10 +15,11 @@ import { FileSignature, MessagesSquare, ThumbsUp } from "lucide-react";
 
 interface ListRecipeSectionProps
 {
-    listRecipe: Array<Recipe>
+    listRecipe: Array<Recipe>,
+    userData: User
 }
 
-const ListRecipeSection:React.FC<ListRecipeSectionProps> = ({listRecipe}) => {
+const ListRecipeSection:React.FC<ListRecipeSectionProps> = ({listRecipe, userData}) => {
     return (
         <div>
             {!listRecipe || listRecipe.length == 0 ? (
@@ -51,12 +53,15 @@ const ListRecipeSection:React.FC<ListRecipeSectionProps> = ({listRecipe}) => {
                                             <b>{recipe.countLikes ?? 0}</b>
                                         </p>
                                     </div>
-                                    <div className="flex absolute right-0">
-                                        <Link href={recipeRoutes.edit.path+'?id='+recipe.id} className="flex gap-1 justify-center">
-                                            <FileSignature size={20} />
-                                            <span className="text-sm">editar</span>
-                                        </Link>
-                                    </div>
+                                    {
+                                        userData?.id == recipe?.idUser &&
+                                        <div className="flex absolute right-0">
+                                            <Link href={recipeRoutes.edit.path+'?id='+recipe.id} className="flex gap-1 justify-center">
+                                                <FileSignature size={20} />
+                                                <span className="text-sm">editar</span>
+                                            </Link>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                             <div className="flex-auto relative w-2/12 bg-green-800">

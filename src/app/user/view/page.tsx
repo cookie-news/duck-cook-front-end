@@ -3,15 +3,12 @@
 import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-import { useRouter } from "next/navigation";
-
 //Data service
 import { RecipeService } from "@root/src/data/recipe.service";
 import { Recipe } from "@root/src/types/Recipe";
 
 //Contexts
 import { AuthContext } from "@context/AuthContext";
-import { LoadingContext } from "@context/LoadingContext";
 
 //Page Components
 import ListRecipeSection from "./_components/ListRecipeSection";
@@ -28,9 +25,11 @@ const ViewUserPage = () => {
     const [userRecipes, setUserRecipes] = useState<Array<Recipe>>([]);
     const [userRecipesLiked, setUserRecipesLiked] = useState<Array<Recipe>>([]);
 
-    const [loading, setLoading] = useState<boolean>(true);
+    const [loadingRecipiesCreatedByUser, setLoadingRecipiesCreatedByUser] = useState<boolean>(true);
+    const [loadingRecipiesLikedByCurrentUser, setLoadingRecipiesLikedByCurrentUser] = useState<boolean>(true);
 
     const getRecipiesCreatedByCurrentUser = () => {
+        console.log(userData);
         RecipeService.getRecipiesByUser(userData.id)
             .then((userRecipesData:any) => {
                 setUserRecipes(userRecipesData);
@@ -39,20 +38,20 @@ const ViewUserPage = () => {
                 toast.error(error.message);
             })
             .finally(() => {
-                setLoading(false);
+                setLoadingRecipiesCreatedByUser(false);
             });
     }
 
     const getRecipiesLikedByCurrentUser = () => {
         RecipeService.getRecipiesLikedByUser(userData.id)
             .then((userRecipesData:any) => {
-                setUserRecipes(userRecipesData);
+                setUserRecipesLiked(userRecipesData);
             })
             .catch((error) => {
                 toast.error(error.message);
             })
             .finally(() => {
-                setLoading(false);
+                setLoadingRecipiesLikedByCurrentUser(false);
             });
     }
 
@@ -62,7 +61,7 @@ const ViewUserPage = () => {
     }, [userData]);
 
     return (
-        loading ? <Loading />
+        loadingRecipiesCreatedByUser || loadingRecipiesLikedByCurrentUser ? <Loading />
         : 
         <div className="mt-10 mb-10 text-gray-default">
             <UserHeaderSection userData={userData} />
@@ -73,13 +72,13 @@ const ViewUserPage = () => {
                         <h5 className="mb-2">
                             <b>Receitas criadas pelo usuário:</b>
                         </h5>
-                        <ListRecipeSection listRecipe={userRecipes} />
+                        <ListRecipeSection listRecipe={userRecipes} userData={userData} />
                     </div>
                     <div className="mt-4 flex flex-col">
                         <h5 className="mb-2">
                             <b>Receitas curtidas:</b>
                         </h5>
-                        <ListRecipeSection listRecipe={userRecipesLiked} />
+                        <ListRecipeSection listRecipe={userRecipesLiked} userData={userData} />
                     </div>
                 </div>
             </div>
