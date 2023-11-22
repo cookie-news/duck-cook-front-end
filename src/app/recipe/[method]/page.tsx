@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 import { useRouter } from "next/navigation";
 
-import { authRoutes, userRoutes } from "@root/routes";
+import { authRoutes, recipeRoutes, userRoutes } from "@root/routes";
 //Data services
 import { RecipeService } from "@root/src/data/recipe.service";
 
@@ -34,6 +34,7 @@ import { z } from "zod";
 
 const createRecipeFormSchema = z.object({
     title: z.string().nonempty("O campo é obrigatório."),
+    description: z.string().nonempty("O campo é obrigatório."),
     images: z.any(),
     preparationTimeHours: z.coerce.number().min(0, "O valor não pode ser negativo."),
     preparationTimeMinutes: z.coerce.number().min(0, "O valor não pode ser negativo.")
@@ -95,8 +96,6 @@ const RecipePage = ({
 
         let newRecipe = {...recipe};
 
-        console.log(values);
-
         setRecipe(Object.assign(newRecipe, values));
     };
 
@@ -104,13 +103,6 @@ const RecipePage = ({
         if(stateRecipe == 'setRecipe') { router.back(); }
         else { setStateRecipe("setRecipe"); }
     };
-
-    const handlerChangeDescription = (value: string) => {
-        let newRecipe = { ...recipe };
-        newRecipe.description = value;
-        setRecipe(newRecipe);
-        clearCustomErrorByInputName('description');
-    }
 
     const handlerChangePreparationMethod = (value: string) => {
         let newRecipe = { ...recipe };
@@ -122,7 +114,6 @@ const RecipePage = ({
     const verifyRichTextsInputs = () => {
         let newCustomErrors:any = {};
 
-        if(!replaceTagsByText(recipe?.description as string)) { newCustomErrors.description = 'O campo é obrigatório.'; }
         if(!replaceTagsByText(recipe?.preparationMethod as string)) { newCustomErrors.preparationMethod = 'O campo é obrigatório.'; }
 
         setCustomErrors(newCustomErrors);
@@ -187,6 +178,7 @@ const RecipePage = ({
 
         RecipeService.getRecipe(recipeId).then((data:any) => {
             setValue('title', data.title);
+            setValue('description', data.description);
 
             const preparationTimeNumbers:any = Date.separateParseHoursAndMinutes(data.preparationTime);
 
@@ -222,7 +214,7 @@ const RecipePage = ({
             >
                 {stateRecipe === "setRecipe" ? (
                     <form>
-                        <div className={"flex flex-row flex-wrap md:grid gap-2 " + (params.method != 'edit' && "md:grid-rows-2")}>
+                        <div className={"flex flex-col gap-2 " + (params.method != 'edit' && "md:grid-rows-2")}>
                             <div className="w-full">
                                 <h2 className="text-gray-600">Informações da receita:</h2>
 
@@ -239,8 +231,16 @@ const RecipePage = ({
                                 {errors.title && <Input.Error>{errors.title.message}</Input.Error>}
 
                                 <Input.Label className="mt-3" text="Descrição" />
-                                {document && <ReactQuill theme="snow" value={recipe?.description} placeholder="Digite aqui..." onChange={handlerChangeDescription} />}
-                                {customErrors?.description && <Input.Error>{customErrors?.description}</Input.Error>}
+                                <Input.Root>
+                                    <Input.TextArea
+                                        rows={3}
+                                        name="description"
+                                        register={register}
+                                        value={recipe?.description}
+                                        placeholder="Digite sua descrição aqui..."
+                                    />
+                                </Input.Root>
+                                {errors.description && <Input.Error>{errors.description.message}</Input.Error>}
 
                                 <Input.Label className="mt-3" text="Modo de preparo" />
                                 {document && <ReactQuill theme="snow" value={recipe?.preparationMethod} placeholder="Digite aqui..." onChange={handlerChangePreparationMethod} />}
@@ -276,7 +276,7 @@ const RecipePage = ({
                             </div>
                             {
                                 params?.method != 'edit' &&
-                                <div className="flex flex-col w-full">
+                                <div className="flex flex-col w-full h-64">
                                     <InputDropzone
                                         label="Imagens da receita:"
                                         name="images"

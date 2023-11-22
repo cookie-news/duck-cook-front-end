@@ -107,7 +107,7 @@ function getFormDataByRecipe(body: Recipe<FileList>) {
     }
   }
 
-  body.ingredients.forEach((ingredient) => {
+  body.ingredients?.forEach((ingredient) => {
     formData.append("ingredients", ingredient);
   });
 
@@ -186,9 +186,7 @@ export async function getRecipiesByUser(userId: string) {
       endpoint
     );
 
-    console.log(response.data);
-
-    response.data.forEach((item) => {
+    response.data?.forEach((item) => {
       item.preparationTimeConverted = Date.parseSecondsToHours(
         item.preparationTime
       );
@@ -207,9 +205,7 @@ export async function getRecipiesLikedByUser(userId: string) {
       endpoint
     );
 
-    console.log(response.data);
-
-    response.data.forEach((item) => {
+    response.data?.forEach((item) => {
       item.preparationTimeConverted = Date.parseSecondsToHours(
         item.preparationTime
       );

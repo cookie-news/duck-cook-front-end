@@ -3,6 +3,7 @@ import InputError from "./InputError";
 import InputIcon from "./InputIcon";
 import InputLabel from "./InputLabel";
 import InputRoot from "./InputRoot";
+import InputTextArea from "./InputTextArea";
 import InputTextfield from "./InputTextfield";
 
 export const Input = {
@@ -11,5 +12,6 @@ export const Input = {
   Icon: InputIcon,
   Button: InputButton,
   Error: InputError,
-  Label: InputLabel
+  Label: InputLabel,
+  TextArea: InputTextArea
 };
