@@ -83,8 +83,10 @@ const RateSection: React.FC<RateSectionProps> = ({
   }, [idRecipe, userData.id]);
 
   useEffect(() => {
-    fetchUserIsLiked();
-  }, [fetchUserIsLiked]);
+    if (isLogged) {
+      fetchUserIsLiked();
+    }
+  }, [fetchUserIsLiked, isLogged]);
 
   const handleLike = async () => {
     try {
@@ -113,15 +115,13 @@ const RateSection: React.FC<RateSectionProps> = ({
         label={Date.parseSecondsToHours(preparationTime)}
         icon={ClockIcon}
       />
-      {isLogged && (
-        <Card
-          label={likes}
-          icon={isLiked ? ThumbUpAlt : ThumbsUp}
-          onClick={handleLike}
-          animate
-          disabled={likeIsLoading}
-        />
-      )}
+      <Card
+        label={likes}
+        icon={isLiked ? ThumbUpAlt : ThumbsUp}
+        onClick={handleLike}
+        animate
+        disabled={likeIsLoading || !isLogged}
+      />
 
       <Card label={commentsNumber} icon={MessagesSquare} />
     </div>
