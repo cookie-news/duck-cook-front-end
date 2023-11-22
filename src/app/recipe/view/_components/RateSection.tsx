@@ -1,27 +1,126 @@
-import { ElementType } from "react";
+"use client";
+
+import {
+  ElementType,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { toast } from "react-toastify";
+
+import { ThumbUpAlt } from "@mui/icons-material";
+
+import { RecipeService } from "@root/src/data/recipe.service";
+
+import { AuthContext } from "@context/AuthContext";
+
+import { Date } from "@utils/Date";
 
 import { ClockIcon, MessagesSquare, ThumbsUp } from "lucide-react";
+import { tv, VariantProps } from "tailwind-variants";
 
-interface CardProps {
-  label: string;
+type IconVariants = VariantProps<typeof iconVariant>;
+
+interface CardProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    IconVariants {
+  label: string | number;
   icon: ElementType;
 }
 
-function Card({ label, icon: Icon }: CardProps) {
+const iconVariant = tv(
+  {
+    base: "text-green-800",
+    variants: {
+      animate: {
+        true: "active:animate-ping",
+      },
+    },
+  },
+  { twMerge: true }
+);
+
+function Card({ label, icon: Icon, animate, ...props }: CardProps) {
   return (
-    <div className="flex flex-1 items-center justify-center gap-2 border border-gray-dark rounded-md bg-neutral-default p-3 ">
-      <Icon className="text-green-800" />
-      <p className="text-lime-700 font-semibold">{label}</p>
-    </div>
+    <button
+      {...props}
+      className={
+        "flex flex-1 items-center justify-center gap-2 border border-gray-dark rounded-md bg-neutral-default p-3 h-12"
+      }
+    >
+      <Icon className={iconVariant({ animate })} />
+      <p className="text-black font-semibold">{label}</p>
+    </button>
   );
 }
 
-const RateSection: React.FC<any> = () => {
+interface RateSectionProps {
+  idRecipe: string;
+  preparationTime: number;
+  likesNumber: number;
+  commentsNumber: number;
+}
+
+const RateSection: React.FC<RateSectionProps> = ({
+  idRecipe,
+  preparationTime,
+  likesNumber,
+  commentsNumber,
+}) => {
+  const [likes, setLikes] = useState(likesNumber);
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeIsLoading, setLikeIsLoading] = useState(false);
+
+  const { userData } = useContext(AuthContext);
+
+  const fetchUserIsLiked = useCallback(() => {
+    RecipeService.getRecipeIsLikedByUser(idRecipe, userData.id)
+      .then((result) => {
+        setIsLiked(result.liked);
+      })
+      .catch((error) => toast.error(error.message));
+  }, [idRecipe, userData.id]);
+
+  useEffect(() => {
+    fetchUserIsLiked();
+  }, [fetchUserIsLiked]);
+
+  const handleLike = async () => {
+    try {
+      setLikeIsLoading(true);
+      if (isLiked) {
+        await RecipeService.deleteRecipeLike({ idRecipe, idUser: userData.id });
+        setLikes((state) => (state -= 1));
+      } else {
+        await RecipeService.createLike({
+          idRecipe,
+          idUser: userData.id,
+        });
+        setLikes((state) => (state += 1));
+      }
+    } catch (e: any) {
+      toast.error(e.message);
+    } finally {
+      setLikeIsLoading(false);
+      fetchUserIsLiked();
+    }
+  };
+
   return (
     <div className="flex justify-between gap-5">
-      <Card label="1h 20 min" icon={ClockIcon} />
-      <Card label="100" icon={ThumbsUp} />
-      <Card label="100" icon={MessagesSquare} />
+      <Card
+        label={Date.parseSecondsToHours(preparationTime)}
+        icon={ClockIcon}
+      />
+      <Card
+        label={likes}
+        icon={isLiked ? ThumbUpAlt : ThumbsUp}
+        onClick={handleLike}
+        animate
+        disabled={likeIsLoading}
+      />
+      <Card label={commentsNumber} icon={MessagesSquare} />
     </div>
   );
 };

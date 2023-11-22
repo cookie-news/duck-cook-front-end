@@ -1,3 +1,6 @@
+import { COOKIE_AUTH_TOKEN } from "@context/AuthContext";
+
+import { Cookies } from "@utils/Cookie";
 import { ServiceError } from "@utils/Error";
 
 import { AxiosHeaders, AxiosRequestConfig } from "axios";
@@ -14,19 +17,11 @@ export interface User {
   image: string;
 }
 
-async function getUserData(
-  fieldName: FieldNameOptions,
-  value: string,
-  token?: string
-) {
+async function getUser(fieldName: FieldNameOptions, value: string) {
   const endpoint = `/customer/${fieldName}/${value}`;
-  const axiosOpts: AxiosRequestConfig<AxiosHeaders> = token
-    ? {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    : {};
+
   try {
-    const { data } = await UserConfig.get<User>(endpoint, axiosOpts);
+    const { data } = await UserConfig.get<User>(endpoint);
     return data;
   } catch (e: any) {
     throw new ServiceError(endpoint);
@@ -45,6 +40,6 @@ async function createUser(body: CreateRegisterFormData) {
 }
 
 export const UserService = {
-  getUserData,
+  getUser,
   createUser,
 };

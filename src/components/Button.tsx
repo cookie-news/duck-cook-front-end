@@ -11,7 +11,7 @@ interface ButtonProps
 }
 
 const buttonVariants = tv({
-  base: "rounded-md p-2 border flex flex-row justify-center",
+  base: "rounded-md p-2 border flex flex-row justify-center items-center",
   variants: {
     variant: {
       primary: "bg-green-800 border-green-900 text-white",

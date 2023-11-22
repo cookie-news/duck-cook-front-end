@@ -14,7 +14,7 @@ export default function Error({ error, reset }: ErrorProps) {
   }, [error]);
 
   return (
-    <div>
+    <div className="flex w-full h-screen">
       <h2>Something went wrong!</h2>
       <button
         onClick={

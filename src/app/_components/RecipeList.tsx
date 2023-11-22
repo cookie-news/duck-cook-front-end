@@ -14,13 +14,16 @@ import { RecipeService } from "@root/src/data/recipe.service";
 import { PaginationData } from "@root/src/types/PaginationData";
 import { Recipe } from "@root/src/types/Recipe";
 
+import { Date } from "@utils/Date";
+
+import parseToHtml from "html-react-parser";
+
 import { SkeletonFallbackRecipes } from "./skeletons/SkeletonFallbackRecipesList";
 
 export function RecipesList() {
   const [page, setPage] = useState(1);
 
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<any>(null);
 
   const [recipesList, setRecipesList] = useState<PaginationData<Recipe>>(
     null as any
@@ -28,13 +31,11 @@ export function RecipesList() {
 
   useEffect(() => {
     setIsLoading(true);
-    setError(null);
     RecipeService.getRecipes(page)
       .then((result) => {
         setRecipesList(result);
       })
       .catch((error) => {
-        setError(error);
         toast.error(error.message);
       })
       .finally(() => {
@@ -48,11 +49,9 @@ export function RecipesList() {
 
   if (isLoading) return <SkeletonFallbackRecipes />;
 
-  if (error) return <Error statusCode={error.status} />;
-
   return (
     <>
-      {recipesList.items.map((item: Recipe) => (
+      {recipesList?.items?.map((item: Recipe) => (
         <Link
           key={item.id}
           href={`${recipeRoutes.view.path}/${item.id}`}
@@ -61,10 +60,10 @@ export function RecipesList() {
           <div className="flex flex-1 flex-col h-full">
             <p className="font-bold uppercase text-green-800">{item.title}</p>
             <span className="font-thin w-32 text-xs text-neutral-500 truncate">
-              {item.preparationMethod}
+              {Date.parseSecondsToHours(Number(item.preparationTime))}
             </span>
             <p className="mt-3 break-words text-base text-neutral-500">
-              {item.description}
+              {parseToHtml(item.description)}
             </p>
           </div>
           {item.images !== null && (

@@ -1,12 +1,15 @@
-import Carousel from "react-material-ui-carousel";
+import React from "react";
 
-import PageWrapper from "@components/PageWrapper";
+import { RecipeService } from "@root/src/data/recipe.service";
+import { User, UserService } from "@root/src/data/user.service";
+
+import parseToHtml from "html-react-parser";
 
 import CarouselImages from "../_components/CarouselImages";
 import CommentsSection from "../_components/CommentsSection";
 import RateSection from "../_components/RateSection";
 
-const ViewRecipePage = ({ params }: { params: { recipeId: string } }) => {
+const ViewRecipePage = async ({ params }: { params: { recipeId: string } }) => {
   // const [recipe, setRecipe] = useState<RecipeType>({});
 
   // //Loading
@@ -245,65 +248,54 @@ const ViewRecipePage = ({ params }: { params: { recipeId: string } }) => {
   //   getRecipeData();
   // }, []);
 
+  const recipe = await RecipeService.getRecipe(params.recipeId);
+  const user = await UserService.getUser("_id", recipe.idUser);
+
   return (
     <>
-      <PageWrapper hasMenu>
-        <div className="flex gap-8">
-          <div className="flex-1">
-            <CarouselImages images={[]} />
-          </div>
-          <div className="flex-1 flex flex-col gap-5 h-96">
-            <h1 className="uppercase font-bold text-3xl text-slate-700">
-              Bolo de Cenoura com Cobertura de Chocolate
-            </h1>
-            <RateSection />
-            <p className="flex-1 text-slate-700 text-sm font-medium">
-              Todo caderno de receita conta com um Bolo de Cenoura com Cobertura
-              de Chocolate. Mas aqui você aprende a melhor forma de fazê-lo e
-              todas as suas variações, para deixar o seu momento de café da
-              tarde mais completo! Com um toque de Maizena, seu bolo vai ficar
-              fofinho e delicioso. Siga passo a passo e tire a prova!
+      <div className="flex gap-8">
+        <div className="flex-1">
+          <CarouselImages images={recipe.images} />
+        </div>
+        <div className="flex-1 flex flex-col gap-5 h-96">
+          <h1 className="uppercase font-bold text-3xl text-slate-700">
+            {recipe.title}
+          </h1>
+          <RateSection
+            idRecipe={params.recipeId}
+            preparationTime={Number(recipe.preparationTime)}
+            commentsNumber={recipe.countComments}
+            likesNumber={recipe.countLikes}
+          />
+          <p className="flex-1 text-slate-700 text-sm font-medium">
+            {parseToHtml(recipe.description)}
+          </p>
+          <div className="flex gap-2">
+            <p className="text-slate-700 text-sm">
+              <b>Por:</b> {user.name}
             </p>
-
-            <div className="flex gap-2">
-              <p className="text-slate-700 text-sm">
-                <b>Por:</b> Lucas Nascimento
+          </div>
+        </div>
+      </div>
+      <div className="flex gap-8 mt-10">
+        <div className="flex flex-1 flex-col gap-4">
+          <h2 className="text-slate-700 font-bold text-2xl ">Igredientes</h2>
+          <div className="bg-neutral-default p-2 rounded-md border border-gray-dark flex flex-col gap-2">
+            {recipe.ingredients.map((item) => (
+              <p key={crypto.randomUUID()} className="capitalize">
+                {item}
               </p>
-            </div>
+            ))}
           </div>
         </div>
-        <div className="flex gap-8 mt-10">
-          <div className="flex flex-1 flex-col gap-4">
-            <h2 className="text-slate-700 font-bold text-2xl ">Igredientes</h2>
-            <p>
-              Massa 2 cenouras médias, cortadas em cubos 300 g 1/2 xícara de chá
-              de óleo 125 ml 3 ovos 1/2 xícara de chá de Amido de Milho Maizena
-              Vita + 60 g maizena Logo 1 1/2 xícara de chá de farinha de trigo
-              210 g 2 colheres de chá de fermento em pó 8 g 1 xícara de chá de
-              açúcar 190 g Cobertura 1/2 xícara de chocolate ao leite derretido
-              1/2 xícara de creme de leite
-            </p>
-          </div>
-          <div className="flex flex-1 flex-col gap-4">
-            <h2 className="text-slate-700 font-bold text-2xl ">
-              Modo de preparo
-            </h2>
-            <p>
-              1 - Pré-aqueça o forno em temperatura média (180°C). 2 - Unte e
-              enfarinhe uma forma de furo central média (20 cm de diâmetro).
-              Reserve. 3 - No copo do liquidificador, coloque a cenoura, o óleo
-              e os ovos, e bata até a massa do bolo de cenoura ficar homogênea.
-              4 - Em uma tigela, peneire o amido de milho MAIZENA®, a farinha de
-              trigo, o fermento e o açúcar, junte a mistura de cenoura
-              reservada, e mexa com o auxílio de uma espátula até que vire uma
-              massa uniforme. 5Disponha a massa na forma reservada e leve ao
-              forno por 40 minutos, ou até que um palito, depois de espetado na
-              massa, saia limpo. Retire o forno e deixe amornar.
-            </p>
-          </div>
+        <div className="flex flex-1 flex-col gap-4">
+          <h2 className="text-slate-700 font-bold text-2xl ">
+            Modo de preparo
+          </h2>
+          <p>{parseToHtml(recipe.preparationMethod)}</p>
         </div>
-        <CommentsSection />
-      </PageWrapper>
+      </div>
+      <CommentsSection idRecipe={params.recipeId} />
       {/* <PageWrapper>
         <Container className="mt-10 mb-10">
           <div className="p-0 md:p-10 bg-white rounded-md overflow-auto">

@@ -9,13 +9,10 @@ import { Date } from "@utils/Date";
 import { RecipeService } from "@/data/recipe.service";
 
 export async function MoreLikedsList() {
-  let moreLikedsRecipes: Array<Recipe> = [];
+  let moreLikedsRecipes: Array<Recipe> =
+    await RecipeService.getRecipiesMoreLikeds();
 
-  try {
-    moreLikedsRecipes = await RecipeService.getRecipiesMoreLikeds();
-  } catch (e: any) {
-    console.error(e.message);
-  }
+  if (moreLikedsRecipes == null) return <></>;
 
   return moreLikedsRecipes
     .slice(0, moreLikedsRecipes.length - 1)
@@ -31,7 +28,7 @@ export async function MoreLikedsList() {
 
         <p className="font-semibold uppercase truncate">{recipe.title}</p>
         <p className="font-thin text-xs truncate">
-          {Date.parseSecondsToHours(recipe.preparationTime)}
+          {Date.parseSecondsToHours(Number(recipe.preparationTime))}
         </p>
       </Link>
     ));
