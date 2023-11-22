@@ -13,7 +13,6 @@ function PageRoot() {
   return (
     <PageWrapper isProtected={false} hasMenu>
       <div className="flex flex-col gap-8">
-        <SearchSection />
         <p className="bg-green-800 p-3 text-white uppercase w-fit font-bold">
           RECEITAS MAIS CURTIDAS
         </p>
