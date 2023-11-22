@@ -12,7 +12,8 @@ const fallbackImage =
   "https://www.pulsecarshalton.co.uk/wp-content/uploads/2016/08/jk-placeholder-image.jpg";
 
 export async function MoreLikedsList() {
-  let moreLikedsRecipes: Array<Recipe> = [];
+  let moreLikedsRecipes: Array<Recipe> =
+    await RecipeService.getRecipiesMoreLikeds();
 
   if (moreLikedsRecipes == null) return <></>;
   if (moreLikedsRecipes.length == 0)
