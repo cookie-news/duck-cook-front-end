@@ -6,7 +6,6 @@ import PageWrapper from "@components/PageWrapper";
 
 import { MoreLikedsList } from "./_components/MoreLikedsList";
 import { RecipesList } from "./_components/RecipeList";
-import SkeletonFallbackMoreLikeds from "./_components/skeletons/SkeletonFallbackMoreLikedsList";
 
 function PageRoot() {
     return (
@@ -16,7 +15,7 @@ function PageRoot() {
                     Receitas mais curtidas
                 </p>
                 <section className="grid grid-flow-row-dense grid-cols-2 md:grid-cols-3 gap-2">
-                    <React.Suspense fallback={<SkeletonFallbackMoreLikeds />}><MoreLikedsList /></React.Suspense>
+                    <MoreLikedsList />
                 </section>
                 <p className="bg-green-800 p-3 text-white uppercase w-fit font-bold">
                     Feed de receitas
