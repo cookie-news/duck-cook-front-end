@@ -91,7 +91,7 @@ export default function PageWrapper({
           )}
         </>
       )}
-      <div className="w-full lg:w-[60%] mx-auto">{children}</div>
+      <div className="w-full md:w-[90%] lg:w-[60%] px-4 md:px-0 mx-auto">{children}</div>
       {isLoading && <Loading />}
     </>
   );
