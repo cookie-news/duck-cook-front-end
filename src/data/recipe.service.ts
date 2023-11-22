@@ -200,6 +200,27 @@ export async function getRecipiesByUser(userId: string) {
   }
 }
 
+export async function getRecipiesLikedByUser(userId: string) {
+  const endpoint = "/user/" + userId + "/recipe/like";
+  try {
+    const response = await RecipeConfig.get<getRecipiesByUserResponse["items"]>(
+      endpoint
+    );
+
+    console.log(response.data);
+
+    response.data.forEach((item) => {
+      item.preparationTimeConverted = Date.parseSecondsToHours(
+        item.preparationTime
+      );
+    });
+
+    return response.data;
+  } catch (e: any) {
+    throw new Error(e);
+  }
+}
+
 async function createRecipeComment(body: createRecipeComment) {
   const endpoint =
     "/user/" + body.idUser + "/recipe/" + body.idRecipe + "/comment";
@@ -285,4 +306,5 @@ export const RecipeService = {
   createLike,
   getRecipeLikes,
   getRecipeIsLikedByUser,
+  getRecipiesLikedByUser
 };

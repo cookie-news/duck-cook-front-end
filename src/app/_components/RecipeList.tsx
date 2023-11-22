@@ -14,11 +14,16 @@ import { RecipeService } from "@root/src/data/recipe.service";
 import { PaginationData } from "@root/src/types/PaginationData";
 import { Recipe } from "@root/src/types/Recipe";
 
+import EmptyState from "@components/EmptyState";
+
 import { Date } from "@utils/Date";
 
 import parseToHtml from "html-react-parser";
 
 import { SkeletonFallbackRecipes } from "./skeletons/SkeletonFallbackRecipesList";
+
+const fallbackImage =
+  "https://www.pulsecarshalton.co.uk/wp-content/uploads/2016/08/jk-placeholder-image.jpg";
 
 export function RecipesList() {
   const [page, setPage] = useState(1);
@@ -48,6 +53,7 @@ export function RecipesList() {
   };
 
   if (isLoading) return <SkeletonFallbackRecipes />;
+  if (recipesList.items.length === 0) return <EmptyState />;
 
   return (
     <>
@@ -55,28 +61,27 @@ export function RecipesList() {
         <Link
           key={item.id}
           href={`${recipeRoutes.view.path}/${item.id}`}
-          className="flex gap-4 justify-between items-center w-full bg-neutral-default border border-neutral-dark p-3 rounded-md"
+          className="flex flex-col-reverse md:flex-row gap-4 h-56 justify-between md:items-center w-full bg-neutral-default border border-neutral-dark rounded-md"
         >
-          <div className="flex flex-1 flex-col h-full">
+          <div className="flex flex-1 flex-col h-full p-3">
             <p className="font-bold uppercase text-green-800">{item.title}</p>
-            <span className="font-thin w-32 text-xs text-neutral-500 truncate">
+            <span className="font-thin w-32 text-xs text-neutral-500">
+              <span className="text-gray-default">Tempo de preparo: </span>
               {Date.parseSecondsToHours(Number(item.preparationTime))}
             </span>
-            <p className="mt-3 break-words text-base text-neutral-500">
-              {parseToHtml(item.description)}
+            <p className="mt-3 break-words overflow-hidden text-base text-neutral-500">
+              {item.description}
             </p>
           </div>
-          {item.images !== null && (
-            <div className="flex-2 relative w-40 h-24">
-              <Image
-                src={item.images[0]}
-                fill
-                objectFit="cover"
-                alt="recipe image"
-                className="rounded-md"
-              />
-            </div>
-          )}
+          <div className="flex-2 relative w-full md:w-40 h-24 md:h-full overflow-auto">
+            <Image
+              src={(item.images && item.images[0]) ?? fallbackImage}
+              fill
+              objectFit="cover"
+              alt="recipe image"
+              className="rounded-t-md md:rounded-r-md"
+            />
+          </div>
         </Link>
       ))}
       <Pagination
