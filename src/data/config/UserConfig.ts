@@ -6,9 +6,7 @@ import axios from "axios";
 
 const UserConfig = axios.create({
   baseURL: process.env.NEXT_PUBLIC_USER_URL || "",
-  headers: {
-    Authorization: "Bearer " + Cookies.get(COOKIE_AUTH_TOKEN),
-  },
+  withCredentials: true
 });
 
 export default UserConfig;
