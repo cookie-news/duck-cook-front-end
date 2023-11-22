@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { Avatar, Button, IconButton, TextField } from "@mui/material";
 
 //Routes
-import { rootRoutes } from "@root/routes";
+import { rootRoutes, userRoutes } from "@root/routes";
 //Data Services
 import { User } from "@root/src/data/user.service";
 
@@ -70,7 +70,7 @@ const EditUserPage = () => {
     console.log(data);
   };
 
-  const redirectToViewUserPage = () => router.push(rootRoutes.user.view.path);
+  const redirectToViewUserPage = () => router.push(userRoutes.view.path);
 
   return (
     <>

@@ -1,11 +1,9 @@
 //Material UI
 import {
-    TableRow,
-    styled
-} from "@mui/material";
-
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+    styled,
+    TableRow} from "@mui/material";
 import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 
 export const StyledTableThreadRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {

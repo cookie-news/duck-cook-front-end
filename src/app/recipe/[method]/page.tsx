@@ -23,14 +23,14 @@ import PageWrapper from "@components/PageWrapper";
 import { AuthContext } from "@context/AuthContext";
 import { LoadingContext } from "@context/LoadingContext";
 
+import { Date } from '@utils/Date'
+
 import 'react-quill/dist/quill.snow.css';
 import { RecipeFactory } from "@/types/Recipe";
 //Types
 import { ToastType } from "@/types/ToastType";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-
-import { Date } from '@utils/Date'
 
 const createRecipeFormSchema = z.object({
     title: z.string().nonempty("O campo é obrigatório."),
@@ -185,7 +185,7 @@ const RecipePage = ({
     const getRecipe = (recipeId:string) => {
         handleLoadingDialog();
 
-        RecipeService.getRecipeById(recipeId).then((data:any) => {
+        RecipeService.getRecipe(recipeId).then((data:any) => {
             setValue('title', data.title);
 
             const preparationTimeNumbers:any = Date.separateParseHoursAndMinutes(data.preparationTime);

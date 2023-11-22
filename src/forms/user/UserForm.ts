@@ -1,5 +1,3 @@
-import ErrorMessages from "@utils/ErrorMessages";
-
 //Types
 import { FormType } from "@/types/FormType";
 
@@ -12,7 +10,7 @@ export const UserForm: FormType[] = [
         type: "text",
         className: "md:mt-1 mt-4",
         validates: {
-            required: ErrorMessages.REQUIRED
+            required: "Campo obrigatório."
         }
     },
     {
@@ -23,7 +21,7 @@ export const UserForm: FormType[] = [
         type: "text",
         className: "mt-4",
         validates: {
-            required: ErrorMessages.REQUIRED
+            required: "Campo obrigatório."
         }
     },
     {
@@ -34,7 +32,7 @@ export const UserForm: FormType[] = [
         type: "email",
         className: "mt-4",
         validates: {
-            required: ErrorMessages.REQUIRED
+            required: "Campo obrigatório."
         }
     }
 ];

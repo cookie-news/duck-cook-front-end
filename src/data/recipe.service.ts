@@ -128,7 +128,7 @@ async function deleteRecipe(recipeId: string) {
   }
 }
 
-async function getRecipeById(recipeId: string) {
+async function getRecipe(recipeId: string) {
   const endpoint = "/recipe/" + recipeId;
   try {
     const response = await RecipeConfig.get<Recipe>(endpoint);
@@ -269,7 +269,7 @@ export const RecipeService = {
   createRecipe,
   updateRecipe,
   deleteRecipe,
-  getRecipeById,
+  getRecipe,
   getRecipes,
   getRecipiesMoreLikeds,
   deleteRecipeLike,

@@ -54,7 +54,7 @@ const InputDropzone: React.FC<InputDropzoneProps> =  ({
                     <Upload className="hover:cursor-pointer text-green-800" size={64} />
                 </div>
                 <div>
-                    { files && Array.from(files).map((file:File, index: number) => <p key={crypto.randomUUID()} color="text.primary" variant="body1">
+                    { files && Array.from(files).map((file:File, index: number) => <p key={crypto.randomUUID()} color="text.primary" >
                         <b>{index+1} - {file?.name}</b>
                     </p>)}
                 </div>

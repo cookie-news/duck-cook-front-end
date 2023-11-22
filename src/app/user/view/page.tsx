@@ -25,11 +25,11 @@ import {
 } from "@mui/material";
 
 //Routes
-import { recipeRoutes, rootRoutes } from "@root/routes";
+import { recipeRoutes, rootRoutes, userRoutes } from "@root/routes";
 //Data service
 import { RecipeService } from "@root/src/data/recipe.service";
 import { UserService } from "@root/src/data/user.service";
-import RecipeType from "@root/src/types/RecipeType";
+import { Recipe } from "@root/src/types/Recipe";
 
 import Button from "@components/Button"
 import PageWrapper from "@components/PageWrapper";
@@ -49,11 +49,9 @@ const ViewRecipePage: NextPage = () => {
     //Loading
     const { toggle: handleLoadingDialog } = useContext(LoadingContext);
 
-    const [fiveRecentsUserRecipes, setFiveRecetsUserRecipes] = useState<
-        RecipeType[]
-    >([]);
+    const [fiveRecentsUserRecipes, setFiveRecetsUserRecipes] = useState<Recipe[]>([]);
 
-    const [userRecipeLiked, setUserRecipeLiked] = useState<RecipeType[]>([]);
+    const [userRecipeLiked, setUserRecipeLiked] = useState<Recipe[]>([]);
 
     // react hook form
     const {
@@ -63,7 +61,7 @@ const ViewRecipePage: NextPage = () => {
         reset,
     } = useForm();
 
-    const redirectToEditUserPage = () => router.push(rootRoutes.user.edit.path);
+    const redirectToEditUserPage = () => router.push(userRoutes.edit.path);
 
     const [toast, setToast] = useState({
         open: false,
@@ -77,7 +75,7 @@ const ViewRecipePage: NextPage = () => {
                 for (let i = 0; i < recipeData.length; i++) {
                     console.log(recipeData[i]);
 
-                    await UserService.getUserData("_id", recipeData[i].idUser).then(
+                    await UserService.getUser("_id", recipeData[i].idUser).then(
                         async (authorData: any) => {
                             authorData["fullName"] = authorData.name;
                             delete authorData.name;
@@ -179,7 +177,7 @@ const ViewRecipePage: NextPage = () => {
                                 </Alert>
                             ) : (
                                 <div>
-                                    {fiveRecentsUserRecipes.map((recipe: RecipeType, index) => (
+                                    {fiveRecentsUserRecipes.map((recipe: Recipe, index) => (
                                         <Paper
                                             elevation={0}
                                             key={crypto.randomUUID()}
@@ -192,20 +190,17 @@ const ViewRecipePage: NextPage = () => {
                                                 <Typography component="div" variant="body1">
                                                     <b>{recipe.title}</b>
                                                 </Typography>
-                                                <Typography color="CaptionText" variant="caption">
-                                                    {recipe.createdDatetime}
-                                                </Typography>
                                                 <div className="flex items-center mt-2 w-full relative">
                                                     <div className="flex mr-2">
                                                         <ForumIcon className="mr-1" />
                                                         <Typography variant="body1">
-                                                            <b>{recipe.commentsNumber}</b>
+                                                            <b>{recipe.countComments}</b>
                                                         </Typography>
                                                     </div>
                                                     <div className="flex">
                                                         <ThumbUpOffAltIcon className="mr-1" />
                                                         <Typography variant="body1">
-                                                            <b>{recipe.likeNumber}</b>
+                                                            <b>{recipe.countLikes}</b>
                                                         </Typography>
                                                     </div>
                                                     <div className="flex absolute right-0">
@@ -264,11 +259,11 @@ const ViewRecipePage: NextPage = () => {
                                                     <b>{recipe.title}</b>
                                                 </Typography>
                                             </div>
-                                            {recipe.imagesSRC && recipe.imagesSRC.length > 0 ? (
+                                            {recipe.images && recipe.images.length > 0 ? (
                                                 <CardMedia
                                                     component="img"
                                                     sx={{ width: 80 }}
-                                                    image={recipe.imagesSRC[0]}
+                                                    image={recipe.images[0]}
                                                     style={{ borderRadius: "0px 1px 1px 0px" }}
                                                 />
                                             ) : (
