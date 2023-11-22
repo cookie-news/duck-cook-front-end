@@ -3,22 +3,21 @@
 //React
 import { useState } from "react";
 
-//Material UI
-import { 
-    FormLabel, Typography
-} from "@mui/material";
-import {
-    CloudUploadOutlined as CloudUploadOutlinedIcon
-} from "@mui/icons-material";
+import { Upload } from "lucide-react";
 
-interface InputDropzoneParams
+interface InputDropzoneProps
 {
-    registerInput: (name:string, params: any) => any,
-    name: string,
+    register?: any,
+    name?: string,
+    label?: string,
     files?: FileList
 }
 
-const InputDropzone = (props:InputDropzoneParams) => 
+const InputDropzone: React.FC<InputDropzoneProps> =  ({
+    register,
+    name,
+    ...props
+  }) => 
 {
     const [files, setFiles] = useState<FileList | undefined>(props.files);
 
@@ -38,26 +37,26 @@ const InputDropzone = (props:InputDropzoneParams) =>
 
     return (
         <>
-            <FormLabel className="mb-2">Informações da receita:</FormLabel>
+            <h2 className="mb-2 text-gray-600">{props.label}</h2>
             <input
                 accept="image/*"
                 id="contained-button-file"
                 multiple
                 style={{display: 'none'}}
                 type="file"
-                name={props.name}
-                {...props.registerInput(props.name, {
+                name={name}
+                {...(register && register(name, {
                     onChange: handleChangeInputDropzoneImages
-                })}
+                }))}
             />
             <label htmlFor="contained-button-file" className="flex flex-1 flex-col justify-center items-center border-2 border-dashed border-gray-400">
                 <div>
-                    <CloudUploadOutlinedIcon className="hover:cursor-pointer text-9xl" color="info" />
+                    <Upload className="hover:cursor-pointer text-green-800" size={64} />
                 </div>
                 <div>
-                    { files && Array.from(files).map((file:File, index: number) => <Typography key={crypto.randomUUID()} color="text.primary" variant="body1">
+                    { files && Array.from(files).map((file:File, index: number) => <p key={crypto.randomUUID()} color="text.primary" >
                         <b>{index+1} - {file?.name}</b>
-                    </Typography>)}
+                    </p>)}
                 </div>
             </label>
         </>

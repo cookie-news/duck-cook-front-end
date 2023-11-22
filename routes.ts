@@ -7,18 +7,31 @@ const authRoutes = {
   },
 };
 
+const userRoutes = {
+  view: {
+    path: "/user/view",
+  },
+  edit: {
+    path: "/user/edit",
+  },
+};
+
+const recipeRoutes = {
+  view: {
+    path: "/recipe/view",
+  },
+  create: {
+    path: "/recipe/create",
+  },
+  edit: {
+    path: "/recipe/edit",
+  },
+};
+
 const rootRoutes = {
   home: {
     path: "/",
   },
-  user: {
-    view: {
-      path: "/user/view"
-    },
-    edit: {
-      path: "/user/edit"
-    }
-  }
 };
 
-export { authRoutes, rootRoutes };
+export { authRoutes, rootRoutes, userRoutes, recipeRoutes };

@@ -1,5 +1,5 @@
 //Material UI
-import { Snackbar, Alert } from "@mui/material";
+import { Alert,Snackbar } from "@mui/material";
 
 //Types
 import { ToastType } from "@/types/ToastType"

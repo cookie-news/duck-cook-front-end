@@ -1,15 +1,16 @@
+import { ToastContainer } from "react-toastify";
+
 import { Metadata } from "next";
 
 //Themes
 import ThemeProvider from "@components/ThemeProvider";
 
+import { AuthContextProvider } from "@context/AuthContext";
+import { LoadingProvider } from "@context/LoadingContext";
+
 //CSS
 import "@styles/globals.css";
-
-//Custom
-import Menu from "@components/Menu";
-import { AuthContextProvider } from "../context/AuthContext";
-import { LoadingProvider } from "@context/LoadingContext";
+import "react-toastify/dist/ReactToastify.css";
 
 export const metadata: Metadata = {
   title: "Duck Cook",
@@ -25,17 +26,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="flex flex-col h-screen">
+      <body>
         <AuthContextProvider>
           <LoadingProvider>
             <ThemeProvider>
-              <Menu />
               <div className="flex-1 max-h-full overflow-y-auto">
                 {children}
               </div>
             </ThemeProvider>
           </LoadingProvider>
         </AuthContextProvider>
+        <ToastContainer />
       </body>
     </html>
   );

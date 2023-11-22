@@ -1,18 +1,20 @@
 "use client";
 
 import { createContext, useEffect, useMemo, useState } from "react";
+
 import { Cookies } from "@utils/Cookie";
+
 import { User } from "../data/user.service";
 
-export const COOKIE_AUTH_TOKEN = "@duck-cook/COOKIE_AUTH_TOKEN";
+export const COOKIE_AUTH_TOKEN = "COOKIE_AUTH_TOKEN";
 export const LOCALSTORAGE_USER_DATA = "@duck-cook/USER_DATA";
 
 interface AuthContextProps {
   token: string;
   userData: User;
-  setUserData: (userData: User) => void;
-  setToken: (token: string) => void;
   isLogged: boolean;
+  setAuthData: (token: string, userData: User) => void;
+  logout: () => void;
 }
 
 export const AuthContext = createContext({} as AuthContextProps);
@@ -33,29 +35,46 @@ export function AuthContextProvider({
   );
 
   useEffect(() => {
-    if (token) Cookies.set(COOKIE_AUTH_TOKEN, token);
+    if (token && token !== "") Cookies.set(COOKIE_AUTH_TOKEN, token);
   }, [token]);
 
   useEffect(() => {
     if (token !== "" || token) {
       localStorage.setItem(LOCALSTORAGE_USER_DATA, JSON.stringify(userData));
     }
-  }, [userData]);
+  }, [token, userData]);
 
-  const handleIsLogged = () => {
-    return Cookies.has(COOKIE_AUTH_TOKEN);
+  const isLogged = useMemo(() => {
+    return token !== "";
+  }, [token]);
+
+  const handleLogout = () => {
+    Cookies.remove(COOKIE_AUTH_TOKEN);
+    localStorage.clear();
+    setToken("");
+    setUserData({} as User);
   };
 
-  const value: AuthContextProps = useMemo(
-    () => ({
-      token,
-      setToken,
-      isLogged: handleIsLogged(),
-      userData,
-      setUserData
-    }),
+  const handleSetAuthData = (token: string, userData: User) => {
+    setToken(token);
+    setUserData(userData);
+  };
+
+  const handles = useMemo(
+    () => ({ setAuthData: handleSetAuthData, logout: handleLogout }),
     []
   );
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider
+      value={{
+        token,
+        isLogged,
+        userData,
+        ...handles,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }

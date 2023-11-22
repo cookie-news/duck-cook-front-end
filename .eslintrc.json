@@ -1,15 +1,25 @@
 {
   "extends": "next/core-web-vitals",
+  "plugins": ["simple-import-sort"],
   "rules": {
-    "sort-imports": [
-      "warn",
+    "simple-import-sort/imports": [
+      "error",
       {
-        "ignoreCase": true,
-        "ignoreMemberSort": true,
-        "ignoreDeclarationSort": true,
-        "eslint-disable-next-line": true,
-        "memberSyntaxSortOrder": ["none"],
-        "allowSeparatedGroups": true
+        "groups": [
+          ["^react"],
+          ["^next"],
+          ["^@mui"],
+          ["^@lexical"],
+          ["^@root"],
+          ["^@components"],
+          ["^@context"],
+          ["^@forms"],
+          ["^@styles"],
+          ["^@assets"],
+          ["^@utils"],
+          ["^"],
+          ["^\\."]
+        ]
       }
     ]
   }

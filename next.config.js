@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    output: 'standalone'
-}
+  reactStrictMode: false,
+  images: {
+    domains: ["dcqgxwhjxkkignjziqvf.supabase.co", "www.pulsecarshalton.co.uk"],
+  },
+  output: "standalone",
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

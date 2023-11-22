@@ -1,16 +1,19 @@
-import Api from "./axios.config";
-import RecipeType from "@/types/RecipeType";
-import IngredientType from '@/types/IngredientType';
+import { Date } from "@utils/Date";
+import { ServiceError } from "@utils/Error";
 
-const baseUrl = process.env.NEXT_PUBLIC_RECIPE_URL;
+import IngredientType from "@/types/IngredientType";
+
+import { PaginationData } from "../types/PaginationData";
+import { Comment, LikeRequest, Recipe } from "../types/Recipe";
+import RecipeConfig from "./config/RecipeConfig";
 
 interface createRecipe {
   idUser: string;
   description: string;
   ingredients: IngredientType[];
   preparationTime: number;
-  preparationMethod: string,
-  images: FileList,
+  preparationMethod: string;
+  images: FileList;
   title: string;
 }
 
@@ -19,363 +22,262 @@ interface updateRecipe {
   description: string;
   ingredients: IngredientType[];
   preparationTime: number;
-  preparationMethod: string,
+  preparationMethod: string;
   title: string;
 }
 
-interface recipeComment {
-  id: string,
-  idUser: string,
-  idRecipe: string,
-  userName: string,
-  message: string
-}
 interface createRecipeComment {
-  idRecipe: string,
-  idUser: string,
-  message: string
+  idRecipe: string;
+  idUser: string;
+  message: string;
 }
 
 interface deleteRecipeComment {
-  idRecipe: string,
-  idUser: string,
-  id: string,
-  message: string
-}
-
-interface createRecipeLike {
-  idRecipe: string,
-  idUser: string
+  idRecipe: string;
+  idUser: string;
+  id: string;
+  message: string;
 }
 
 interface deleteRecipeLike {
-  idRecipe: string,
-  idUser: string
+  idRecipe: string;
+  idUser: string;
 }
 
 interface getRecipeResponse {
-  id:string,
+  id: string;
   idUser: string;
   description: string;
   ingredients: IngredientType[];
   preparationTime: number;
   preparationTimeConverted: string;
-  preparationMethod: string,
-  images: string[],
+  preparationMethod: string;
+  images: string[];
   title: string;
 }
 
-interface getRecipiesPaggingResponse {
-  currentPage: number,
-  items: string,
-  itemsArray: getRecipeResponse[],
-  next: number,
-  previous: number,
-  recordPerPage: number,
-  totalPage: number
+interface getRecipiesByUserResponse {
+  items: getRecipeResponse[];
 }
 
-interface getRecipiesMoreLikedsResponse{
-  items: getRecipeResponse[],
+async function createRecipe(body: Recipe<FileList>) {
+  const endpoint = "/recipe";
+  try {
+    const formData = getFormDataByRecipe(body);
+
+    const { data } = await RecipeConfig.post(endpoint, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  } catch (e: any) {
+    throw new Error(e);
+  }
 }
 
-interface getRecipiesByUserResponse{
-  items: getRecipeResponse[],
-}
-
-interface getRecipeCommentsResponse{
-  comments: recipeComment[],
-}
-
-function secondsToHourMinute(seconds: number) {
-
-  var hours = Math.floor(seconds / 3600);
-  var minutes = Math.floor((seconds % 3600) / 60);
-
-  var formattedHours = hours < 10 ? '0' + hours : hours;
-  var formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
-
-  var result = `${formattedHours}:${formattedMinutes}`;
-
-  return result;
-}
-
-export async function createRecipe(body: createRecipe) {
+async function updateRecipe(body: Recipe<FileList>, recipeId: string) {
   const endpoint = "/recipe";
   try {
 
-    const formData = new FormData()
+    const { data } = await RecipeConfig.put(endpoint, body);
 
-    console.log(body);
 
-    formData.append("idUser", body.idUser);
-    formData.append("title", body.title);
-    formData.append("description", body.description);
-    formData.append("preparationTime", body.preparationTime.toString());
-    formData.append("preparationMethod", body.preparationMethod);
+  } catch (e: any) {
+    throw new Error(e);
+  }
+}
 
-    for(let i = 0; i < body.images.length; i ++){
+function getFormDataByRecipe(body: Recipe<FileList>) {
+  const formData = new FormData();
+
+  for (let keyBody in body) {
+    if (keyBody == "images") {
+      continue;
+    }
+    if (keyBody == "ingredients") {
+      continue;
+    }
+    formData.append(keyBody, body[keyBody as keyof Recipe] as string);
+  }
+
+  if (body.images) {
+    for (let i = 0; i < body.images.length; i++) {
       const img = body.images.item(i);
-      
-      if(img){
+
+      if (img) {
         formData.append("images", img);
       }
     }
-   
-    body.ingredients.forEach((ingredient)=>{
-
-      const ingredientData  = {
-        measure: ingredient.measure,
-        name: ingredient.name,
-        quantity: parseFloat(ingredient.quantity)
-      }
-
-      formData.append("ingredients", JSON.stringify(ingredientData));
-
-    });
-    
-    const { data } = await Api.post(baseUrl + endpoint, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-  
-  } catch (e: any) {
-    throw new Error(e);
   }
+
+  body.ingredients.forEach((ingredient) => {
+    formData.append("ingredients", ingredient);
+  });
+
+  return formData;
 }
 
-export async function updateRecipe(body: updateRecipe) {
-  const endpoint = "/recipe";
-  try {
-
-    const formData = new FormData()
-
-    console.log(body);
-
-    formData.append("idUser", body.idUser);
-    formData.append("title", body.title);
-    formData.append("description", body.description);
-    formData.append("preparationTime", body.preparationTime.toString());
-    formData.append("preparationMethod", body.preparationMethod);
-
-    body.ingredients.forEach((ingredient)=>{
-
-      const ingredientData  = {
-        measure: ingredient.measure,
-        name: ingredient.name,
-        quantity: parseFloat(ingredient.quantity)
-      }
-
-      formData.append("ingredients", JSON.stringify(ingredientData));
-
-    });
-    
-    const { data } = await Api.put(baseUrl + endpoint, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-
-    console.log(data);
-  
-  } catch (e: any) {
-    throw new Error(e);
-  }
-}
-
-export async function deleteRecipe(recipeId: string) {
-
+async function deleteRecipe(recipeId: string) {
   const endpoint = "/recipe/" + recipeId;
   try {
+    const data = await RecipeConfig.delete(endpoint);
 
-    const data = await Api.delete(baseUrl  + endpoint);
-    
-    console.log(data);
     return data;
-  
   } catch (e: any) {
     throw new Error(e);
   }
 }
 
-export async function getRecipe(recipeId: string) {
-
+async function getRecipe(recipeId: string) {
   const endpoint = "/recipe/" + recipeId;
   try {
+    const response = await RecipeConfig.get<Recipe>(endpoint);
 
-    const response = await Api.get<getRecipeResponse>(baseUrl  + endpoint);
-
-    response.data.preparationTimeConverted = secondsToHourMinute(response.data.preparationTime);
-    console.log(response);
     return response.data;
-  
   } catch (e: any) {
     throw new Error(e);
   }
 }
 
-export async function getRecipiesPagging(pagging: number) {
-
-  const endpoint = "/page/" + pagging;
+async function getRecipes(page: number) {
+  const endpoint = "recipe/page/" + page;
 
   try {
-
-    const response = await Api.get<getRecipiesPaggingResponse>(baseUrl  + endpoint);
-
-    response.data.itemsArray = JSON.parse(response.data.items);
-
-    response.data.itemsArray.forEach(item => {
-      item.preparationTimeConverted = secondsToHourMinute(item.preparationTime);
-    });
-    
-    console.log(response.data);
-    return response.data;
-  
+    const { data } = await RecipeConfig.get<PaginationData<Recipe>>(endpoint);
+    return data;
   } catch (e: any) {
-    throw new Error(e);
+    console.error(e);
+    throw new ServiceError(endpoint);
   }
-  
 }
 
-export async function getRecipiesMoreLikeds( ) {
-
-  const endpoint = "/recipe/" + "more-like";
+async function getRecipiesMoreLikeds() {
+  const endpoint = "/recipe/more-like";
 
   try {
+    const { data } = await RecipeConfig.get<Recipe[]>(endpoint);
 
-    const response = await Api.get<getRecipiesMoreLikedsResponse["items"]>(baseUrl  + endpoint);
-
-    response.data.forEach(item => {
-      item.preparationTimeConverted = secondsToHourMinute(item.preparationTime);
-    });
-    
-    console.log(response.data);
-    return response.data;
-  
+    return data;
   } catch (e: any) {
-    throw new Error(e);
+    throw new ServiceError(endpoint);
   }
-  
+}
+
+async function getRecipeIsLikedByUser(recipeId: string, userId: string) {
+  const endpoint = "/user/" + userId + "/recipe/" + recipeId + "/like";
+  try {
+    const { data } = await RecipeConfig.get(endpoint);
+
+    return data;
+  } catch (e: any) {
+    throw new ServiceError(endpoint);
+  }
 }
 
 export async function getRecipiesByUser(userId: string) {
-
   const endpoint = "/user/" + userId + "/recipe";
   try {
+    const response = await RecipeConfig.get<getRecipiesByUserResponse["items"]>(
+      endpoint
+    );
 
-    const response = await Api.get<getRecipiesByUserResponse["items"]>(baseUrl  + endpoint);
-
-    response.data.forEach(item => {
-      item.preparationTimeConverted = secondsToHourMinute(item.preparationTime);
-    });
-    
     console.log(response.data);
+
+    response.data.forEach((item) => {
+      item.preparationTimeConverted = Date.parseSecondsToHours(
+        item.preparationTime
+      );
+    });
+
     return response.data;
-  
   } catch (e: any) {
     throw new Error(e);
   }
-
 }
 
-export async function createRecipeComment(body: createRecipeComment) {
-
-  const endpoint = "/user/" + body.idUser + "/recipe/" + body.idRecipe + "/comment";
+async function createRecipeComment(body: createRecipeComment) {
+  const endpoint =
+    "/user/" + body.idUser + "/recipe/" + body.idRecipe + "/comment";
   try {
-
-    const { data } = await Api.post(baseUrl + endpoint, body, {
+    const { data } = await RecipeConfig.post(endpoint, body, {
       headers: {
         "Content-Type": "multipart/json",
       },
     });
-
-    console.log(data);
-  
   } catch (e: any) {
     throw new Error(e);
   }
-  
 }
 
-export async function deleteRecipeComment(body: deleteRecipeComment) {
-
-  const endpoint = "/user/" + body.idUser + "/recipe/" + body.idRecipe + "/comment/" + body.id;
+async function deleteRecipeComment(body: deleteRecipeComment) {
+  const endpoint =
+    "/user/" + body.idUser + "/recipe/" + body.idRecipe + "/comment/" + body.id;
   try {
-
-    console.log(body);
-    
-    const { data } = await Api.delete(baseUrl + endpoint);
-
-    console.log(data);
-  
+    const { data } = await RecipeConfig.delete(endpoint);
   } catch (e: any) {
     throw new Error(e);
   }
-  
 }
 
-export async function getRecipeComments(recipeId: string) {
-
+async function getRecipeComments(recipeId: string) {
   const endpoint = "/recipe/" + recipeId + "/comment";
   try {
+    const response = await RecipeConfig.get<Comment[]>(endpoint);
 
-    const response = await Api.get<getRecipeCommentsResponse["comments"]>(baseUrl  + endpoint);
-    
-    console.log(response.data);
     return response.data;
-  
   } catch (e: any) {
     throw new Error(e);
   }
-  
 }
 
-export async function createRecipeLike(body: createRecipeLike) {
-
-  const endpoint = "/user/" + body.idUser + "/recipe/" + body.idRecipe + "/like";
+async function createLike(body: LikeRequest) {
+  const endpoint =
+    "/user/" + body.idUser + "/recipe/" + body.idRecipe + "/like";
   try {
+    const response = await RecipeConfig.post(endpoint);
 
-    const response = await Api.post(baseUrl  + endpoint);
-    
-    console.log(response.data);
     return response.data;
-  
   } catch (e: any) {
     throw new Error(e);
   }
-  
 }
 
-export async function deleteRecipeLike(body: deleteRecipeLike) {
-
-  const endpoint = "/user/" + body.idUser + "/recipe/" + body.idRecipe + "/like";
+async function deleteRecipeLike(body: LikeRequest) {
+  const endpoint =
+    "/user/" + body.idUser + "/recipe/" + body.idRecipe + "/like";
   try {
+    const response = await RecipeConfig.delete(endpoint);
 
-    const response = await Api.delete(baseUrl  + endpoint);
-    
-    console.log(response.data);
     return response.data;
-  
   } catch (e: any) {
     throw new Error(e);
   }
-  
 }
 
-export async function getRecipeLikes(recipeId: string) {
-
+async function getRecipeLikes(recipeId: string) {
   const endpoint = "/recipe/" + recipeId + "/like";
   try {
+    const response = await RecipeConfig.get(endpoint);
 
-    const response = await Api.get(baseUrl  + endpoint);
-    
-    console.log(response.data);
     return response.data;
-  
   } catch (e: any) {
     throw new Error(e);
   }
-  
 }
 
+export const RecipeService = {
+  createRecipe,
+  updateRecipe,
+  deleteRecipe,
+  getRecipe,
+  getRecipes,
+  getRecipiesMoreLikeds,
+  deleteRecipeLike,
+  createRecipeComment,
+  deleteRecipeComment,
+  getRecipeComments,
+  getRecipiesByUser,
+  createLike,
+  getRecipeLikes,
+  getRecipeIsLikedByUser,
+};
