@@ -282,7 +282,7 @@ async function createLike(body: LikeRequest, token: string) {
   const endpoint =
     "/user/" + body.idUser + "/recipe/" + body.idRecipe + "/like";
   try {
-    const response = await RecipeConfig.post(endpoint, {
+    const response = await RecipeConfig.post(endpoint, null, {
       headers: {
         Authorization: "Bearer " + token,
       },
