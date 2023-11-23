@@ -75,7 +75,7 @@ const RateSection: React.FC<RateSectionProps> = ({
 
   const { token, userData, isLogged } = useContext(AuthContext);
 
-  const fetchUserIsLiked = useCallback(() => {
+  const fetchUserIsLiked = useCallback(async () => {
     RecipeService.getRecipeIsLikedByUser(idRecipe, userData.id, token)
       .then((result) => {
         setIsLiked(result.liked);
@@ -93,12 +93,13 @@ const RateSection: React.FC<RateSectionProps> = ({
     try {
       setLikeIsLoading(true);
       if (isLiked) {
+        setLikes((state) => (state -= 1));
         await RecipeService.deleteRecipeLike(
           { idRecipe, idUser: userData.id },
           token
         );
-        setLikes((state) => (state -= 1));
       } else {
+        setLikes((state) => (state += 1));
         await RecipeService.createLike(
           {
             idRecipe,
@@ -106,13 +107,12 @@ const RateSection: React.FC<RateSectionProps> = ({
           },
           token
         );
-        setLikes((state) => (state += 1));
       }
     } catch (e: any) {
       toast.error(e.message);
     } finally {
+      await fetchUserIsLiked();
       setLikeIsLoading(false);
-      fetchUserIsLiked();
     }
   };
 

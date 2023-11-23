@@ -42,7 +42,7 @@ const ViewRecipePage = async ({ params }: { params: { recipeId: string } }) => {
             </div>
             <div className="flex gap-8 mt-10 flex-col md:flex-row mb-7">
                 <div className="flex flex-1 flex-col gap-4">
-                    <h2 className="text-slate-700 font-bold text-2xl ">Igredientes</h2>
+                    <h2 className="text-slate-700 font-bold text-2xl ">Igredientes:</h2>
                     <div className="bg-neutral-default rounded-md border border-gray-dark flex flex-col divide-y">
                         {recipe.ingredients.map((item) => (
                             <div key={crypto.randomUUID()} className="p-3">
@@ -55,9 +55,11 @@ const ViewRecipePage = async ({ params }: { params: { recipeId: string } }) => {
                 </div>
                 <div className="flex flex-1 flex-col gap-4">
                     <h2 className="text-slate-700 font-bold text-2xl ">
-                        Modo de preparo
+                        Modo de preparo:
                     </h2>
-                    <ShowRichText richText={recipe.preparationMethod} />
+                    <div className="bg-neutral-default rounded-md p-3">
+                        <ShowRichText richText={recipe.preparationMethod} />
+                    </div>
                 </div>
             </div>
             <CommentsSection idRecipe={params.recipeId} />
