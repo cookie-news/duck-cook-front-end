@@ -150,7 +150,7 @@ const RecipePage = ({
     if (params?.method == "edit") {
       RecipeService.updateRecipe(recipeRequest, searchParams?.id, token)
         .then((sucess) => {
-          toast.success("Receita criada com sucesso!!");
+          toast.success("Receita editada com sucesso!!");
           router.push(userRoutes.view.path);
         })
         .catch((error) => {
