@@ -9,6 +9,7 @@ import { Recipe } from "@root/src/types/Recipe";
 
 //Contexts
 import { AuthContext } from "@context/AuthContext";
+import { LoadingContext } from "@context/LoadingContext";
 
 //Page Components
 import ListRecipeSection from "./_components/ListRecipeSection";
@@ -20,6 +21,8 @@ const ViewUserPage = () => {
   //User
   const { userData, token } = useContext(AuthContext);
 
+  const { toggle: toggleLoading } = useContext(LoadingContext);
+
   const [userRecipes, setUserRecipes] = useState<Array<Recipe>>([]);
   const [userRecipesLiked, setUserRecipesLiked] = useState<Array<Recipe>>([]);
 
@@ -30,8 +33,8 @@ const ViewUserPage = () => {
     setLoadingRecipiesLikedByCurrentUser,
   ] = useState<boolean>(true);
 
-  const getRecipiesCreatedByCurrentUser = () => {
-    RecipeService.getRecipiesByUser(userData.id, token)
+  const getRecipiesCreatedByCurrentUser = async () => {
+    await RecipeService.getRecipiesByUser(userData.id, token)
       .then((userRecipesData: any) => {
         setUserRecipes(userRecipesData);
       })
@@ -43,8 +46,9 @@ const ViewUserPage = () => {
       });
   };
 
-  const getRecipiesLikedByCurrentUser = () => {
-    RecipeService.getRecipiesLikedByUser(userData.id, token)
+  const getRecipiesLikedByCurrentUser = async () => {
+    
+    await RecipeService.getRecipiesLikedByUser(userData.id, token)
       .then((userRecipesData: any) => {
         setUserRecipesLiked(userRecipesData);
       })
@@ -61,6 +65,25 @@ const ViewUserPage = () => {
     getRecipiesLikedByCurrentUser();
   }, [userData]);
 
+    const deleteRecipe = async (recipeId:string) => {
+
+        const result = window.confirm('Tem certeza que deseja deletar essa receita ?');
+
+        if(!result) { return; }
+
+        toggleLoading();
+        RecipeService.deleteRecipe(recipeId)
+            .then(async () => {
+                await getRecipiesCreatedByCurrentUser();
+                await getRecipiesLikedByCurrentUser();
+            })
+            .catch((error:any) => {
+                toast.error(error.message);
+            }).finally(() => {
+              toggleLoading();
+            })
+    }
+
   return loadingRecipiesCreatedByUser || loadingRecipiesLikedByCurrentUser ? (
     <Loading />
   ) : (
@@ -73,7 +96,7 @@ const ViewUserPage = () => {
             <h5 className="mb-2">
               <b>Receitas criadas pelo usuário:</b>
             </h5>
-            <ListRecipeSection listRecipe={userRecipes} userData={userData} />
+            <ListRecipeSection listRecipe={userRecipes} userData={userData} handlerDeleteAction={deleteRecipe}/>
           </div>
           <div className="mt-4 flex flex-col">
             <h5 className="mb-2">
@@ -82,6 +105,7 @@ const ViewUserPage = () => {
             <ListRecipeSection
               listRecipe={userRecipesLiked}
               userData={userData}
+              handlerDeleteAction={deleteRecipe}
             />
           </div>
         </div>

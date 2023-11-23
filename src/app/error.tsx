@@ -1,5 +1,9 @@
 "use client";
 
+import Link from "next/link";
+
+import { rootRoutes } from "@root/routes";
+
 import Button from "@components/Button";
 import { Information } from "@components/Information";
 
@@ -19,9 +23,14 @@ export default function Error({ error, reset }: ErrorProps) {
           </span>
         </Information.Content>
         <Information.Actions>
-          <Button className="mt-11" onClick={reset}>
-            Tentar novamente
-          </Button>
+          <div className="flex flex-col justify-center">
+            <Button className="mt-11" onClick={reset}>
+              Tentar novamente
+            </Button>
+            <Link className="mt-2 underline text-blue-600 text-center" href={rootRoutes.home.path}>
+              Voltar para o Feed
+            </Link>
+          </div>
         </Information.Actions>
       </Information.Root>
     </div>
