@@ -1,9 +1,9 @@
-.ql-toolbar
+.ShowRichText .ql-toolbar
 {
     display: none;
 }
 
-.ql-container 
+.ShowRichText .ql-container 
 {
     border: none !important;
 }
