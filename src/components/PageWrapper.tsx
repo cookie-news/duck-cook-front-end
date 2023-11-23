@@ -68,7 +68,7 @@ export default function PageWrapper({
                     )}
                   </div>
                   {!isLogged && <Nav.Actions variant="mobile" />}
-                  <Nav.Logout variant="mobile" />
+                  {isLogged && <Nav.Logout variant="mobile" />}
                 </Nav.MobileMenu>
                 <Link href={rootRoutes.home.path}>
                   <Image
