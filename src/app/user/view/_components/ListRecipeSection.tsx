@@ -8,10 +8,12 @@ import Link from "next/link";
 import { recipeRoutes } from "@root/routes";
 import { User } from "@root/src/data/user.service";
 
+import Button from "@components/Button";
+
 //Types
 import { Recipe } from "@/types/Recipe"
 //Icons
-import { FileSignature, MessagesSquare, ThumbsUp } from "lucide-react";
+import { FileSignature, MessagesSquare, ThumbsUp, Trash2 } from "lucide-react";
 
 interface ListRecipeSectionProps
 {
@@ -55,12 +57,20 @@ const ListRecipeSection:React.FC<ListRecipeSectionProps> = ({listRecipe, userDat
                                     </div>
                                     {
                                         userData?.id == recipe?.idUser &&
-                                        <div className="flex absolute right-0">
-                                            <Link href={recipeRoutes.edit.path+'?id='+recipe.id} className="flex gap-1 justify-center">
-                                                <FileSignature size={20} />
-                                                <span className="text-sm">editar</span>
-                                            </Link>
-                                        </div>
+                                        <>
+                                            <div className="flex absolute right-0">
+                                                <Link href={recipeRoutes.edit.path+'?id='+recipe.id} className="flex gap-1 justify-center">
+                                                    <FileSignature size={20} />
+                                                    <span className="text-sm">editar</span>
+                                                </Link>
+                                            </div>
+                                            <div className="flex absolute right-0">
+                                                <Button className="flex gap-1 justify-center">
+                                                    <Trash2 size={20} />
+                                                    <span className="text-sm">apagar</span>
+                                                </Button>
+                                            </div>
+                                        </>
                                     }
                                 </div>
                             </div>
