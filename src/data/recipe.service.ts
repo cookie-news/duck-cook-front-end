@@ -161,7 +161,10 @@ async function getRecipiesMoreLikeds() {
   }
 }
 
-async function getRecipeIsLikedByUser(recipeId: string, userId: string) {
+async function getRecipeIsLikedByUser(
+  recipeId: string,
+  userId: string
+) {
   const endpoint = "/user/" + userId + "/recipe/" + recipeId + "/like";
   try {
     const { data } = await RecipeConfig.get(endpoint);
@@ -295,4 +298,5 @@ export const RecipeService = {
   createLike,
   getRecipeLikes,
   getRecipeIsLikedByUser,
+  getRecipiesLikedByUser
 };
