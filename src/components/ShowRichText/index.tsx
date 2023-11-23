@@ -26,10 +26,12 @@ export const ShowRichText:React.FC<ShowRichTextProps> = ({richText}) => {
     }, []);*/
 
     return (
-        document && <ReactQuill
-            theme="snow"
-            defaultValue={richText}
-            readOnly={true}
-        />
+        <div className="ShowRichText">
+            {document && <ReactQuill
+                theme="snow"
+                defaultValue={richText}
+                readOnly={true}
+            />}
+        </div>
     );
 }

@@ -115,6 +115,7 @@ const RecipePage = ({
   const handlerChangePreparationMethod = (value: string) => {
     let newRecipe = { ...recipe };
     newRecipe.preparationMethod = value;
+    console.log(newRecipe);
     setRecipe(newRecipe);
     clearCustomErrorByInputName("preparationMethod");
   };
