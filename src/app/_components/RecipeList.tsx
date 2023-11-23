@@ -53,7 +53,7 @@ export function RecipesList() {
   };
 
   if (isLoading) return <SkeletonFallbackRecipes />;
-  if (recipesList.items.length === 0) return <EmptyState />;
+  if (!recipesList?.items || recipesList?.items.length === 0) return <EmptyState />;
 
   return (
     <>
@@ -85,7 +85,7 @@ export function RecipesList() {
         </Link>
       ))}
       <Pagination
-        count={recipesList.totalPage}
+        count={recipesList?.totalPage}
         page={page}
         onChange={(e, page) => goToPage(page)}
         className="mt-2"
