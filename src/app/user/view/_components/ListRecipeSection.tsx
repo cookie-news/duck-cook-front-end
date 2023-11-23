@@ -6,6 +6,7 @@ import Link from "next/link";
 
 //Routes
 import { recipeRoutes } from "@root/routes";
+import { RecipeService } from "@root/src/data/recipe.service";
 import { User } from "@root/src/data/user.service";
 
 import Button from "@components/Button";
@@ -18,10 +19,11 @@ import { FileSignature, MessagesSquare, ThumbsUp, Trash2 } from "lucide-react";
 interface ListRecipeSectionProps
 {
     listRecipe: Array<Recipe>,
-    userData: User
+    userData: User,
+    handlerDeleteAction?: (recipeId:string) => void
 }
 
-const ListRecipeSection:React.FC<ListRecipeSectionProps> = ({listRecipe, userData}) => {
+const ListRecipeSection:React.FC<ListRecipeSectionProps> = ({listRecipe, userData, handlerDeleteAction}) => {
     return (
         <div>
             {!listRecipe || listRecipe.length == 0 ? (
@@ -57,20 +59,20 @@ const ListRecipeSection:React.FC<ListRecipeSectionProps> = ({listRecipe, userDat
                                     </div>
                                     {
                                         userData?.id == recipe?.idUser &&
-                                        <>
-                                            <div className="flex absolute right-0">
+                                        <div className="flex gap-2 absolute right-0">
+                                            <div className="flex">
                                                 <Link href={recipeRoutes.edit.path+'?id='+recipe.id} className="flex gap-1 justify-center">
                                                     <FileSignature size={20} />
                                                     <span className="text-sm">editar</span>
                                                 </Link>
                                             </div>
-                                            <div className="flex absolute right-0">
-                                                <Button className="flex gap-1 justify-center">
+                                            <div className="flex">
+                                                <span className="flex gap-1 justify-center text-red-400 hover:cursor-pointer" onClick={() => {handlerDeleteAction && handlerDeleteAction(recipe?.id)}}>
                                                     <Trash2 size={20} />
                                                     <span className="text-sm">apagar</span>
-                                                </Button>
+                                                </span>
                                             </div>
-                                        </>
+                                        </div>
                                     }
                                 </div>
                             </div>

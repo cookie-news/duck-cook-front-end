@@ -60,7 +60,7 @@ interface getRecipiesByUserResponse {
   items: getRecipeResponse[];
 }
 
-async function createRecipe(body: Recipe<FileList>) {
+async function createRecipe(body: Recipe<FileList>, token: string) {
   const endpoint = "/recipe";
   try {
     const formData = getFormDataByRecipe(body);
@@ -68,6 +68,7 @@ async function createRecipe(body: Recipe<FileList>) {
     const { data } = await RecipeConfig.post(endpoint, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + token,
       },
     });
   } catch (e: any) {
@@ -75,10 +76,19 @@ async function createRecipe(body: Recipe<FileList>) {
   }
 }
 
-async function updateRecipe(body: Recipe<FileList>, recipeId: string) {
+async function updateRecipe(
+  body: Recipe<FileList>,
+  recipeId: string,
+  token: string
+) {
   const endpoint = "/recipe";
   try {
-    const { data } = await RecipeConfig.put(endpoint, body);
+    const { data } = await RecipeConfig.put(endpoint, body, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    return data;
   } catch (e: any) {
     throw new Error(e);
   }
@@ -163,11 +173,16 @@ async function getRecipiesMoreLikeds() {
 
 async function getRecipeIsLikedByUser(
   recipeId: string,
-  userId: string
+  userId: string,
+  token: string
 ) {
   const endpoint = "/user/" + userId + "/recipe/" + recipeId + "/like";
   try {
-    const { data } = await RecipeConfig.get(endpoint);
+    const { data } = await RecipeConfig.get(endpoint, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
 
     return data;
   } catch (e: any) {
@@ -175,11 +190,16 @@ async function getRecipeIsLikedByUser(
   }
 }
 
-export async function getRecipiesByUser(userId: string) {
+export async function getRecipiesByUser(userId: string, token: string) {
   const endpoint = "/user/" + userId + "/recipe";
   try {
     const response = await RecipeConfig.get<getRecipiesByUserResponse["items"]>(
-      endpoint
+      endpoint,
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
     );
 
     response.data?.forEach((item) => {
@@ -194,11 +214,16 @@ export async function getRecipiesByUser(userId: string) {
   }
 }
 
-export async function getRecipiesLikedByUser(userId: string) {
+export async function getRecipiesLikedByUser(userId: string, token: string) {
   const endpoint = "/user/" + userId + "/recipe/like";
   try {
     const response = await RecipeConfig.get<getRecipiesByUserResponse["items"]>(
-      endpoint
+      endpoint,
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
     );
 
     response.data?.forEach((item) => {
@@ -213,13 +238,14 @@ export async function getRecipiesLikedByUser(userId: string) {
   }
 }
 
-async function createRecipeComment(body: createRecipeComment) {
+async function createRecipeComment(body: createRecipeComment, token: string) {
   const endpoint =
     "/user/" + body.idUser + "/recipe/" + body.idRecipe + "/comment";
   try {
     const { data } = await RecipeConfig.post(endpoint, body, {
       headers: {
         "Content-Type": "multipart/json",
+        Authorization: "Bearer " + token,
       },
     });
   } catch (e: any) {
@@ -227,11 +253,15 @@ async function createRecipeComment(body: createRecipeComment) {
   }
 }
 
-async function deleteRecipeComment(body: deleteRecipeComment) {
+async function deleteRecipeComment(body: deleteRecipeComment, token: string) {
   const endpoint =
     "/user/" + body.idUser + "/recipe/" + body.idRecipe + "/comment/" + body.id;
   try {
-    const { data } = await RecipeConfig.delete(endpoint);
+    const { data } = await RecipeConfig.delete(endpoint, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
   } catch (e: any) {
     throw new Error(e);
   }
@@ -248,11 +278,15 @@ async function getRecipeComments(recipeId: string) {
   }
 }
 
-async function createLike(body: LikeRequest) {
+async function createLike(body: LikeRequest, token: string) {
   const endpoint =
     "/user/" + body.idUser + "/recipe/" + body.idRecipe + "/like";
   try {
-    const response = await RecipeConfig.post(endpoint);
+    const response = await RecipeConfig.post(endpoint, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
 
     return response.data;
   } catch (e: any) {
@@ -260,11 +294,15 @@ async function createLike(body: LikeRequest) {
   }
 }
 
-async function deleteRecipeLike(body: LikeRequest) {
+async function deleteRecipeLike(body: LikeRequest, token: string) {
   const endpoint =
     "/user/" + body.idUser + "/recipe/" + body.idRecipe + "/like";
   try {
-    const response = await RecipeConfig.delete(endpoint);
+    const response = await RecipeConfig.delete(endpoint, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
 
     return response.data;
   } catch (e: any) {
@@ -298,5 +336,5 @@ export const RecipeService = {
   createLike,
   getRecipeLikes,
   getRecipeIsLikedByUser,
-  getRecipiesLikedByUser
+  getRecipiesLikedByUser,
 };

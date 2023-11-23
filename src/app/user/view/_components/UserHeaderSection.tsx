@@ -16,7 +16,7 @@ const UserHeaderSection:React.FC<UserHeaderSectionProps> = ({userData}) => {
         <div className="flex pb-4 flex-col md:flex-row items-center	md:items-center border-b border-t-0 border-r-0 border-l-0 border-solid border-gray-default">
             <div className="relative w-36 h-36">
                 <Image
-                    src={userData?.image}
+                    src={userData?.image ? userData?.image : "/assets/imgs/logo.png"}
                     fill objectFit="cover"
                     alt="Imagem do usuário"
                     className="rounded-full"

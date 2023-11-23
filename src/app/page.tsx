@@ -14,7 +14,7 @@ function PageRoot() {
                 <p className="bg-green-800 p-3 text-white uppercase w-fit font-bold">
                     Receitas mais curtidas
                 </p>
-                <section className="grid grid-flow-row-dense grid-cols-2 md:grid-cols-3 gap-2">
+                <section>
                     <MoreLikedsList />
                 </section>
                 <p className="bg-green-800 p-3 text-white uppercase w-fit font-bold">

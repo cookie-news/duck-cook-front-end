@@ -24,6 +24,7 @@ async function getUser(fieldName: FieldNameOptions, value: string) {
     const { data } = await UserConfig.get<User>(endpoint);
     return data;
   } catch (e: any) {
+    console.log(e);
     throw new ServiceError(endpoint);
   }
 }
@@ -32,7 +33,7 @@ async function createUser(body: CreateRegisterFormData) {
   const endpoint = "/customer";
 
   const formData = new FormData();
-  formData.append("image", body.image);
+  if (body.image) formData.append("image", body.image.item(0));
   formData.append("email", body.email);
   formData.append("name", body.name);
   formData.append("pass", body.pass);
