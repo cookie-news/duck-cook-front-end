@@ -4,7 +4,6 @@ import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import { rootRoutes } from "@root/routes";
@@ -73,23 +72,6 @@ const LoginForm: React.FC<any> = () => {
       className="flex flex-col gap-2 w-80"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="w-full flex justify-center">
-        <input
-          accept="image/*"
-          id="contained-button-file"
-          multiple
-          className="hidden"
-          type="file"
-        />
-        <button>
-          <label
-            htmlFor="contained-button-file"
-            className="label-avatar-file-input"
-          >
-            <Image width={200} height={200} src={""} alt="user profile" />
-          </label>
-        </button>
-      </div>
       <Input.Root>
         <Input.Textfield
           name="user"
