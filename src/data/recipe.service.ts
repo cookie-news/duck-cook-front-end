@@ -156,6 +156,7 @@ async function getRecipiesMoreLikeds() {
 
     return data;
   } catch (e: any) {
+    console.log(e);
     throw new ServiceError(endpoint);
   }
 }

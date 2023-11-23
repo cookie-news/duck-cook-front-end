@@ -32,16 +32,17 @@ async function createUser(body: CreateRegisterFormData) {
   const endpoint = "/customer";
 
   const formData = new FormData();
-  formData.append("email",body.email)
-  formData.append("name", body.name)
-  formData.append("pass", body.pass)
-  formData.append("user", body.user)
+  formData.append("image", body.image);
+  formData.append("email", body.email);
+  formData.append("name", body.name);
+  formData.append("pass", body.pass);
+  formData.append("user", body.user);
 
   try {
-    const { data } = await UserConfig.post(endpoint, formData,{
+    const { data } = await UserConfig.post(endpoint, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
-      }
+      },
     });
     return data;
   } catch (e: any) {
