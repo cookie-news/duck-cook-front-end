@@ -13,8 +13,9 @@ import { ThumbUpAlt } from "@mui/icons-material";
 
 import { RecipeService } from "@root/src/data/recipe.service";
 
-import { AuthContext } from "@context/AuthContext";
+import { AuthContext, COOKIE_AUTH_TOKEN } from "@context/AuthContext";
 
+import { Cookies } from "@utils/Cookie";
 import { Date } from "@utils/Date";
 
 import { ClockIcon, MessagesSquare, ThumbsUp } from "lucide-react";
@@ -75,12 +76,12 @@ const RateSection: React.FC<RateSectionProps> = ({
   const { token, userData, isLogged } = useContext(AuthContext);
 
   const fetchUserIsLiked = useCallback(() => {
-    RecipeService.getRecipeIsLikedByUser(idRecipe, userData.id)
+    RecipeService.getRecipeIsLikedByUser(idRecipe, userData.id, token)
       .then((result) => {
         setIsLiked(result.liked);
       })
       .catch((error) => toast.error(error.message));
-  }, [idRecipe, userData.id]);
+  }, [idRecipe, token, userData.id]);
 
   useEffect(() => {
     if (isLogged) {
@@ -92,13 +93,19 @@ const RateSection: React.FC<RateSectionProps> = ({
     try {
       setLikeIsLoading(true);
       if (isLiked) {
-        await RecipeService.deleteRecipeLike({ idRecipe, idUser: userData.id });
+        await RecipeService.deleteRecipeLike(
+          { idRecipe, idUser: userData.id },
+          token
+        );
         setLikes((state) => (state -= 1));
       } else {
-        await RecipeService.createLike({
-          idRecipe,
-          idUser: userData.id,
-        });
+        await RecipeService.createLike(
+          {
+            idRecipe,
+            idUser: userData.id,
+          },
+          token
+        );
         setLikes((state) => (state += 1));
       }
     } catch (e: any) {
