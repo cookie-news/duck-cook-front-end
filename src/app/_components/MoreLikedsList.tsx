@@ -34,8 +34,7 @@ export function MoreLikedsList() {
 
     if(loading) return <SkeletonFallbackMoreLikeds />
 
-    if (moreLikedsRecipes == null) return <></>;
-    if (moreLikedsRecipes.length == 0)
+    if (!moreLikedsRecipes || moreLikedsRecipes?.length == 0)
         return (
             <p className="flex-1 col-span-3 text-center font-semibold uppercase mt-4 text-green-800">
                 Nada para mostrar
